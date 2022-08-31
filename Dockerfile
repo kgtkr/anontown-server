@@ -9,13 +9,14 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
   && tar -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
   && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-FROM node:16.17.0-alpine
+FROM node:16.17.0-slim
 
 WORKDIR /home
 
 COPY --from=dockerize /home/dockerize /usr/local/bin/
 
-RUN apk add --no-cache openssl-dev
+RUN apt update && \
+    apt install openssl -y
 
 COPY package.json package-lock.json ./
 RUN npm ci --no-progress
