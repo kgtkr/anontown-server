@@ -25,6 +25,7 @@ jobs:
       - run: |
           npm ci
           npx lerna bootstrap --ci
+      - run: npm run lint
       - run: ./bin/test.sh
   docker:
     runs-on: ubuntu-latest
