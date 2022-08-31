@@ -27,7 +27,10 @@ jobs:
           npx lerna bootstrap --ci
       - run: npx lerna run codegen --parallel --scope @anontown/server --include-filtered-dependencies
       - run: npm run lint
-      - run: ./bin/test.sh
+      - run: |
+          npx prisma migrate deploy
+          npm test
+        working-directory: packages/server
   docker:
     runs-on: ubuntu-latest
     steps:
