@@ -9,7 +9,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
   && tar -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
   && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-FROM node:12.22-slim as base
+FROM 6.17.0-alpine
 
 WORKDIR /home
 
@@ -31,12 +31,5 @@ RUN npx lerna run codegen --scope @anontown/server --include-filtered-dependenci
   && npx lerna run build --scope @anontown/server
 
 COPY bin ./bin
-
-FROM base as dev
-
-COPY restart-dummy ./restart-dummy
-CMD ./bin/start-watch.sh
-
-FROM base
 
 CMD ./bin/start.sh
