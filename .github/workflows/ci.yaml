@@ -1,6 +1,31 @@
 name: ci
 on: push
 jobs:
+  check:
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+      REDIS_HOST: localhost
+    services:
+      postgres:
+        image: postgres:14.5
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:5.0.14
+        ports:
+          - 6379:6379
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: |
+          npm ci
+          npx lerna bootstrap --ci
+      - run: ./bin/test.sh
   docker:
     runs-on: ubuntu-latest
     steps:
