@@ -15,8 +15,7 @@ WORKDIR /home
 
 COPY --from=dockerize /home/dockerize /usr/local/bin/
 
-RUN apt update && \
-    apt install openssl -y
+RUN apk add --no-cache openssl-dev
 
 COPY package.json package-lock.json ./
 RUN npm ci --no-progress
