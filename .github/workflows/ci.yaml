@@ -4,7 +4,7 @@ jobs:
   check:
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-      REDIS_HOST: localhost
+      REDIS_HOST: localhost:6379
     services:
       postgres:
         image: postgres:14.5
