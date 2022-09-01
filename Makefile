@@ -23,7 +23,3 @@ lint-quiet:
 test:
 	docker-compose -f docker-compose.test.yml build
 	docker-compose -f docker-compose.test.yml run --rm app ./bin/test.sh
-
-.PHONY: restart
-restart:
-	touch restart-dummy/`date +%s%3N`
