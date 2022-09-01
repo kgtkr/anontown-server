@@ -18,7 +18,7 @@ import {
 describe("ITokenDB", () => {
   class TokenBaseTest extends Copyable<TokenBaseTest>
     implements TokenBase<"general", TokenBaseTest> {
-    readonly type: "general" = "general";
+    readonly type = "general" as const;
 
     toBaseAPI!: () => ITokenBaseAPI<"general">;
 
@@ -26,7 +26,7 @@ describe("ITokenDB", () => {
       readonly id: string,
       readonly key: string,
       readonly user: string,
-      readonly date: Date,
+      readonly date: Date
     ) {
       super(TokenBaseTest);
     }
@@ -42,7 +42,7 @@ describe("ITokenDB", () => {
     clientID,
     userID,
     Im.List(),
-    new Date(300),
+    new Date(300)
   );
 
   describe("fromTokenBase", () => {
@@ -71,7 +71,7 @@ describe("ITokenDB", () => {
           user: new ObjectID(userID),
           date: new Date(300),
           req: [],
-        }),
+        })
       ).toEqual(tokenGeneral);
     });
   });
@@ -97,7 +97,7 @@ describe("ITokenDB", () => {
           type: "master",
           user: new ObjectID(userID),
           date: new Date(0),
-        }),
+        })
       ).toEqual(tokenMaster);
     });
   });

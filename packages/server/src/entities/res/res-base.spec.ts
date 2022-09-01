@@ -11,22 +11,22 @@ describe("ResBase", () => {
     cv!: (
       resUser: User,
       user: User,
-      _authToken: IAuthToken,
+      _authToken: IAuthToken
     ) => { res: ResBaseTest; resUser: User };
     _v!: (
       resUser: User,
       user: User,
       type: "uv" | "dv",
-      _authToken: IAuthToken,
+      _authToken: IAuthToken
     ) => { res: ResBaseTest; resUser: User };
     v!: (
       resUser: User,
       user: User,
       type: "uv" | "dv",
-      _authToken: IAuthToken,
+      _authToken: IAuthToken
     ) => { res: ResBaseTest; resUser: User };
 
-    readonly type: "normal" = "normal";
+    readonly type = "normal" as const;
 
     constructor(
       readonly id: string,
@@ -36,7 +36,7 @@ describe("ResBase", () => {
       readonly votes: Im.List<IVote>,
       readonly lv: number,
       readonly hash: string,
-      readonly replyCount: number,
+      readonly replyCount: number
     ) {
       super(ResBaseTest);
     }
@@ -60,7 +60,7 @@ describe("ResBase", () => {
     new Date(300),
     new Date(10),
     0,
-    new Date(200),
+    new Date(200)
   );
 
   const token: IAuthToken = {
@@ -78,7 +78,7 @@ describe("ResBase", () => {
     Im.List(),
     1,
     "hash",
-    10,
+    10
   );
 
   describe("#v", () => {
@@ -90,7 +90,7 @@ describe("ResBase", () => {
       });
 
       expect(newRes).toEqual(
-        res.copy({ votes: Im.List([{ user: voteUser.id, value: 2 }]) }),
+        res.copy({ votes: Im.List([{ user: voteUser.id, value: 2 }]) })
       );
       expect(newResUser).toEqual(user.copy({ lv: 3 }));
 
@@ -99,7 +99,7 @@ describe("ResBase", () => {
         newResUser,
         voteUser2,
         "dv",
-        { ...token, user: "voteuser2" },
+        { ...token, user: "voteuser2" }
       );
 
       expect(newNewRes).toEqual(
@@ -108,7 +108,7 @@ describe("ResBase", () => {
             { user: voteUser.id, value: 2 },
             { user: voteUser2.id, value: -1 },
           ]),
-        }),
+        })
       );
       expect(newNewResUser).toEqual(newResUser.copy({ lv: 2 }));
     });
@@ -129,7 +129,7 @@ describe("ResBase", () => {
         const data = votedRes.cv(user, voteUser, auth);
 
         expect(votedRes.v(user, voteUser, "dv", auth)).toEqual(
-          data.res.v(data.resUser, voteUser, "dv", auth),
+          data.res.v(data.resUser, voteUser, "dv", auth)
         );
       }
 
@@ -142,7 +142,7 @@ describe("ResBase", () => {
         const data = votedRes.cv(user, voteUser, auth);
 
         expect(votedRes.v(user, voteUser, "uv", auth)).toEqual(
-          data.res.v(data.resUser, voteUser, "uv", auth),
+          data.res.v(data.resUser, voteUser, "uv", auth)
         );
       }
     });
@@ -182,7 +182,7 @@ describe("ResBase", () => {
       const { res: newRes, resUser: newResUser } = votedRes.cv(
         resUser,
         voteUser,
-        { ...token, user: "voteuser" },
+        { ...token, user: "voteuser" }
       );
 
       expect(newRes).toEqual(res.copy({ votes: Im.List() }));

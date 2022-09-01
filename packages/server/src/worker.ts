@@ -12,14 +12,16 @@ function runTopicWorker() {
   // 毎時間トピ落ちチェック
   new CronJob({
     cronTime: "00 00 * * * *",
-    onTick: async () => {
-      await prisma.$transaction(async prismaTransaction => {
-        const logger = new Logger();
-        const topicRepo = new TopicRepo(prismaTransaction);
+    onTick: () => {
+      void (async () => {
+        await prisma.$transaction(async (prismaTransaction) => {
+          const logger = new Logger();
+          const topicRepo = new TopicRepo(prismaTransaction);
 
-        logger.info("TopicCron");
-        await topicRepo.cronTopicCheck(new Date());
-      });
+          logger.info("TopicCron");
+          await topicRepo.cronTopicCheck(new Date());
+        });
+      })();
     },
     start: false,
     timeZone: "Asia/Tokyo",
@@ -30,14 +32,16 @@ function runUserWorker() {
   const start = (cronTime: string, key: ResWaitCountKey) => {
     new CronJob({
       cronTime,
-      onTick: async () => {
-        await prisma.$transaction(async prismaTransaction => {
-          const logger = new Logger();
-          const userRepo = new UserRepo(prismaTransaction);
+      onTick: () => {
+        void (async () => {
+          await prisma.$transaction(async (prismaTransaction) => {
+            const logger = new Logger();
+            const userRepo = new UserRepo(prismaTransaction);
 
-          logger.info(`UserCron ${key}`);
-          await userRepo.cronCountReset(key);
-        });
+            logger.info(`UserCron ${key}`);
+            await userRepo.cronCountReset(key);
+          });
+        })();
       },
       start: false,
       timeZone: "Asia/Tokyo",
@@ -52,11 +56,13 @@ function runUserWorker() {
   start("00 00 00 * * *", "d1");
   new CronJob({
     cronTime: "00 00 00 * * *",
-    onTick: async () => {
-      await prisma.$transaction(async prismaTransaction => {
-        const userRepo = new UserRepo(prismaTransaction);
-        await userRepo.cronPointReset();
-      });
+    onTick: () => {
+      void (async () => {
+        await prisma.$transaction(async (prismaTransaction) => {
+          const userRepo = new UserRepo(prismaTransaction);
+          await userRepo.cronPointReset();
+        });
+      })();
     },
     start: false,
     timeZone: "Asia/Tokyo",

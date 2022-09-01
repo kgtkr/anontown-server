@@ -102,9 +102,9 @@ export abstract class ResBase<T extends ResType, C extends ResBase<T, C>> {
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ): { res: C; resUser: User } {
-    const voted = this.votes.find(x => x.user === user.id);
+    const voted = this.votes.find((x) => x.user === user.id);
     const data =
       voted !== undefined &&
       ((voted.value > 0 && type === "dv") || (voted.value < 0 && type === "uv"))
@@ -118,12 +118,12 @@ export abstract class ResBase<T extends ResType, C extends ResBase<T, C>> {
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ): { res: C; resUser: User } {
     if (user.id === this.user) {
       throw new AtRightError("自分に投票は出来ません");
     }
-    if (this.votes.find(x => x.user === user.id) !== undefined) {
+    if (this.votes.find((x) => x.user === user.id) !== undefined) {
       throw new AtPrerequisiteError("既に投票しています");
     }
     const valueAbs = Math.floor(user.lv / 100) + 1;
@@ -140,9 +140,9 @@ export abstract class ResBase<T extends ResType, C extends ResBase<T, C>> {
   cv(
     resUser: User,
     user: User,
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ): { res: C; resUser: User } {
-    const vote = this.votes.find(x => x.user === user.id);
+    const vote = this.votes.find((x) => x.user === user.id);
     if (vote === undefined) {
       throw new AtPrerequisiteError("投票していません");
     }
@@ -158,15 +158,15 @@ export abstract class ResBase<T extends ResType, C extends ResBase<T, C>> {
   toBaseAPI(authToken: Option<IAuthToken>): IResBaseAPI<T> {
     const voteFlag = pipe(
       authToken,
-      option.map(authToken => {
-        const vote = this.votes.find(v => authToken.user === v.user);
+      option.map((authToken) => {
+        const vote = this.votes.find((v) => authToken.user === v.user);
         if (vote === undefined) {
           return "not";
         } else {
           return vote.value > 0 ? "uv" : "dv";
         }
       }),
-      option.toNullable,
+      option.toNullable
     );
 
     return {
@@ -175,11 +175,11 @@ export abstract class ResBase<T extends ResType, C extends ResBase<T, C>> {
       date: this.date,
       self: pipe(
         authToken,
-        option.map(authToken => authToken.user === this.user),
-        option.toNullable,
+        option.map((authToken) => authToken.user === this.user),
+        option.toNullable
       ),
-      uv: this.votes.filter(x => x.value > 0).size,
-      dv: this.votes.filter(x => x.value < 0).size,
+      uv: this.votes.filter((x) => x.value > 0).size,
+      dv: this.votes.filter((x) => x.value < 0).size,
       hash: this.hash,
       replyCount: this.replyCount,
       voteFlag,
@@ -202,7 +202,7 @@ export class ResNormal extends Copyable<ResNormal>
     reply: Option<Res>,
     profile: Option<Profile>,
     age: boolean,
-    now: Date,
+    now: Date
   ) {
     paramsErrorMaker([
       {
@@ -222,8 +222,8 @@ export class ResNormal extends Copyable<ResNormal>
     if (
       pipe(
         profile,
-        option.map(profile => profile.user !== user.id),
-        option.getOrElse(() => false),
+        option.map((profile) => profile.user !== user.id),
+        option.getOrElse(() => false)
       )
     ) {
       throw new AtRightError("自分のプロフィールを指定して下さい。");
@@ -233,8 +233,8 @@ export class ResNormal extends Copyable<ResNormal>
     if (
       pipe(
         reply,
-        option.map(reply => reply.topic !== topic.id),
-        option.getOrElse(() => false),
+        option.map((reply) => reply.topic !== topic.id),
+        option.getOrElse(() => false)
       )
     ) {
       throw new AtPrerequisiteError("他のトピックのレスへのリプは出来ません");
@@ -247,12 +247,12 @@ export class ResNormal extends Copyable<ResNormal>
       text,
       pipe(
         reply,
-        option.map(reply => ({ res: reply.id, user: reply.user })),
+        option.map((reply) => ({ res: reply.id, user: reply.user }))
       ),
       "active",
       pipe(
         profile,
-        option.map(profile => profile.id),
+        option.map((profile) => profile.id)
       ),
       age,
       objidGenerator.generateObjectId(),
@@ -262,32 +262,32 @@ export class ResNormal extends Copyable<ResNormal>
       Im.List(),
       newUser.lv * 5,
       topic.hash(now, newUser),
-      0,
+      0
     );
 
     const newTopic = topic.resUpdate(result);
     return { res: result, user: newUser, topic: newTopic };
   }
 
-  readonly type: "normal" = "normal";
+  readonly type = "normal" as const;
 
   toBaseAPI!: (authToken: Option<IAuthToken>) => IResBaseAPI<"normal">;
   cv!: (
     resUser: User,
     user: User,
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResNormal; resUser: User };
   _v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResNormal; resUser: User };
   v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResNormal; resUser: User };
 
   constructor(
@@ -304,7 +304,7 @@ export class ResNormal extends Copyable<ResNormal>
     readonly votes: Im.List<IVote>,
     readonly lv: number,
     readonly hash: string,
-    readonly replyCount: number,
+    readonly replyCount: number
   ) {
     super(ResNormal);
   }
@@ -317,19 +317,19 @@ export class ResNormal extends Copyable<ResNormal>
         text: this.text,
         replyID: pipe(
           this.reply,
-          option.map(x => x.res),
-          option.toNullable,
+          option.map((x) => x.res),
+          option.toNullable
         ),
         profileID: pipe(this.profile, option.toNullable),
         isReply: pipe(
           authToken,
-          option.chain(authToken =>
+          option.chain((authToken) =>
             pipe(
               this.reply,
-              option.map(reply => authToken.user === reply.user),
-            ),
+              option.map((reply) => authToken.user === reply.user)
+            )
           ),
-          option.toNullable,
+          option.toNullable
         ),
       };
     } else {
@@ -369,7 +369,7 @@ export class ResHistory extends Copyable<ResHistory>
     user: User,
     _authToken: IAuthToken,
     history: History,
-    now: Date,
+    now: Date
   ) {
     const result = new ResHistory(
       history.id,
@@ -380,7 +380,7 @@ export class ResHistory extends Copyable<ResHistory>
       Im.List(),
       user.lv * 5,
       topic.hash(now, user),
-      0,
+      0
     );
 
     const newTopic = topic.resUpdate(result);
@@ -391,22 +391,22 @@ export class ResHistory extends Copyable<ResHistory>
   cv!: (
     resUser: User,
     user: User,
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResHistory; resUser: User };
   _v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResHistory; resUser: User };
   v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResHistory; resUser: User };
 
-  readonly type: "history" = "history";
+  readonly type = "history" as const;
 
   constructor(
     readonly history: string,
@@ -417,7 +417,7 @@ export class ResHistory extends Copyable<ResHistory>
     readonly votes: Im.List<IVote>,
     readonly lv: number,
     readonly hash: string,
-    readonly replyCount: number,
+    readonly replyCount: number
   ) {
     super(ResHistory);
   }
@@ -438,7 +438,7 @@ export class ResTopic extends Copyable<ResTopic>
     topic: TC,
     user: User,
     _authToken: IAuthToken,
-    now: Date,
+    now: Date
   ) {
     const result = new ResTopic(
       objidGenerator.generateObjectId(),
@@ -448,7 +448,7 @@ export class ResTopic extends Copyable<ResTopic>
       Im.List(),
       user.lv * 5,
       topic.hash(now, user),
-      0,
+      0
     );
 
     // TODO:キャストなしで書きたい
@@ -460,22 +460,22 @@ export class ResTopic extends Copyable<ResTopic>
   cv!: (
     resUser: User,
     user: User,
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResTopic; resUser: User };
   _v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResTopic; resUser: User };
   v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResTopic; resUser: User };
 
-  readonly type: "topic" = "topic";
+  readonly type = "topic" as const;
 
   constructor(
     readonly id: string,
@@ -485,7 +485,7 @@ export class ResTopic extends Copyable<ResTopic>
     readonly votes: Im.List<IVote>,
     readonly lv: number,
     readonly hash: string,
-    readonly replyCount: number,
+    readonly replyCount: number
   ) {
     super(ResTopic);
   }
@@ -504,7 +504,7 @@ export class ResFork extends Copyable<ResFork>
     user: User,
     _authToken: IAuthToken,
     fork: TopicFork,
-    now: Date,
+    now: Date
   ) {
     const result = new ResFork(
       fork.id,
@@ -515,7 +515,7 @@ export class ResFork extends Copyable<ResFork>
       Im.List(),
       user.lv * 5,
       topic.hash(now, user),
-      0,
+      0
     );
 
     const newTopic = topic.resUpdate(result);
@@ -526,22 +526,22 @@ export class ResFork extends Copyable<ResFork>
   cv!: (
     resUser: User,
     user: User,
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResFork; resUser: User };
   _v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResFork; resUser: User };
   v!: (
     resUser: User,
     user: User,
     type: "uv" | "dv",
-    _authToken: IAuthToken,
+    _authToken: IAuthToken
   ) => { res: ResFork; resUser: User };
 
-  readonly type: "fork" = "fork";
+  readonly type = "fork" as const;
 
   constructor(
     readonly fork: string,
@@ -552,7 +552,7 @@ export class ResFork extends Copyable<ResFork>
     readonly votes: Im.List<IVote>,
     readonly lv: number,
     readonly hash: string,
-    readonly replyCount: number,
+    readonly replyCount: number
   ) {
     super(ResFork);
   }

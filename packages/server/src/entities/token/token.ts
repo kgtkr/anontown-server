@@ -71,17 +71,17 @@ export class TokenMaster extends Copyable<TokenMaster>
     objidGenerator: IObjectIdGenerator,
     authUser: IAuthUser,
     now: Date,
-    randomGenerator: ISafeIdGenerator,
+    randomGenerator: ISafeIdGenerator
   ): TokenMaster {
     return new TokenMaster(
       objidGenerator.generateObjectId(),
       TokenBase.createTokenKey(randomGenerator),
       authUser.id,
-      now,
+      now
     );
   }
 
-  readonly type: "master" = "master";
+  readonly type = "master" as const;
 
   toBaseAPI!: () => ITokenBaseAPI<"master">;
 
@@ -89,7 +89,7 @@ export class TokenMaster extends Copyable<TokenMaster>
     readonly id: string,
     readonly key: string,
     readonly user: string,
-    readonly date: Date,
+    readonly date: Date
   ) {
     super(TokenMaster);
   }
@@ -115,7 +115,7 @@ export class TokenGeneral extends Copyable<TokenGeneral>
     authToken: IAuthTokenMaster,
     client: Client,
     now: Date,
-    randomGenerator: ISafeIdGenerator,
+    randomGenerator: ISafeIdGenerator
   ): TokenGeneral {
     return new TokenGeneral(
       objidGenerator.generateObjectId(),
@@ -123,11 +123,11 @@ export class TokenGeneral extends Copyable<TokenGeneral>
       client.id,
       authToken.user,
       Im.List(),
-      now,
+      now
     );
   }
 
-  readonly type: "general" = "general";
+  readonly type = "general" as const;
 
   toBaseAPI!: () => ITokenBaseAPI<"general">;
 
@@ -137,7 +137,7 @@ export class TokenGeneral extends Copyable<TokenGeneral>
     readonly client: string,
     readonly user: string,
     readonly req: Im.List<ITokenReq>,
-    readonly date: Date,
+    readonly date: Date
   ) {
     super(TokenGeneral);
   }
@@ -151,19 +151,19 @@ export class TokenGeneral extends Copyable<TokenGeneral>
 
   createReq(
     now: Date,
-    randomGenerator: ISafeIdGenerator,
+    randomGenerator: ISafeIdGenerator
   ): { token: TokenGeneral; req: ITokenReqAPI } {
     const nowNum = now.getTime();
 
     // ゴミを削除
     const reqFilter = this.req.filter(
-      r => r.active && nowNum < r.expireDate.getTime(),
+      (r) => r.active && nowNum < r.expireDate.getTime()
     );
 
     const req: ITokenReq = {
       key: TokenBase.createTokenKey(randomGenerator),
       expireDate: new Date(
-        nowNum + 1000 * 60 * Constant.token.req.expireMinute,
+        nowNum + 1000 * 60 * Constant.token.req.expireMinute
       ),
       active: true,
     };
@@ -181,7 +181,7 @@ export class TokenGeneral extends Copyable<TokenGeneral>
 
   authReq(key: string, now: Date): IAuthTokenGeneral {
     // TODO: 自動削除
-    const req = this.req.find(x => x.key === key);
+    const req = this.req.find((x) => x.key === key);
     if (
       req === undefined ||
       !req.active ||

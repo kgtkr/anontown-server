@@ -12,7 +12,7 @@ import { Copyable } from "../../utils";
 describe("TopicSearchBase", () => {
   class TopicSearchBaseTest extends Copyable<TopicSearchBaseTest>
     implements TopicSearchBase<"normal", TopicSearchBaseTest> {
-    readonly type: "normal" = "normal";
+    readonly type = "normal" as const;
 
     toBaseAPI!: () => ITopicBaseAPI<"normal">;
     hash!: (date: Date, user: User) => string;
@@ -28,7 +28,7 @@ describe("TopicSearchBase", () => {
       readonly date: Date,
       readonly resCount: number,
       readonly ageUpdate: Date,
-      readonly active: boolean,
+      readonly active: boolean
     ) {
       super(TopicSearchBaseTest);
     }
@@ -44,7 +44,7 @@ describe("TopicSearchBase", () => {
     new Date(0),
     10,
     new Date(50),
-    true,
+    true
   );
 
   describe("toAPI", () => {

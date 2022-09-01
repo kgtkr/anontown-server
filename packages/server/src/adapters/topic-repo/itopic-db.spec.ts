@@ -23,7 +23,7 @@ import {
 describe("ITopicDB", () => {
   class TopicSearchBaseTest extends Copyable<TopicSearchBaseTest>
     implements TopicSearchBase<"normal", TopicSearchBaseTest> {
-    readonly type: "normal" = "normal";
+    readonly type = "normal" as const;
 
     toBaseAPI!: () => ITopicBaseAPI<"normal">;
     hash!: (date: Date, user: User) => string;
@@ -39,7 +39,7 @@ describe("ITopicDB", () => {
       readonly date: Date,
       readonly resCount: number,
       readonly ageUpdate: Date,
-      readonly active: boolean,
+      readonly active: boolean
     ) {
       super(TopicSearchBaseTest);
     }
@@ -55,12 +55,12 @@ describe("ITopicDB", () => {
     new Date(0),
     10,
     new Date(50),
-    true,
+    true
   );
 
   class TopicBaseTest extends Copyable<TopicBaseTest>
     implements TopicBase<"normal", TopicBaseTest> {
-    readonly type: "normal" = "normal";
+    readonly type = "normal" as const;
     toBaseAPI!: () => ITopicBaseAPI<"normal">;
     hash!: (date: Date, user: User) => string;
     resUpdate!: (res: Res) => TopicBaseTest;
@@ -72,7 +72,7 @@ describe("ITopicDB", () => {
       readonly date: Date,
       readonly resCount: number,
       readonly ageUpdate: Date,
-      readonly active: boolean,
+      readonly active: boolean
     ) {
       super(TopicBaseTest);
     }
@@ -86,7 +86,7 @@ describe("ITopicDB", () => {
     new Date(0),
     10,
     new Date(50),
-    true,
+    true
   );
 
   describe("fromTopicSearchBase", () => {
@@ -95,7 +95,7 @@ describe("ITopicDB", () => {
         fromTopicBase<"normal">()(topicSearchBaseTest, {
           tags: [],
           text: "text",
-        }),
+        })
       );
     });
   });
@@ -125,7 +125,7 @@ describe("ITopicDB", () => {
     new Date(0),
     5,
     new Date(50),
-    true,
+    true
   );
 
   describe("toTopic", () => {
@@ -145,8 +145,8 @@ describe("ITopicDB", () => {
               text: "text",
             },
           },
-          5,
-        ),
+          5
+        )
       ).toEqual(topicOne);
     });
   });
@@ -160,7 +160,7 @@ describe("ITopicDB", () => {
     new Date(0),
     5,
     new Date(50),
-    true,
+    true
   );
 
   describe("toTopicNormal", () => {
@@ -180,8 +180,8 @@ describe("ITopicDB", () => {
               text: "text",
             },
           },
-          5,
-        ),
+          5
+        )
       ).toEqual(topicNormal);
     });
   });
@@ -194,7 +194,7 @@ describe("ITopicDB", () => {
     5,
     new Date(50),
     true,
-    "parent",
+    "parent"
   );
 
   describe("toTopicFork", () => {
@@ -213,8 +213,8 @@ describe("ITopicDB", () => {
               parent: "parent",
             },
           },
-          5,
-        ),
+          5
+        )
       ).toEqual(topicFork);
     });
   });
@@ -224,7 +224,7 @@ describe("ITopicDB", () => {
       expect(fromTopicFork(topicFork)).toEqual(
         fromTopicBase<"fork">()(topicFork, {
           parent: "parent",
-        }),
+        })
       );
     });
   });

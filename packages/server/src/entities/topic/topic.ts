@@ -159,7 +159,7 @@ export abstract class TopicBase<
         // トピ依存
         this.id +
         // ソルト依存
-        Config.salt.hash,
+        Config.salt.hash
     ).substr(0, Constant.topic.hashLen);
   }
 }
@@ -190,7 +190,7 @@ export class TopicNormal extends Copyable<TopicNormal>
     text: string,
     user: User,
     authToken: IAuthToken,
-    now: Date,
+    now: Date
   ) {
     TopicBase.checkData({ title, tags, text });
     const topic = new TopicNormal(
@@ -202,7 +202,7 @@ export class TopicNormal extends Copyable<TopicNormal>
       now,
       1,
       now,
-      true,
+      true
     );
     const cd = topic.changeData(
       objidGenerator,
@@ -211,14 +211,14 @@ export class TopicNormal extends Copyable<TopicNormal>
       title,
       tags,
       text,
-      now,
+      now
     );
     const newUser = cd.user.changeLastTopic(now);
 
     return { topic: cd.topic, history: cd.history, res: cd.res, user: newUser };
   }
 
-  readonly type: "normal" = "normal";
+  readonly type = "normal" as const;
 
   toBaseAPI!: () => ITopicBaseAPI<"normal">;
   hash!: (date: Date, user: User) => string;
@@ -234,7 +234,7 @@ export class TopicNormal extends Copyable<TopicNormal>
     readonly date: Date,
     readonly resCount: number,
     readonly ageUpdate: Date,
-    readonly active: boolean,
+    readonly active: boolean
   ) {
     super(TopicNormal);
   }
@@ -246,7 +246,7 @@ export class TopicNormal extends Copyable<TopicNormal>
     title: string | undefined,
     tags: Array<string> | undefined,
     text: string | undefined,
-    now: Date,
+    now: Date
   ) {
     const newUser = user.usePoint(10);
     TopicBase.checkData({ title, tags, text });
@@ -265,7 +265,7 @@ export class TopicNormal extends Copyable<TopicNormal>
       newTopic.text,
       now,
       newTopic.hash(now, newUser),
-      newUser,
+      newUser
     );
     const { res, topic: newNewTopic } = ResHistory.create(
       objidGenerator,
@@ -273,7 +273,7 @@ export class TopicNormal extends Copyable<TopicNormal>
       newUser,
       authToken,
       history,
-      now,
+      now
     );
 
     return { topic: newNewTopic, res, history, user: newUser };
@@ -290,7 +290,7 @@ export class TopicOne extends Copyable<TopicOne>
     text: string,
     user: User,
     authToken: IAuthToken,
-    now: Date,
+    now: Date
   ) {
     TopicBase.checkData({ title, tags, text });
     const topic = new TopicOne(
@@ -302,7 +302,7 @@ export class TopicOne extends Copyable<TopicOne>
       now,
       1,
       now,
-      true,
+      true
     );
 
     const { res, topic: newTopic } = ResTopic.create(
@@ -310,14 +310,14 @@ export class TopicOne extends Copyable<TopicOne>
       topic,
       user,
       authToken,
-      now,
+      now
     );
     const newUser = user.changeLastOneTopic(now);
 
     return { topic: newTopic, res, user: newUser };
   }
 
-  readonly type: "one" = "one";
+  readonly type = "one" as const;
   toBaseAPI!: () => ITopicBaseAPI<"one">;
   hash!: (date: Date, user: User) => string;
   toAPI!: () => ITopicSearchBaseAPI<"one">;
@@ -332,7 +332,7 @@ export class TopicOne extends Copyable<TopicOne>
     readonly date: Date,
     readonly resCount: number,
     readonly ageUpdate: Date,
-    readonly active: boolean,
+    readonly active: boolean
   ) {
     super(TopicOne);
   }
@@ -347,7 +347,7 @@ export class TopicFork extends Copyable<TopicFork>
     parent: TopicNormal,
     user: User,
     authToken: IAuthToken,
-    now: Date,
+    now: Date
   ) {
     TopicBase.checkData({ title });
     const topic = new TopicFork(
@@ -358,7 +358,7 @@ export class TopicFork extends Copyable<TopicFork>
       1,
       now,
       true,
-      parent.id,
+      parent.id
     );
 
     const { res, topic: newTopic } = ResTopic.create(
@@ -366,7 +366,7 @@ export class TopicFork extends Copyable<TopicFork>
       topic,
       user,
       authToken,
-      now,
+      now
     );
 
     const { topic: newParent, res: resParent } = ResFork.create(
@@ -375,7 +375,7 @@ export class TopicFork extends Copyable<TopicFork>
       user,
       authToken,
       newTopic,
-      now,
+      now
     );
     const newUser = user.changeLastOneTopic(now);
 
@@ -388,7 +388,7 @@ export class TopicFork extends Copyable<TopicFork>
     };
   }
 
-  readonly type: "fork" = "fork";
+  readonly type = "fork" as const;
   toBaseAPI!: () => ITopicBaseAPI<"fork">;
   hash!: (date: Date, user: User) => string;
   resUpdate!: (res: Res) => TopicFork;
@@ -401,7 +401,7 @@ export class TopicFork extends Copyable<TopicFork>
     readonly resCount: number,
     readonly ageUpdate: Date,
     readonly active: boolean,
-    readonly parent: string,
+    readonly parent: string
   ) {
     super(TopicFork);
   }
