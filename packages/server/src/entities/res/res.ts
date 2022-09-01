@@ -67,7 +67,7 @@ export interface IResHistoryAPI extends IResBaseAPI<"history"> {
   readonly historyID: string;
 }
 
-export interface IResTopicAPI extends IResBaseAPI<"topic"> {}
+export type IResTopicAPI = IResBaseAPI<"topic">
 
 export interface IResForkAPI extends IResBaseAPI<"fork"> {
   readonly forkID: string;

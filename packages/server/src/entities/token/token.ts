@@ -31,7 +31,7 @@ export interface ITokenBaseAPI<T extends TokenType> {
   readonly type: T;
 }
 
-export interface ITokenMasterAPI extends ITokenBaseAPI<"master"> {}
+export type ITokenMasterAPI = ITokenBaseAPI<"master">
 
 export interface ITokenGeneralAPI extends ITokenBaseAPI<"general"> {
   readonly clientID: string;

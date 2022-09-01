@@ -36,9 +36,9 @@ export interface ITopicSearchBaseAPI<T extends TopicSearchType>
   readonly text: string;
 }
 
-export interface ITopicNormalAPI extends ITopicSearchBaseAPI<"normal"> {}
+export type ITopicNormalAPI = ITopicSearchBaseAPI<"normal">
 
-export interface ITopicOneAPI extends ITopicSearchBaseAPI<"one"> {}
+export type ITopicOneAPI = ITopicSearchBaseAPI<"one">
 
 export interface ITopicForkAPI extends ITopicBaseAPI<"fork"> {
   readonly parentID: string;

@@ -19,7 +19,7 @@ export interface ITokenBaseDB<T extends TokenType> {
   readonly date: Date;
 }
 
-export interface ITokenMasterDB extends ITokenBaseDB<"master"> {}
+export type ITokenMasterDB = ITokenBaseDB<"master">
 
 export interface ITokenGeneralDB extends ITokenBaseDB<"general"> {
   readonly client: ObjectID;
