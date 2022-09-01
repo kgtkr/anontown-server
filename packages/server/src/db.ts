@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import lazy = require("lazy-value");
+import lazy from "lazy-value";
 import { Config } from "./config";
 
 export function createRedisClient() {

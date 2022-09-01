@@ -1,4 +1,4 @@
-import nanoid = require("nanoid");
+import { nanoid } from "nanoid";
 import { ISafeIdGenerator } from "../../ports";
 
 export class SafeIdGenerator implements ISafeIdGenerator {
