@@ -16,7 +16,7 @@ export class RecaptchaClient implements IRecaptchaClient {
       }
     );
 
-    if (!(result.data as any).success) {
+    if (!result.data.success) {
       throw new AtCaptchaError();
     }
   }
