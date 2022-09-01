@@ -10,10 +10,10 @@
     "typescript": "^4.8.2"
   },
   "scripts": {
-    "lint": "eslint --ext .ts,.tsx packages/*/src",
-    "lint:fix": "eslint --ext .ts,.tsx --fix packages/*/src",
-    "format:check": "prettier --check packages/*/src/**/*.ts",
-    "format": "prettier --write packages/*/src/**/*.ts",
+    "lint": "eslint 'packages/*/src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}'",
+    "format:check": "prettier --check 'packages/*/src/**/*.{ts,tsx}'",
+    "format": "prettier --write 'packages/*/src/**/*.{ts,tsx}'",
     "dev": "npm run dev -w @anontown/server",
     "build": "npm run build -w @anontown/server",
     "start": "npm run start -w @anontown/server"
