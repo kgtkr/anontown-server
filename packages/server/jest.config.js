@@ -7,5 +7,4 @@ module.exports = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   testEnvironment: "node",
   verbose: true,
-  setupFilesAfterEnv: ["./jest.setup.js"],
 };

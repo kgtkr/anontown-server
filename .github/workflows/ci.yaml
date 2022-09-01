@@ -22,10 +22,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: |
-          npm ci
-          npx lerna bootstrap --ci
-      - run: npx lerna run codegen --parallel --scope @anontown/server --include-filtered-dependencies
+      - run: npm ci
+      - run: npm run build
       - run: npm run lint
       - run: |
           npx prisma migrate deploy

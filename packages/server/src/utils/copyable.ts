@@ -7,6 +7,6 @@ export class Copyable<T> {
 
   copy(partial: Partial<T>): T {
     const cloneObj: T = new this._constructor();
-    return Object.assign(cloneObj, this, objectRemoveUndefined(partial));
+    return Object.assign(cloneObj as any, this, objectRemoveUndefined(partial));
   }
 }

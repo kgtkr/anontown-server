@@ -12,6 +12,8 @@ services:
     image: redis:5.0.14
     volumes:
       - redis:/var/lib/postgresql/data
+    ports:
+      - 6379:6379
 volumes:
   postgres:
   redis:
