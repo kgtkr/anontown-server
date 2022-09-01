@@ -57,9 +57,10 @@
   "scripts": {
     "start": "node ./dist/app.js",
     "build": "graphql-codegen && prisma generate && tsc -b .",
-    "dev": "run-p codegen:watch start-dev",
+    "dev": "run-p graphql-codegen:watch prisma-codegen:watch start-dev",
     "start-dev": "ts-node-dev ./src/app.ts",
-    "codegen:watch": "graphql-codegen -w",
+    "graphql-codegen:watch": "graphql-codegen -w",
+    "prisma-codegen:watch": "prisma generate --watch",
     "test": "jest --forceExit",
     "migrate": "prisma migrate deploy",
     "render-schema": "node ./dist/render-schema.js"
