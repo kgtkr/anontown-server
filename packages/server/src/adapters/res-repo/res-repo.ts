@@ -177,10 +177,9 @@ export class ResRepo implements IResRepo {
   subscribeInsertEvent(): Observable<{ res: Res; count: number }> {
     return new Observable<{ res: Res; count: number }>(subscriber => {
       const subRedis = createRedisClient();
-      subRedis.subscribe(ResPubSubChannel);
+      void subRedis.subscribe(ResPubSubChannel);
       subRedis.on("message", (_channel: any, message: string) => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        (async () => {
+        void (async () => {
           const unknownData: unknown = JSON.parse(message);
           try {
             const data = ResPubSub.parse(unknownData);
