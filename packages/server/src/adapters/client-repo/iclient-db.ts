@@ -17,7 +17,7 @@ export function toClient(c: IClientDB): Client {
     c.url,
     c.user.toString(),
     c.date,
-    c.update,
+    c.update
   );
 }
 

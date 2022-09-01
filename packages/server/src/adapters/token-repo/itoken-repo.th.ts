@@ -3,7 +3,7 @@ import { ObjectID } from "bson";
 import { AtError, ITokenRepo, TokenGeneral, TokenMaster } from "../../";
 
 export function run(
-  $isolate: (callback: (repo: ITokenRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: ITokenRepo) => Promise<void>) => Promise<void>
 ) {
   const userID = new ObjectID().toHexString();
 
@@ -11,7 +11,7 @@ export function run(
     new ObjectID().toHexString(),
     "key",
     userID,
-    new Date(0),
+    new Date(0)
   );
 
   const tokenGeneral = new TokenGeneral(
@@ -26,12 +26,12 @@ export function run(
         active: true,
       },
     ]),
-    new Date(0),
+    new Date(0)
   );
 
   describe("findOne", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(tokenMaster);
         await repo.insert(tokenGeneral);
 
@@ -41,11 +41,11 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(tokenMaster);
 
         await expect(
-          repo.findOne(new ObjectID().toHexString()),
+          repo.findOne(new ObjectID().toHexString())
         ).rejects.toThrow(AtError);
       });
     });
@@ -53,7 +53,7 @@ export function run(
 
   describe("findAll", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const user1 = new ObjectID().toHexString();
         const user2 = new ObjectID().toHexString();
         const user3 = new ObjectID().toHexString();
@@ -90,7 +90,7 @@ export function run(
             key: "key",
             user: user1,
             type: "master",
-          }),
+          })
         ).toEqual([token2, token1, token3]);
 
         expect(
@@ -99,7 +99,7 @@ export function run(
             key: "key",
             user: user2,
             type: "master",
-          }),
+          })
         ).toEqual([token4]);
 
         expect(
@@ -108,7 +108,7 @@ export function run(
             key: "key",
             user: user3,
             type: "master",
-          }),
+          })
         ).toEqual([]);
       });
     });
@@ -116,7 +116,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(tokenMaster);
 
         expect(await repo.findOne(tokenMaster.id)).toEqual(tokenMaster);
@@ -128,7 +128,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const token1 = tokenMaster.copy({
           id: new ObjectID().toHexString(),
           key: "key1",
@@ -166,7 +166,7 @@ export function run(
 
   describe("delClientToken", () => {
     it("正常に削除出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const token1 = tokenGeneral.copy({ id: new ObjectID().toHexString() });
         const token2 = tokenGeneral.copy({ id: new ObjectID().toHexString() });
         const token3 = tokenGeneral.copy({
@@ -192,7 +192,7 @@ export function run(
             user: tokenGeneral.user,
             type: "master",
           },
-          tokenGeneral.client,
+          tokenGeneral.client
         );
 
         await expect(repo.findOne(token1.id)).rejects.toThrow(AtError);
@@ -206,7 +206,7 @@ export function run(
 
   describe("delMasterToken", () => {
     it("正常に削除出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const token1 = tokenMaster.copy({ id: new ObjectID().toHexString() });
         const token2 = tokenMaster.copy({ id: new ObjectID().toHexString() });
         const token3 = tokenMaster.copy({

@@ -13,21 +13,21 @@ function toEntity(db: P.Storage): Storage {
   return new Storage(
     pipe(
       O.some(db.clientId),
-      O.filter(client => client !== ""),
+      O.filter((client) => client !== "")
     ),
     db.userId,
     db.key,
-    db.value,
+    db.value
   );
 }
 
 function fromEntityToUniqueKey(
-  entity: Omit<Storage, "value">,
+  entity: Omit<Storage, "value">
 ): P.Prisma.StorageClientIdUserIdKeyCompoundUniqueInput {
   return {
     clientId: pipe(
       entity.client,
-      O.getOrElse(() => ""),
+      O.getOrElse(() => "")
     ),
     userId: entity.user,
     key: entity.key,
@@ -35,7 +35,7 @@ function fromEntityToUniqueKey(
 }
 
 function fromEntity(
-  storage: Storage,
+  storage: Storage
 ): Omit<P.Prisma.StorageCreateInput, "userId" | "clientId" | "key"> {
   return {
     value: storage.value,
@@ -47,7 +47,7 @@ export class StorageRepo implements IStorageRepo {
 
   async find(
     token: IAuthToken,
-    query: G.StorageQuery,
+    query: G.StorageQuery
   ): Promise<Array<Storage>> {
     const filter: Array<P.Prisma.StorageWhereInput> = [
       {
@@ -68,7 +68,7 @@ export class StorageRepo implements IStorageRepo {
         AND: filter,
       },
     });
-    return storages.map(x => toEntity(x));
+    return storages.map((x) => toEntity(x));
   }
 
   async findOneKey(token: IAuthToken, key: string): Promise<Storage> {

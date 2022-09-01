@@ -67,7 +67,7 @@ export interface IResHistoryAPI extends IResBaseAPI<"history"> {
   readonly historyID: string;
 }
 
-export type IResTopicAPI = IResBaseAPI<"topic">
+export type IResTopicAPI = IResBaseAPI<"topic">;
 
 export interface IResForkAPI extends IResBaseAPI<"fork"> {
   readonly forkID: string;
@@ -190,8 +190,10 @@ export abstract class ResBase<T extends ResType, C extends ResBase<T, C>> {
 
 export type Res = ResNormal | ResHistory | ResTopic | ResFork;
 
-export class ResNormal extends Copyable<ResNormal>
-  implements ResBase<"normal", ResNormal> {
+export class ResNormal
+  extends Copyable<ResNormal>
+  implements ResBase<"normal", ResNormal>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     topic: Topic,
@@ -361,8 +363,10 @@ export class ResNormal extends Copyable<ResNormal>
 }
 applyMixins(ResNormal, [ResBase]);
 
-export class ResHistory extends Copyable<ResHistory>
-  implements ResBase<"history", ResHistory> {
+export class ResHistory
+  extends Copyable<ResHistory>
+  implements ResBase<"history", ResHistory>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     topic: TopicNormal,
@@ -431,8 +435,10 @@ export class ResHistory extends Copyable<ResHistory>
 }
 applyMixins(ResHistory, [ResBase]);
 
-export class ResTopic extends Copyable<ResTopic>
-  implements ResBase<"topic", ResTopic> {
+export class ResTopic
+  extends Copyable<ResTopic>
+  implements ResBase<"topic", ResTopic>
+{
   static create<TC extends TopicOne | TopicFork>(
     objidGenerator: IObjectIdGenerator,
     topic: TC,
@@ -496,8 +502,10 @@ export class ResTopic extends Copyable<ResTopic>
 }
 applyMixins(ResTopic, [ResBase]);
 
-export class ResFork extends Copyable<ResFork>
-  implements ResBase<"fork", ResFork> {
+export class ResFork
+  extends Copyable<ResFork>
+  implements ResBase<"fork", ResFork>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     topic: TopicNormal,

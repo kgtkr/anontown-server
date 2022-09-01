@@ -2,11 +2,13 @@ import { $$asyncIterator } from "iterall";
 import { Observable, Subscription } from "rxjs";
 // https://github.com/apollographql/graphql-subscriptions/blob/master/src/event-emitter-to-async-iterator.ts
 export function observableAsyncIterator<T>(
-  obs: Observable<T>,
+  obs: Observable<T>
 ): AsyncIterator<T> {
-  const pullQueue: Array<(
-    value?: IteratorResult<T> | PromiseLike<IteratorResult<T>> | undefined,
-  ) => void> = [];
+  const pullQueue: Array<
+    (
+      value?: IteratorResult<T> | PromiseLike<IteratorResult<T>> | undefined
+    ) => void
+  > = [];
   const pushQueue: Array<T> = [];
   let subs: Array<Subscription> = [];
   let listening = true;
@@ -21,7 +23,7 @@ export function observableAsyncIterator<T>(
   };
 
   const pullValue = () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (pushQueue.length !== 0) {
         resolve({ value: pushQueue.shift(), done: false });
       } else {
@@ -36,8 +38,8 @@ export function observableAsyncIterator<T>(
       if (addedListeners) {
         removeEventListeners();
       }
-      pullQueue.forEach(resolve =>
-        resolve({ value: undefined as any, done: true }),
+      pullQueue.forEach((resolve) =>
+        resolve({ value: undefined as any, done: true })
       );
       pullQueue.length = 0;
       pushQueue.length = 0;
@@ -49,7 +51,7 @@ export function observableAsyncIterator<T>(
   };
 
   const removeEventListeners = () => {
-    subs.forEach(sub => sub.unsubscribe());
+    subs.forEach((sub) => sub.unsubscribe());
     subs = [];
   };
 

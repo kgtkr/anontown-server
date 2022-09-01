@@ -7,7 +7,7 @@ export class ResLoader implements IResLoader {
   loader: DataLoader<string, Res>;
 
   constructor(resRepo: IResRepo, auth: IAuthContainer) {
-    this.loader = loader(ids => resRepo.find(auth, { id: ids }, ids.length));
+    this.loader = loader((ids) => resRepo.find(auth, { id: ids }, ids.length));
   }
 
   load(id: string) {

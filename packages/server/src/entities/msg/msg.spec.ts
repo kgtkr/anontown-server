@@ -46,12 +46,7 @@ describe("Msg", () => {
   describe("create", () => {
     it("receiverがnullの時正常に生成できるか", () => {
       expect(
-        Msg.create(
-          new DummyObjectIdGenerator("msg"),
-          none,
-          "text",
-          new Date(0),
-        ),
+        Msg.create(new DummyObjectIdGenerator("msg"), none, "text", new Date(0))
       ).toEqual(receiverNullMsg);
     });
 
@@ -73,15 +68,15 @@ describe("Msg", () => {
         new Date(200),
         new Date(20),
         0,
-        new Date(250),
+        new Date(250)
       );
       expect(
         Msg.create(
           new DummyObjectIdGenerator("msg"),
           some(user),
           "text",
-          new Date(0),
-        ),
+          new Date(0)
+        )
       ).toEqual(msg);
     });
   });

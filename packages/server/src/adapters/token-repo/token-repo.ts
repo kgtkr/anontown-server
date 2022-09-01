@@ -13,7 +13,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 function toEntity(
   model: P.Token & {
     reqs: Array<P.TokenReq>;
-  },
+  }
 ): Token {
   switch (model.type) {
     case "GENERAL":
@@ -25,25 +25,25 @@ function toEntity(
         pipe(
           model.reqs,
           A.sort(
-            Ord.contramap<number, P.TokenReq>(x => x.expires.valueOf())(
-              Ord.ordNumber,
-            ),
+            Ord.contramap<number, P.TokenReq>((x) => x.expires.valueOf())(
+              Ord.ordNumber
+            )
           ),
-          A.map(req => ({
+          A.map((req) => ({
             key: req.key,
             expireDate: req.expires,
             active: req.active,
           })),
-          xs => Im.List(xs),
+          (xs) => Im.List(xs)
         ),
-        model.createdAt,
+        model.createdAt
       );
     case "MASTER":
       return new TokenMaster(
         model.id,
         model.key,
         model.userId,
-        model.createdAt,
+        model.createdAt
       );
   }
 }
@@ -71,9 +71,9 @@ function fromEntity(token: Token): Omit<P.Prisma.TokenCreateInput, "id"> {
 }
 
 function reqsFromEntity(
-  token: TokenGeneral,
+  token: TokenGeneral
 ): Array<P.Prisma.TokenReqCreateManyInput> {
-  return token.req.toArray().map<P.Prisma.TokenReqCreateManyInput>(req => ({
+  return token.req.toArray().map<P.Prisma.TokenReqCreateManyInput>((req) => ({
     key: req.key,
     expires: req.expireDate,
     active: req.active,
@@ -108,7 +108,7 @@ export class TokenRepo implements ITokenRepo {
       orderBy: { createdAt: "desc" },
     });
 
-    return models.map(t => toEntity(t));
+    return models.map((t) => toEntity(t));
   }
 
   async insert(token: Token): Promise<void> {
@@ -134,7 +134,7 @@ export class TokenRepo implements ITokenRepo {
 
   async delClientToken(
     token: IAuthTokenMaster,
-    clientID: string,
+    clientID: string
   ): Promise<void> {
     await this.prisma.token.deleteMany({
       where: { userId: token.user, clientId: clientID },

@@ -32,8 +32,8 @@ describe("IResDB", () => {
               fork: "topicfork",
             },
           },
-          3,
-        ),
+          3
+        )
       ).toEqual(
         new ResFork(
           "topicfork",
@@ -44,8 +44,8 @@ describe("IResDB", () => {
           Im.List(),
           5,
           "hash",
-          3,
-        ),
+          3
+        )
       );
     });
   });
@@ -60,12 +60,12 @@ describe("IResDB", () => {
       Im.List(),
       5,
       "hash",
-      10,
+      10
     );
 
     it("正常に変換出来るか", () => {
       expect(fromResFork(resFork)).toEqual(
-        fromResBase<"fork">()(resFork, { fork: "topicfork" }),
+        fromResBase<"fork">()(resFork, { fork: "topicfork" })
       );
     });
   });
@@ -95,8 +95,8 @@ describe("IResDB", () => {
               age: true,
             },
           },
-          2,
-        ),
+          2
+        )
       ).toEqual(
         new ResNormal(
           some("name"),
@@ -115,8 +115,8 @@ describe("IResDB", () => {
           Im.List(),
           10,
           "hash",
-          2,
-        ),
+          2
+        )
       );
     });
   });
@@ -139,7 +139,7 @@ describe("IResDB", () => {
       Im.List(),
       5,
       "hash",
-      1,
+      1
     );
 
     it("正常に変換出来るか", () => {
@@ -180,8 +180,8 @@ describe("IResDB", () => {
               hash: "hash",
             },
           },
-          3,
-        ),
+          3
+        )
       ).toEqual(
         new ResTopic(
           "id",
@@ -191,8 +191,8 @@ describe("IResDB", () => {
           Im.List(),
           5,
           "hash",
-          3,
-        ),
+          3
+        )
       );
     });
   });
@@ -206,7 +206,7 @@ describe("IResDB", () => {
       Im.List(),
       5,
       "hash",
-      10,
+      10
     );
 
     it("正常に変換出来るか", () => {
@@ -231,8 +231,8 @@ describe("IResDB", () => {
               history: "history",
             },
           },
-          3,
-        ),
+          3
+        )
       ).toEqual(
         new ResHistory(
           "history",
@@ -243,8 +243,8 @@ describe("IResDB", () => {
           Im.List(),
           5,
           "hash",
-          3,
-        ),
+          3
+        )
       );
     });
   });
@@ -259,14 +259,14 @@ describe("IResDB", () => {
       Im.List(),
       5,
       "hash",
-      1,
+      1
     );
 
     it("正常に変換できるか", () => {
       expect(fromResHistory(resHistory)).toEqual(
         fromResBase()(resHistory, {
           history: resHistory.history,
-        }),
+        })
       );
     });
   });

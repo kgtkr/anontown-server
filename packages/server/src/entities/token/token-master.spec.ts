@@ -20,15 +20,15 @@ describe("TokenMaster", () => {
             pass: "pass",
           },
           new Date(100),
-          new DummySafeIdGenerator("key"),
-        ),
+          new DummySafeIdGenerator("key")
+        )
       ).toEqual(
         new TokenMaster(
           "token",
           TokenBase.createTokenKey(new DummySafeIdGenerator("key")),
           "user",
-          new Date(100),
-        ),
+          new Date(100)
+        )
       );
     });
   });

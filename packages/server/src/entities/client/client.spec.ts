@@ -20,8 +20,8 @@ describe("Client", () => {
           },
           "hoge",
           "http://hoge.com",
-          new Date(0),
-        ),
+          new Date(0)
+        )
       ).toEqual(
         new Client(
           "client",
@@ -29,8 +29,8 @@ describe("Client", () => {
           "http://hoge.com",
           "user",
           new Date(0),
-          new Date(0),
-        ),
+          new Date(0)
+        )
       );
     });
 
@@ -46,8 +46,8 @@ describe("Client", () => {
           },
           "hoge",
           "https://hoge.com",
-          new Date(0),
-        ),
+          new Date(0)
+        )
       ).toEqual(
         new Client(
           "client",
@@ -55,8 +55,8 @@ describe("Client", () => {
           "https://hoge.com",
           "user",
           new Date(0),
-          new Date(0),
-        ),
+          new Date(0)
+        )
       );
     });
 
@@ -72,7 +72,7 @@ describe("Client", () => {
           },
           "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "http://hoge",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -89,7 +89,7 @@ describe("Client", () => {
           },
           "",
           "http://hoge",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -106,7 +106,7 @@ describe("Client", () => {
           },
           "hoge",
           "hogehttp://hoge.com",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -123,7 +123,7 @@ describe("Client", () => {
           },
           "http://",
           "",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -140,7 +140,7 @@ describe("Client", () => {
           },
           "hoge",
           "",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -154,7 +154,7 @@ describe("Client", () => {
     "http://hoge.com",
     userID,
     new Date(0),
-    new Date(100),
+    new Date(100)
   );
 
   const auth: IAuthTokenMaster = {
@@ -167,7 +167,7 @@ describe("Client", () => {
   describe("#changeData", () => {
     it("正常に変更できるか", () => {
       expect(
-        client.changeData(auth, "name2", "http://hoge2.com", new Date(200)),
+        client.changeData(auth, "name2", "http://hoge2.com", new Date(200))
       ).toEqual(
         new Client(
           clientID,
@@ -175,12 +175,12 @@ describe("Client", () => {
           "http://hoge2.com",
           userID,
           new Date(0),
-          new Date(200),
-        ),
+          new Date(200)
+        )
       );
 
       expect(
-        client.changeData(auth, undefined, "http://hoge2.com", new Date(200)),
+        client.changeData(auth, undefined, "http://hoge2.com", new Date(200))
       ).toEqual(
         new Client(
           clientID,
@@ -188,12 +188,12 @@ describe("Client", () => {
           "http://hoge2.com",
           userID,
           new Date(0),
-          new Date(200),
-        ),
+          new Date(200)
+        )
       );
 
       expect(
-        client.changeData(auth, "name2", undefined, new Date(200)),
+        client.changeData(auth, "name2", undefined, new Date(200))
       ).toEqual(
         new Client(
           clientID,
@@ -201,8 +201,8 @@ describe("Client", () => {
           "http://hoge.com",
           userID,
           new Date(0),
-          new Date(200),
-        ),
+          new Date(200)
+        )
       );
     });
 
@@ -220,7 +220,7 @@ describe("Client", () => {
           auth,
           "hoge",
           "http://hoge",
-          new Date(0),
+          new Date(0)
         );
 
         client.changeData(
@@ -232,7 +232,7 @@ describe("Client", () => {
           },
           "foo",
           "http://foo",
-          new Date(100),
+          new Date(100)
         );
       }).toThrow(AtError);
     });
@@ -251,14 +251,14 @@ describe("Client", () => {
           auth,
           "hoge",
           "http://hoge",
-          new Date(0),
+          new Date(0)
         );
 
         client.changeData(
           auth,
           "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           undefined,
-          new Date(100),
+          new Date(100)
         );
       }).toThrow(AtError);
     });
@@ -277,7 +277,7 @@ describe("Client", () => {
           auth,
           "hoge",
           "http://hoge",
-          new Date(0),
+          new Date(0)
         );
 
         client.changeData(auth, undefined, "hogehttp://foo", new Date(100));
@@ -303,8 +303,8 @@ describe("Client", () => {
           some({
             ...auth,
             user: new ObjectID().toHexString(),
-          }),
-        ),
+          })
+        )
       ).toEqual({
         id: clientID,
         name: "name",

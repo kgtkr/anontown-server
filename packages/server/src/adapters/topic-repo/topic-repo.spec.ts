@@ -4,8 +4,8 @@ import { TopicRepo } from "../../";
 import { $transactionAfterRollback } from "../../prisma-client";
 
 describe("TopicRepo", () => {
-  run(async callback => {
-    await $transactionAfterRollback(async prisma => {
+  run(async (callback) => {
+    await $transactionAfterRollback(async (prisma) => {
       await callback(new TopicRepo(prisma));
     });
   });

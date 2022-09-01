@@ -18,7 +18,7 @@ describe("TopicFork", () => {
     5,
     new Date(50),
     true,
-    "parent",
+    "parent"
   );
 
   const user = new User(
@@ -38,7 +38,7 @@ describe("TopicFork", () => {
     new Date(0),
     new Date(0),
     0,
-    new Date(0),
+    new Date(0)
   );
 
   const auth: IAuthTokenMaster = {
@@ -57,7 +57,7 @@ describe("TopicFork", () => {
     new Date(0),
     5,
     new Date(50),
-    true,
+    true
   );
 
   describe("create", () => {
@@ -69,8 +69,8 @@ describe("TopicFork", () => {
           parent,
           user,
           auth,
-          new Date(24 * 60 * 60 * 1000),
-        ),
+          new Date(24 * 60 * 60 * 1000)
+        )
       ).toEqual({
         topic: topicFork.copy({
           id: "id",
@@ -91,7 +91,7 @@ describe("TopicFork", () => {
               id: "id",
             })
             .hash(new Date(24 * 60 * 60 * 1000), user),
-          0,
+          0
         ),
         resParent: new ResFork(
           "id",
@@ -102,7 +102,7 @@ describe("TopicFork", () => {
           Im.List(),
           50,
           parent.hash(new Date(24 * 60 * 60 * 1000), user),
-          0,
+          0
         ),
         user: user.copy({
           lastOneTopic: new Date(24 * 60 * 60 * 1000),

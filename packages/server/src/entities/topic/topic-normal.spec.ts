@@ -18,7 +18,7 @@ describe("TopicNormal", () => {
     new Date(0),
     5,
     new Date(50),
-    true,
+    true
   );
 
   const user = new User(
@@ -38,7 +38,7 @@ describe("TopicNormal", () => {
     new Date(0),
     new Date(0),
     0,
-    new Date(0),
+    new Date(0)
   );
 
   const auth: IAuthTokenMaster = {
@@ -58,8 +58,8 @@ describe("TopicNormal", () => {
           "text",
           user,
           auth,
-          new Date(24 * 60 * 60 * 1000),
-        ),
+          new Date(24 * 60 * 60 * 1000)
+        )
       ).toEqual({
         topic: topic.copy({
           date: new Date(24 * 60 * 60 * 1000),
@@ -75,7 +75,7 @@ describe("TopicNormal", () => {
           "text",
           new Date(24 * 60 * 60 * 1000),
           topic.hash(new Date(24 * 60 * 60 * 1000), user),
-          "user",
+          "user"
         ),
         res: new ResHistory(
           "topic",
@@ -86,7 +86,7 @@ describe("TopicNormal", () => {
           Im.List(),
           50,
           topic.hash(new Date(24 * 60 * 60 * 1000), user),
-          0,
+          0
         ),
         user: user.copy({
           lastTopic: new Date(24 * 60 * 60 * 1000),
@@ -106,8 +106,8 @@ describe("TopicNormal", () => {
           "title2",
           ["x"],
           "text2",
-          new Date(1000),
-        ),
+          new Date(1000)
+        )
       ).toEqual({
         topic: topic.copy({
           update: new Date(1000),
@@ -123,7 +123,7 @@ describe("TopicNormal", () => {
           "text2",
           new Date(1000),
           topic.hash(new Date(1000), user),
-          "user",
+          "user"
         ),
         res: new ResHistory(
           "id",
@@ -134,7 +134,7 @@ describe("TopicNormal", () => {
           Im.List(),
           50,
           topic.hash(new Date(1000), user),
-          0,
+          0
         ),
         user: user.copy({
           point: 10,
@@ -149,8 +149,8 @@ describe("TopicNormal", () => {
           undefined,
           ["x"],
           "text2",
-          new Date(1000),
-        ),
+          new Date(1000)
+        )
       ).toEqual({
         topic: topic.copy({
           update: new Date(1000),
@@ -166,7 +166,7 @@ describe("TopicNormal", () => {
           "text2",
           new Date(1000),
           topic.hash(new Date(1000), user),
-          "user",
+          "user"
         ),
         res: new ResHistory(
           "id",
@@ -177,7 +177,7 @@ describe("TopicNormal", () => {
           Im.List(),
           50,
           topic.hash(new Date(1000), user),
-          0,
+          0
         ),
         user: user.copy({
           point: 10,
@@ -192,8 +192,8 @@ describe("TopicNormal", () => {
           "title2",
           undefined,
           "text2",
-          new Date(1000),
-        ),
+          new Date(1000)
+        )
       ).toEqual({
         topic: topic.copy({
           update: new Date(1000),
@@ -209,7 +209,7 @@ describe("TopicNormal", () => {
           "text2",
           new Date(1000),
           topic.hash(new Date(1000), user),
-          "user",
+          "user"
         ),
         res: new ResHistory(
           "id",
@@ -220,7 +220,7 @@ describe("TopicNormal", () => {
           Im.List(),
           50,
           topic.hash(new Date(1000), user),
-          0,
+          0
         ),
         user: user.copy({
           point: 10,

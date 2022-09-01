@@ -25,7 +25,7 @@ export const mutation: G.MutationResolvers = {
       context.ports.objectIdGenerator,
       args.sn,
       args.pass,
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
     await context.ports.userRepo.insert(user);
 
@@ -33,7 +33,7 @@ export const mutation: G.MutationResolvers = {
       context.ports.objectIdGenerator,
       user.auth(args.pass),
       context.ports.clock.now(),
-      context.ports.safeIdGenerator,
+      context.ports.safeIdGenerator
     );
     await context.ports.tokenRepo.insert(token);
 
@@ -42,13 +42,13 @@ export const mutation: G.MutationResolvers = {
   updateUser: async (_obj, args, context, _info) => {
     const authUser = await authFromApiParam.authUserRequestToUser(
       context.ports.userRepo,
-      args.auth,
+      args.auth
     );
     const user = await context.ports.userRepo.findOne(authUser.id);
     const newUser = user.change(
       authUser,
       nullToUndefined(args.pass),
-      nullToUndefined(args.sn),
+      nullToUndefined(args.sn)
     );
     await context.ports.userRepo.update(newUser);
     await context.ports.tokenRepo.delMasterToken(authUser);
@@ -57,7 +57,7 @@ export const mutation: G.MutationResolvers = {
       context.ports.objectIdGenerator,
       authUser,
       context.ports.clock.now(),
-      context.ports.safeIdGenerator,
+      context.ports.safeIdGenerator
     );
     await context.ports.tokenRepo.insert(token);
     return { user: newUser.toAPI(), token: token.toAPI() };
@@ -68,11 +68,11 @@ export const mutation: G.MutationResolvers = {
       context.ports.authContainer.getTokenMaster(),
       args.name,
       args.url,
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
     await context.ports.clientRepo.insert(client);
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "clients", client.id),
+      formatter.mutation(context.ports.ipContainer, "clients", client.id)
     );
     return client.toAPI(some(context.ports.authContainer.getTokenMaster()));
   },
@@ -82,11 +82,11 @@ export const mutation: G.MutationResolvers = {
       context.ports.authContainer.getTokenMaster(),
       nullToUndefined(args.name),
       nullToUndefined(args.url),
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
     await context.ports.clientRepo.update(newClient);
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "clients", client.id),
+      formatter.mutation(context.ports.ipContainer, "clients", client.id)
     );
     return newClient.toAPI(some(context.ports.authContainer.getTokenMaster()));
   },
@@ -97,11 +97,11 @@ export const mutation: G.MutationResolvers = {
       args.name,
       args.text,
       args.sn,
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
     await context.ports.profileRepo.insert(profile);
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "profiles", profile.id),
+      formatter.mutation(context.ports.ipContainer, "profiles", profile.id)
     );
     return profile.toAPI(some(context.ports.authContainer.getToken()));
   },
@@ -112,11 +112,11 @@ export const mutation: G.MutationResolvers = {
       nullToUndefined(args.name),
       nullToUndefined(args.text),
       nullToUndefined(args.sn),
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
     await context.ports.profileRepo.update(newProfile);
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "profiles", newProfile.id),
+      formatter.mutation(context.ports.ipContainer, "profiles", newProfile.id)
     );
     return newProfile.toAPI(some(context.ports.authContainer.getToken()));
   },
@@ -124,7 +124,7 @@ export const mutation: G.MutationResolvers = {
     const [topic, user, reply, profile] = await Promise.all([
       context.ports.topicRepo.findOne(args.topic),
       context.ports.userRepo.findOne(
-        context.ports.authContainer.getToken().user,
+        context.ports.authContainer.getToken().user
       ),
       !isNullish(args.reply)
         ? context.ports.resRepo.findOne(args.reply)
@@ -134,7 +134,11 @@ export const mutation: G.MutationResolvers = {
         : Promise.resolve(null),
     ] as const);
 
-    const { res, user: newUser, topic: newTopic } = ResNormal.create(
+    const {
+      res,
+      user: newUser,
+      topic: newTopic,
+    } = ResNormal.create(
       context.ports.objectIdGenerator,
       topic,
       user,
@@ -144,7 +148,7 @@ export const mutation: G.MutationResolvers = {
       fromNullable(reply),
       fromNullable(profile),
       args.age,
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
 
     await Promise.all([
@@ -154,7 +158,7 @@ export const mutation: G.MutationResolvers = {
     ]);
 
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "reses", res.id),
+      formatter.mutation(context.ports.ipContainer, "reses", res.id)
     );
     const api = res.toAPI(some(context.ports.authContainer.getToken()));
     if (api.type !== "normal") {
@@ -167,7 +171,7 @@ export const mutation: G.MutationResolvers = {
       const [res, user] = await Promise.all([
         context.ports.resRepo.findOne(args.res),
         context.ports.userRepo.findOne(
-          context.ports.authContainer.getToken().user,
+          context.ports.authContainer.getToken().user
         ),
       ]);
 
@@ -177,7 +181,7 @@ export const mutation: G.MutationResolvers = {
       const { res: newRes, resUser: newResUser } = res.cv(
         resUser,
         user,
-        context.ports.authContainer.getToken(),
+        context.ports.authContainer.getToken()
       );
 
       await Promise.all([
@@ -191,7 +195,7 @@ export const mutation: G.MutationResolvers = {
       const [res, user] = await Promise.all([
         context.ports.resRepo.findOne(args.res),
         context.ports.userRepo.findOne(
-          context.ports.authContainer.getToken().user,
+          context.ports.authContainer.getToken().user
         ),
       ]);
 
@@ -202,7 +206,7 @@ export const mutation: G.MutationResolvers = {
         resUser,
         user,
         args.type,
-        context.ports.authContainer.getToken(),
+        context.ports.authContainer.getToken()
       );
 
       await Promise.all([
@@ -226,7 +230,7 @@ export const mutation: G.MutationResolvers = {
 
     const { res: newRes, resUser: newResUser } = res.del(
       resUser,
-      context.ports.authContainer.getToken(),
+      context.ports.authContainer.getToken()
     );
 
     await Promise.all([
@@ -244,7 +248,7 @@ export const mutation: G.MutationResolvers = {
     const storage = Storage.create(
       context.ports.authContainer.getToken(),
       args.key,
-      args.value,
+      args.value
     );
     await context.ports.storageRepo.save(storage);
     return storage.toAPI(context.ports.authContainer.getToken());
@@ -252,7 +256,7 @@ export const mutation: G.MutationResolvers = {
   delStorage: async (_obj, args, context, _info) => {
     const storage = await context.ports.storageRepo.findOneKey(
       context.ports.authContainer.getToken(),
-      args.key,
+      args.key
     );
     await context.ports.storageRepo.del(storage);
     return null;
@@ -261,7 +265,7 @@ export const mutation: G.MutationResolvers = {
     const client = await context.ports.clientRepo.findOne(args.client);
     await context.ports.tokenRepo.delClientToken(
       context.ports.authContainer.getTokenMaster(),
-      client.id,
+      client.id
     );
     return null;
   },
@@ -272,12 +276,12 @@ export const mutation: G.MutationResolvers = {
       context.ports.authContainer.getTokenMaster(),
       client,
       context.ports.clock.now(),
-      context.ports.safeIdGenerator,
+      context.ports.safeIdGenerator
     );
 
     const { req, token: newToken } = token.createReq(
       context.ports.clock.now(),
-      context.ports.safeIdGenerator,
+      context.ports.safeIdGenerator
     );
 
     await context.ports.tokenRepo.insert(newToken);
@@ -290,13 +294,13 @@ export const mutation: G.MutationResolvers = {
   createTokenMaster: async (_obj, args, context, _info) => {
     const authUser = await authFromApiParam.authUserRequestToUser(
       context.ports.userRepo,
-      args.auth,
+      args.auth
     );
     const token = TokenMaster.create(
       context.ports.objectIdGenerator,
       authUser,
       context.ports.clock.now(),
-      context.ports.safeIdGenerator,
+      context.ports.safeIdGenerator
     );
     await context.ports.tokenRepo.insert(token);
 
@@ -312,14 +316,14 @@ export const mutation: G.MutationResolvers = {
   },
   createTokenReq: async (_obj, _args, context, _info) => {
     const token = await context.ports.tokenRepo.findOne(
-      context.ports.authContainer.getToken().id,
+      context.ports.authContainer.getToken().id
     );
     if (token.type !== "general") {
       throw new AtNotFoundError("トークンが見つかりません");
     }
     const { req, token: newToken } = token.createReq(
       context.ports.clock.now(),
-      context.ports.safeIdGenerator,
+      context.ports.safeIdGenerator
     );
 
     await context.ports.tokenRepo.update(newToken);
@@ -328,7 +332,7 @@ export const mutation: G.MutationResolvers = {
   },
   createTopicNormal: async (_obj, args, context, _info) => {
     const user = await context.ports.userRepo.findOne(
-      context.ports.authContainer.getToken().user,
+      context.ports.authContainer.getToken().user
     );
     const create = TopicNormal.create(
       context.ports.objectIdGenerator,
@@ -337,7 +341,7 @@ export const mutation: G.MutationResolvers = {
       args.text,
       user,
       context.ports.authContainer.getToken(),
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
 
     await context.ports.topicRepo.insert(create.topic);
@@ -347,23 +351,23 @@ export const mutation: G.MutationResolvers = {
       context.ports.historyRepo.insert(create.history),
     ]);
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "topics", create.topic.id),
+      formatter.mutation(context.ports.ipContainer, "topics", create.topic.id)
     );
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "reses", create.res.id),
+      formatter.mutation(context.ports.ipContainer, "reses", create.res.id)
     );
     context.ports.logger.info(
       formatter.mutation(
         context.ports.ipContainer,
         "histories",
-        create.history.id,
-      ),
+        create.history.id
+      )
     );
     return create.topic.toAPI();
   },
   createTopicOne: async (_obj, args, context, _info) => {
     const user = await context.ports.userRepo.findOne(
-      context.ports.authContainer.getToken().user,
+      context.ports.authContainer.getToken().user
     );
     const create = TopicOne.create(
       context.ports.objectIdGenerator,
@@ -372,7 +376,7 @@ export const mutation: G.MutationResolvers = {
       args.text,
       user,
       context.ports.authContainer.getToken(),
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
 
     await context.ports.topicRepo.insert(create.topic);
@@ -382,17 +386,17 @@ export const mutation: G.MutationResolvers = {
     ]);
 
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "topics", create.topic.id),
+      formatter.mutation(context.ports.ipContainer, "topics", create.topic.id)
     );
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "reses", create.res.id),
+      formatter.mutation(context.ports.ipContainer, "reses", create.res.id)
     );
 
     return create.topic.toAPI();
   },
   createTopicFork: async (_obj, args, context, _info) => {
     const user = await context.ports.userRepo.findOne(
-      context.ports.authContainer.getToken().user,
+      context.ports.authContainer.getToken().user
     );
     const parent = await context.ports.topicRepo.findOne(args.parent);
 
@@ -406,7 +410,7 @@ export const mutation: G.MutationResolvers = {
       parent,
       user,
       context.ports.authContainer.getToken(),
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
 
     await context.ports.topicRepo.insert(create.topic);
@@ -418,17 +422,17 @@ export const mutation: G.MutationResolvers = {
     ]);
 
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "topics", create.topic.id),
+      formatter.mutation(context.ports.ipContainer, "topics", create.topic.id)
     );
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "reses", create.res.id),
+      formatter.mutation(context.ports.ipContainer, "reses", create.res.id)
     );
     context.ports.logger.info(
       formatter.mutation(
         context.ports.ipContainer,
         "reses",
-        create.resParent.id,
-      ),
+        create.resParent.id
+      )
     );
 
     return create.topic.toAPI();
@@ -437,7 +441,7 @@ export const mutation: G.MutationResolvers = {
     const [topic, user] = await Promise.all([
       context.ports.topicRepo.findOne(args.id),
       context.ports.userRepo.findOne(
-        context.ports.authContainer.getToken().user,
+        context.ports.authContainer.getToken().user
       ),
     ]);
 
@@ -452,7 +456,7 @@ export const mutation: G.MutationResolvers = {
       nullToUndefined(args.title),
       nullToUndefined(args.tags),
       nullToUndefined(args.text),
-      context.ports.clock.now(),
+      context.ports.clock.now()
     );
 
     await Promise.all([
@@ -463,14 +467,10 @@ export const mutation: G.MutationResolvers = {
     ]);
 
     context.ports.logger.info(
-      formatter.mutation(context.ports.ipContainer, "reses", val.res.id),
+      formatter.mutation(context.ports.ipContainer, "reses", val.res.id)
     );
     context.ports.logger.info(
-      formatter.mutation(
-        context.ports.ipContainer,
-        "histories",
-        val.history.id,
-      ),
+      formatter.mutation(context.ports.ipContainer, "histories", val.history.id)
     );
 
     return topic.toAPI();

@@ -18,7 +18,7 @@ describe("ResTopic", () => {
     new Date(100),
     10,
     new Date(200),
-    true,
+    true
   );
 
   const user = new User(
@@ -38,7 +38,7 @@ describe("ResTopic", () => {
     new Date(10),
     new Date(0),
     0,
-    new Date(20),
+    new Date(20)
   );
 
   const token: IAuthToken = {
@@ -56,7 +56,7 @@ describe("ResTopic", () => {
     Im.List(),
     5,
     "hash",
-    10,
+    10
   );
 
   describe("create", () => {
@@ -66,7 +66,7 @@ describe("ResTopic", () => {
         topicOne,
         user,
         token,
-        new Date(100),
+        new Date(100)
       );
       expect(res).toEqual(
         new ResTopic(
@@ -77,8 +77,8 @@ describe("ResTopic", () => {
           Im.List(),
           5,
           topicOne.hash(new Date(100), user),
-          0,
-        ),
+          0
+        )
       );
 
       expect(newTopic).toEqual(topicOne.copy({ update: new Date(100) }));
@@ -88,7 +88,7 @@ describe("ResTopic", () => {
   describe("toAPI", () => {
     it("正常に変換出来るか", () => {
       expect(resTopic.toAPI(some(token))).toEqual(
-        resTopic.toBaseAPI(some(token)),
+        resTopic.toBaseAPI(some(token))
       );
     });
   });

@@ -16,8 +16,10 @@ import {
 } from "./itoken-db";
 
 describe("ITokenDB", () => {
-  class TokenBaseTest extends Copyable<TokenBaseTest>
-    implements TokenBase<"general", TokenBaseTest> {
+  class TokenBaseTest
+    extends Copyable<TokenBaseTest>
+    implements TokenBase<"general", TokenBaseTest>
+  {
     readonly type = "general" as const;
 
     toBaseAPI!: () => ITokenBaseAPI<"general">;

@@ -5,8 +5,10 @@ import { Copyable } from "../../utils";
 import { applyMixins } from "../../utils";
 
 describe("ResBase", () => {
-  class ResBaseTest extends Copyable<ResBaseTest>
-    implements ResBase<"normal", ResBaseTest> {
+  class ResBaseTest
+    extends Copyable<ResBaseTest>
+    implements ResBase<"normal", ResBaseTest>
+  {
     toBaseAPI!: (authToken: Option<IAuthToken>) => IResBaseAPI<"normal">;
     cv!: (
       resUser: User,

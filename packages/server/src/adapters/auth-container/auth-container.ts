@@ -31,9 +31,9 @@ export class AuthContainer implements IAuthContainer {
   getTokenMasterOrNull(): Option<IAuthTokenMaster> {
     return pipe(
       this._token,
-      option.chain(token =>
-        token.type === "master" ? option.some(token) : option.none,
-      ),
+      option.chain((token) =>
+        token.type === "master" ? option.some(token) : option.none
+      )
     );
   }
 }

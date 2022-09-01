@@ -51,30 +51,27 @@ async function createToken(raw: unknown, tokenRepo: ITokenRepo) {
     await authFromApiParam.tokenHeaderToToken(tokenRepo, {
       id: id.value,
       key: key.value,
-    }),
+    })
   );
 }
 
 export async function createContext(
-  headers: Record<string, unknown>,
+  headers: Record<string, unknown>
 ): Promise<AppContext> {
   const xRealIp = headers["x-real-ip"];
   const ipContainer = new FixIpContainer(
-    typeof xRealIp === "string" ? some(xRealIp) : none,
+    typeof xRealIp === "string" ? some(xRealIp) : none
   );
 
   const logger = new Logger();
 
-  const {
-    prismaTransaction,
-    prismaOnError,
-    prismaOnSuccess,
-  } = await transaction();
+  const { prismaTransaction, prismaOnError, prismaOnSuccess } =
+    await transaction();
   const tokenRepo = new TokenRepo(prismaTransaction);
 
   const token = await createToken(
     headers["x-token"] || headers["X-Token"],
-    tokenRepo,
+    tokenRepo
   );
 
   const authContainer = new AuthContainer(token);

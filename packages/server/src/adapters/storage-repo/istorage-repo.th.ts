@@ -9,7 +9,7 @@ import {
 } from "../../";
 
 export function run(
-  $isolate: (callback: (repo: IStorageRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IStorageRepo) => Promise<void>) => Promise<void>
 ) {
   const client = new ObjectID().toHexString();
   const user = new ObjectID().toHexString();
@@ -18,7 +18,7 @@ export function run(
 
   describe("findOneKey", () => {
     it("正常に検索出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const client1 = new ObjectID().toHexString();
         const client2 = new ObjectID().toHexString();
 
@@ -98,7 +98,7 @@ export function run(
       });
     });
     it("存在しない時エラーになるか(通常トークン)", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const authGeneral: IAuthTokenGeneral = {
           id: new ObjectID().toHexString(),
           key: "tk",
@@ -119,17 +119,17 @@ export function run(
         await expect(
           repo.findOneKey(
             { ...authGeneral, user: new ObjectID().toHexString() },
-            key,
-          ),
+            key
+          )
         ).rejects.toThrow(AtError);
         await expect(
           repo.findOneKey(
             { ...authGeneral, client: new ObjectID().toHexString() },
-            key,
-          ),
+            key
+          )
         ).rejects.toThrow(AtError);
         await expect(repo.findOneKey(authGeneral, "key2")).rejects.toThrow(
-          AtError,
+          AtError
         );
         await expect(repo.findOneKey(authMaster, key)).rejects.toThrow(AtError);
       });
@@ -138,12 +138,12 @@ export function run(
 
   describe("find", () => {
     it("正常に検索出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const storage = new Storage(
           none,
           new ObjectID().toHexString(),
           "key",
-          "value",
+          "value"
         );
 
         const client1 = new ObjectID().toHexString();
@@ -237,7 +237,7 @@ export function run(
 
   describe("save", () => {
     it("新しく作れるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.save(storage);
 
         const authGeneral: IAuthTokenGeneral = {
@@ -253,7 +253,7 @@ export function run(
     });
 
     it("更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.save(storage);
 
         const storageUpdate = storage.copy({ value: "value2" });
@@ -274,7 +274,7 @@ export function run(
 
   describe("del", () => {
     it("正常に削除出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.save(storage);
         await repo.del(storage);
 
@@ -287,7 +287,7 @@ export function run(
         };
 
         await expect(repo.findOneKey(authGeneral, key)).rejects.toThrow(
-          AtError,
+          AtError
         );
       });
     });

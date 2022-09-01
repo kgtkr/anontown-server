@@ -7,8 +7,8 @@ export class ClientLoader implements IClientLoader {
   loader: DataLoader<string, Client>;
 
   constructor(clientRepo: IClientRepo, auth: IAuthContainer) {
-    this.loader = loader(ids =>
-      clientRepo.find(auth.getTokenMasterOrNull(), { id: ids }),
+    this.loader = loader((ids) =>
+      clientRepo.find(auth.getTokenMasterOrNull(), { id: ids })
     );
   }
 

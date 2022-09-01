@@ -27,7 +27,7 @@ export class Profile extends Copyable<Profile> {
     name: string,
     text: string,
     sn: string,
-    now: Date,
+    now: Date
   ): Profile {
     paramsErrorMaker([
       {
@@ -57,7 +57,7 @@ export class Profile extends Copyable<Profile> {
       text,
       now,
       now,
-      sn,
+      sn
     );
   }
 
@@ -68,7 +68,7 @@ export class Profile extends Copyable<Profile> {
     readonly text: string,
     readonly date: Date,
     readonly update: Date,
-    readonly sn: string,
+    readonly sn: string
   ) {
     super(Profile);
   }
@@ -78,8 +78,8 @@ export class Profile extends Copyable<Profile> {
       id: this.id,
       self: pipe(
         authToken,
-        option.map(authToken => authToken.user === this.user),
-        option.toNullable,
+        option.map((authToken) => authToken.user === this.user),
+        option.toNullable
       ),
       name: this.name,
       text: this.text,
@@ -94,7 +94,7 @@ export class Profile extends Copyable<Profile> {
     name: string | undefined,
     text: string | undefined,
     sn: string | undefined,
-    now: Date,
+    now: Date
   ) {
     if (authToken.user !== this.user) {
       throw new AtRightError("人のプロフィール変更は出来ません");

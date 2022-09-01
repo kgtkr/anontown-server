@@ -7,7 +7,7 @@ export class HistoryLoader implements IHistoryLoader {
   loader: DataLoader<string, History>;
 
   constructor(historyRepo: IHistoryRepo) {
-    this.loader = loader(ids => historyRepo.find({ id: ids }, ids.length));
+    this.loader = loader((ids) => historyRepo.find({ id: ids }, ids.length));
   }
 
   load(id: string) {

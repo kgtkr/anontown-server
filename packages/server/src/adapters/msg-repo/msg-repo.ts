@@ -13,7 +13,7 @@ function toEntity(m: P.Msg): Msg {
     m.id,
     O.fromNullable(m.receiverId),
     m.content,
-    new Date(m.createdAt),
+    new Date(m.createdAt)
   );
 }
 
@@ -40,7 +40,7 @@ export class MsgRepo implements IMsgRepo {
   async find(
     authToken: IAuthToken,
     query: G.MsgQuery,
-    limit: number,
+    limit: number
   ): Promise<Array<Msg>> {
     const filter: Array<P.Prisma.MsgWhereInput> = [
       {
@@ -80,7 +80,7 @@ export class MsgRepo implements IMsgRepo {
       take: limit,
     });
 
-    const result = msgs.map(m => toEntity(m));
+    const result = msgs.map((m) => toEntity(m));
     if (
       !isNullish(query.date) &&
       (query.date.type === "gt" || query.date.type === "gte")

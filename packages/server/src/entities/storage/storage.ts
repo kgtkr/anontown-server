@@ -32,7 +32,7 @@ export class Storage extends Copyable<Storage> {
       authToken.type === "general" ? some(authToken.client) : none,
       authToken.user,
       key,
-      value,
+      value
     );
   }
 
@@ -40,7 +40,7 @@ export class Storage extends Copyable<Storage> {
     readonly client: Option<string>,
     readonly user: string,
     readonly key: string,
-    readonly value: string,
+    readonly value: string
   ) {
     super(Storage);
   }

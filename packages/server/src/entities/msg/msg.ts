@@ -19,16 +19,16 @@ export class Msg extends Copyable<Msg> {
     objidGenerator: IObjectIdGenerator,
     receiver: Option<User>,
     text: string,
-    now: Date,
+    now: Date
   ): Msg {
     return new Msg(
       objidGenerator.generateObjectId(),
       pipe(
         receiver,
-        option.map(x => x.id),
+        option.map((x) => x.id)
       ),
       text,
-      now,
+      now
     );
   }
 
@@ -36,7 +36,7 @@ export class Msg extends Copyable<Msg> {
     readonly id: string,
     readonly receiver: Option<string>,
     readonly text: string,
-    readonly date: Date,
+    readonly date: Date
   ) {
     super(Msg);
   }
@@ -45,8 +45,8 @@ export class Msg extends Copyable<Msg> {
     if (
       pipe(
         this.receiver,
-        option.map(x => x !== authToken.user),
-        option.getOrElse(() => false),
+        option.map((x) => x !== authToken.user),
+        option.getOrElse(() => false)
       )
     ) {
       throw new AtRightError("アクセス権がありません。");

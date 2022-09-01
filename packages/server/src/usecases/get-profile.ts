@@ -18,7 +18,7 @@ import { PortPick } from "../ports";
 */
 export async function getProfile(
   { id }: { id: string },
-  { profileLoader, authContainer }: PortPick<"profileLoader" | "authContainer">,
+  { profileLoader, authContainer }: PortPick<"profileLoader" | "authContainer">
 ): Promise<IProfileAPI> {
   const profile = await profileLoader.load(id);
   return profile.toAPI(authContainer.getTokenOrNull());

@@ -23,7 +23,7 @@ describe("IUserDB", () => {
     new Date(100),
     new Date(0),
     0,
-    new Date(150),
+    new Date(150)
   );
 
   describe("toUser", () => {
@@ -47,7 +47,7 @@ describe("IUserDB", () => {
           date: new Date(0),
           point: 0,
           lastOneTopic: new Date(150),
-        }),
+        })
       ).toEqual(user);
     });
   });

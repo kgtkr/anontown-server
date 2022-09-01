@@ -12,7 +12,7 @@ describe("TopicOne", () => {
     new Date(0),
     5,
     new Date(50),
-    true,
+    true
   );
 
   const user = new User(
@@ -32,7 +32,7 @@ describe("TopicOne", () => {
     new Date(0),
     new Date(0),
     0,
-    new Date(0),
+    new Date(0)
   );
 
   const auth: IAuthTokenMaster = {
@@ -52,8 +52,8 @@ describe("TopicOne", () => {
           "text",
           user,
           auth,
-          new Date(24 * 60 * 60 * 1000),
-        ),
+          new Date(24 * 60 * 60 * 1000)
+        )
       ).toEqual({
         topic: topic.copy({
           resCount: 1,
@@ -70,7 +70,7 @@ describe("TopicOne", () => {
           Im.List(),
           50,
           topic.copy({ id: "id" }).hash(new Date(24 * 60 * 60 * 1000), user),
-          0,
+          0
         ),
         user: user.copy({ lastOneTopic: new Date(24 * 60 * 60 * 1000) }),
       });

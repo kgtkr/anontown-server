@@ -4,7 +4,7 @@ import { AtError, AuthContainer, IProfileRepo, Profile } from "../../";
 import { IAuthToken } from "../../auth";
 
 export function run(
-  $isolate: (callback: (repo: IProfileRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IProfileRepo) => Promise<void>) => Promise<void>
 ) {
   const profile = new Profile(
     new ObjectID().toHexString(),
@@ -13,15 +13,15 @@ export function run(
     "text",
     new Date(0),
     new Date(10),
-    "sn",
+    "sn"
   );
 
   describe("findOne", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(profile);
         await repo.insert(
-          profile.copy({ id: new ObjectID().toHexString(), sn: "sn2" }),
+          profile.copy({ id: new ObjectID().toHexString(), sn: "sn2" })
         );
 
         expect(await repo.findOne(profile.id)).toEqual(profile);
@@ -29,7 +29,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(
           new Profile(
             new ObjectID().toHexString(),
@@ -38,12 +38,12 @@ export function run(
             "text",
             new Date(0),
             new Date(10),
-            "sn",
-          ),
+            "sn"
+          )
         );
 
         await expect(
-          repo.findOne(new ObjectID().toHexString()),
+          repo.findOne(new ObjectID().toHexString())
         ).rejects.toThrow(AtError);
       });
     });
@@ -51,7 +51,7 @@ export function run(
 
   describe("find", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const user1 = new ObjectID().toHexString();
         const user2 = new ObjectID().toHexString();
 
@@ -102,26 +102,26 @@ export function run(
                 key: "key",
                 user: user1,
                 type: "master",
-              }),
+              })
             ),
-            { self: true },
-          ),
+            { self: true }
+          )
         ).toEqual([profile2, profile1, profile3]);
 
         expect(
           await repo.find(new AuthContainer(none), {
             self: false,
-          }),
+          })
         ).toEqual([profile4, profile2, profile1, profile3]);
 
         // id
         expect(await repo.find(new AuthContainer(none), { id: [] })).toEqual(
-          [],
+          []
         );
         expect(
           await repo.find(new AuthContainer(none), {
             id: [profile1.id, profile2.id, new ObjectID().toHexString()],
-          }),
+          })
         ).toEqual([profile2, profile1]);
 
         // 複合
@@ -133,18 +133,18 @@ export function run(
                 key: "key",
                 user: user1,
                 type: "master",
-              }),
+              })
             ),
-            { self: true, id: [profile1.id, profile2.id, profile4.id] },
-          ),
+            { self: true, id: [profile1.id, profile2.id, profile4.id] }
+          )
         ).toEqual([profile2, profile1]);
       });
     });
 
     it("認証していない状態でselfしたらエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await expect(
-          repo.find(new AuthContainer(none), { self: true }),
+          repo.find(new AuthContainer(none), { self: true })
         ).rejects.toThrow(AtError);
       });
     });
@@ -152,7 +152,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(profile);
 
         expect(await repo.findOne(profile.id)).toEqual(profile);
@@ -160,7 +160,7 @@ export function run(
     });
 
     it("sn被りでエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const profile2 = profile.copy({ id: new ObjectID().toHexString() });
 
         await repo.insert(profile);
@@ -173,7 +173,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const profile1 = profile.copy({
           id: new ObjectID().toHexString(),
           sn: "sn1",
@@ -199,7 +199,7 @@ export function run(
     });
 
     it("sn被りでエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const profile1 = profile.copy({
           id: new ObjectID().toHexString(),
           sn: "sn1",

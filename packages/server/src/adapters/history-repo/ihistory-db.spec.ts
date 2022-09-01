@@ -17,7 +17,7 @@ describe("IHistoryDB", () => {
             hash: "hash",
             user: "user",
           },
-        }),
+        })
       ).toEqual(
         new History(
           "history",
@@ -27,8 +27,8 @@ describe("IHistoryDB", () => {
           "text",
           new Date(0),
           "hash",
-          "user",
-        ),
+          "user"
+        )
       );
     });
   });
@@ -42,7 +42,7 @@ describe("IHistoryDB", () => {
       "text",
       new Date(0),
       "hash",
-      "user",
+      "user"
     );
 
     it("正常に変換できるか", () => {

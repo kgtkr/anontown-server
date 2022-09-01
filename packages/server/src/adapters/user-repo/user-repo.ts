@@ -23,7 +23,7 @@ function toEntity(u: P.User): User {
     u.topicLastCreatedAt,
     u.createdAt,
     u.point,
-    u.oneTopicLastCreatedAt,
+    u.oneTopicLastCreatedAt
   );
 }
 

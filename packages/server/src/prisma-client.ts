@@ -14,10 +14,10 @@ export type PrismaTransactionClient = Omit<
 class RollbackError extends Error {}
 
 export async function $transactionAfterRollback(
-  callback: (prisma: PrismaTransactionClient) => Promise<void>,
+  callback: (prisma: PrismaTransactionClient) => Promise<void>
 ): Promise<void> {
   try {
-    await prisma.$transaction(async prisma => {
+    await prisma.$transaction(async (prisma) => {
       await callback(prisma);
       throw new RollbackError();
     });
@@ -34,9 +34,9 @@ export function transaction(): Promise<{
   prismaOnError: (err: unknown) => Promise<void>;
   prismaOnSuccess: () => Promise<void>;
 }> {
-  return new Promise(resolvePrismaContext => {
+  return new Promise((resolvePrismaContext) => {
     const promise = prisma.$transaction<void>(
-      prismaTransaction =>
+      (prismaTransaction) =>
         new Promise((resolve, reject) => {
           resolvePrismaContext({
             prismaTransaction,
@@ -49,7 +49,7 @@ export function transaction(): Promise<{
               await promise;
             },
           });
-        }),
+        })
     );
   });
 }

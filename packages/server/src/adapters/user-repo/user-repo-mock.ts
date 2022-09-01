@@ -7,7 +7,7 @@ export class UserRepoMock implements IUserRepo {
   private users: Array<IUserDB> = [];
 
   async findOne(id: string): Promise<User> {
-    const user = this.users.find(x => x._id.toHexString() === id);
+    const user = this.users.find((x) => x._id.toHexString() === id);
 
     if (user === undefined) {
       throw new AtNotFoundError("ユーザーが存在しません");
@@ -17,7 +17,7 @@ export class UserRepoMock implements IUserRepo {
   }
 
   async findID(sn: string): Promise<string> {
-    const user = this.users.find(x => x.sn === sn);
+    const user = this.users.find((x) => x.sn === sn);
 
     if (user === undefined) {
       throw new AtNotFoundError("ユーザーが存在しません");
@@ -27,7 +27,7 @@ export class UserRepoMock implements IUserRepo {
   }
 
   async insert(user: User): Promise<void> {
-    if (this.users.findIndex(x => x.sn === user.sn) !== -1) {
+    if (this.users.findIndex((x) => x.sn === user.sn) !== -1) {
       throw new AtConflictError("スクリーンネームが使われています");
     }
 
@@ -37,23 +37,22 @@ export class UserRepoMock implements IUserRepo {
   async update(user: User): Promise<void> {
     if (
       this.users.findIndex(
-        x => x.sn === user.sn && x._id.toHexString() !== user.id,
+        (x) => x.sn === user.sn && x._id.toHexString() !== user.id
       ) !== -1
     ) {
       throw new AtConflictError("スクリーンネームが使われています");
     }
 
-    this.users[
-      this.users.findIndex(x => x._id.toHexString() === user.id)
-    ] = fromUser(user);
+    this.users[this.users.findIndex((x) => x._id.toHexString() === user.id)] =
+      fromUser(user);
   }
 
   async cronPointReset(): Promise<void> {
-    this.users = this.users.map(x => ({ ...x, point: 0 }));
+    this.users = this.users.map((x) => ({ ...x, point: 0 }));
   }
 
   async cronCountReset(key: ResWaitCountKey): Promise<void> {
-    this.users = this.users.map(x => ({
+    this.users = this.users.map((x) => ({
       ...x,
       resWait: { ...x.resWait, [key]: 0 },
     }));

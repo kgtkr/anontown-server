@@ -23,7 +23,7 @@ export function toUser(u: IUserDB): User {
     u.lastTopic,
     u.date,
     u.point,
-    u.lastOneTopic,
+    u.lastOneTopic
   );
 }
 

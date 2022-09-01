@@ -18,7 +18,7 @@ import { PortPick } from "../ports";
 */
 export async function getRes(
   { id }: { id: string },
-  { resLoader, authContainer }: PortPick<"resLoader" | "authContainer">,
+  { resLoader, authContainer }: PortPick<"resLoader" | "authContainer">
 ): Promise<IResAPI> {
   const res = await resLoader.load(id);
   return res.toAPI(authContainer.getTokenOrNull());

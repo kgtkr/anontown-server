@@ -9,6 +9,6 @@ export interface IClientRepo {
   update(client: Client): Promise<void>;
   find(
     authToken: Option<IAuthTokenMaster>,
-    query: G.ClientQuery,
+    query: G.ClientQuery
   ): Promise<Array<Client>>;
 }

@@ -2,13 +2,13 @@ import { none, some } from "fp-ts/lib/Option";
 import { AtError, IAuthTokenMaster, IMsgRepo, Msg } from "../../";
 
 export function run(
-  $isolate: (callback: (repo: IMsgRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IMsgRepo) => Promise<void>) => Promise<void>
 ): void {
   const msg = new Msg("msg", some("user"), "text", new Date(0));
 
   describe("findOne", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(msg);
         await repo.insert(msg.copy({ id: "msg2" }));
 
@@ -17,7 +17,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(new Msg("msg", some("user"), "text", new Date(0)));
 
         await expect(repo.findOne("msg2")).rejects.toThrow(AtError);
@@ -27,7 +27,7 @@ export function run(
 
   describe("find", () => {
     it("正常に検索出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const user1 = "user1";
         const user2 = "user2";
 
@@ -116,8 +116,8 @@ export function run(
             {
               id: [],
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([]);
 
         expect(
@@ -126,8 +126,8 @@ export function run(
             {
               id: ["msg1", "msg2", "msg3"],
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([msg1, msg3]);
 
         // date
@@ -141,8 +141,8 @@ export function run(
                 date: new Date(70).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([msg4, msg9]);
 
         expect(
@@ -154,8 +154,8 @@ export function run(
                 date: new Date(70).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([msg4]);
 
         expect(
@@ -167,8 +167,8 @@ export function run(
                 date: new Date(30).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([msg3, msg5, msg6]);
 
         expect(
@@ -180,8 +180,8 @@ export function run(
                 date: new Date(30).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([msg5, msg6]);
 
         // 複合
@@ -195,8 +195,8 @@ export function run(
               },
               id: ["msg5", "msg3"],
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([msg5]);
       });
     });
@@ -204,7 +204,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(msg);
 
         expect(await repo.findOne(msg.id)).toEqual(msg);
@@ -216,7 +216,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const msg1 = msg.copy({ id: "msg1" });
         const msg2 = msg.copy({ id: "msg2" });
         const msg1update = msg1.copy({ text: "update" });

@@ -3,7 +3,7 @@ import { AtError, User } from "../../";
 import { IUserRepo } from "../../ports";
 
 export function run(
-  $isolate: (callback: (repo: IUserRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IUserRepo) => Promise<void>) => Promise<void>
 ) {
   const user = new User(
     new ObjectID().toHexString(),
@@ -22,15 +22,15 @@ export function run(
     new Date(100),
     new Date(0),
     0,
-    new Date(200),
+    new Date(200)
   );
 
   describe("findOne", () => {
     it("正常に取得出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(user);
         await repo.insert(
-          user.copy({ id: new ObjectID().toHexString(), sn: "sn2" }),
+          user.copy({ id: new ObjectID().toHexString(), sn: "sn2" })
         );
 
         expect(await repo.findOne(user.id)).toEqual(user);
@@ -38,11 +38,11 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(user);
 
         await expect(
-          repo.findOne(new ObjectID().toHexString()),
+          repo.findOne(new ObjectID().toHexString())
         ).rejects.toThrow(AtError);
       });
     });
@@ -50,10 +50,10 @@ export function run(
 
   describe("findID", () => {
     it("正常に取得出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(user);
         await repo.insert(
-          user.copy({ id: new ObjectID().toHexString(), sn: "sn2" }),
+          user.copy({ id: new ObjectID().toHexString(), sn: "sn2" })
         );
 
         expect(await repo.findID(user.sn)).toEqual(user.id);
@@ -61,7 +61,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(user);
 
         await expect(repo.findID("sn2")).rejects.toThrow(AtError);
@@ -71,7 +71,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(user);
 
         expect(await repo.findOne(user.id)).toEqual(user);
@@ -79,11 +79,11 @@ export function run(
     });
 
     it("スクリーンネーム被りでエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(user);
 
         await expect(
-          repo.insert(user.copy({ id: new ObjectID().toHexString() })),
+          repo.insert(user.copy({ id: new ObjectID().toHexString() }))
         ).rejects.toThrow(AtError);
       });
     });
@@ -91,7 +91,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const user1 = user.copy({
           id: new ObjectID().toHexString(),
           sn: "sn1",
@@ -113,7 +113,7 @@ export function run(
     });
 
     it("sn被りでエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const user1 = user.copy({
           id: new ObjectID().toHexString(),
           sn: "sn1",
@@ -136,7 +136,7 @@ export function run(
 
   describe("cronPointReset", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const users = [
           user.copy({ id: new ObjectID().toHexString(), sn: "sn1", point: 10 }),
           user.copy({ id: new ObjectID().toHexString(), sn: "sn2", point: 0 }),
@@ -159,7 +159,7 @@ export function run(
   describe("cronCountReset", () => {
     for (const t of ["m10", "m30", "h1", "h6", "h12", "d1"] as const) {
       it("正常に更新出来るか:" + t, async () => {
-        await $isolate(async repo => {
+        await $isolate(async (repo) => {
           const users = [
             user.copy({
               id: new ObjectID().toHexString(),
@@ -210,7 +210,7 @@ export function run(
 
           for (const u of users) {
             expect(await repo.findOne(u.id)).toEqual(
-              u.copy({ resWait: { ...u.resWait, [t]: 0 } }),
+              u.copy({ resWait: { ...u.resWait, [t]: 0 } })
             );
           }
         });

@@ -13,7 +13,7 @@ import * as Ord from "fp-ts/lib/Ord";
 function toEntity(
   h: P.History & {
     tags: Array<P.HistoryTag>;
-  },
+  }
 ): History {
   return new History(
     h.id,
@@ -21,14 +21,16 @@ function toEntity(
     h.title,
     pipe(
       h.tags,
-      A.sort(Ord.contramap<number, P.HistoryTag>(x => x.order)(Ord.ordNumber)),
+      A.sort(
+        Ord.contramap<number, P.HistoryTag>((x) => x.order)(Ord.ordNumber)
+      ),
       A.map(({ tag }) => tag),
-      xs => Im.List(xs),
+      (xs) => Im.List(xs)
     ),
     h.description,
     h.createdAt,
     h.hash,
-    h.userId,
+    h.userId
   );
 }
 
@@ -44,7 +46,7 @@ function fromEntity(history: History): Omit<P.Prisma.HistoryCreateInput, "id"> {
 }
 
 function tagsFromEntity(
-  history: History,
+  history: History
 ): Array<P.Prisma.HistoryTagCreateManyInput> {
   return history.tags
     .toArray()
@@ -138,7 +140,7 @@ export class HistoryRepo implements IHistoryRepo {
       take: limit,
     });
 
-    const result = histories.map(h => toEntity(h));
+    const result = histories.map((h) => toEntity(h));
     if (
       !isNullish(query.date) &&
       (query.date.type === "gt" || query.date.type === "gte")

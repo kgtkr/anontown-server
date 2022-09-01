@@ -5,6 +5,6 @@ import { IIpContainer } from "./ports/index";
 export function mutation(ipContainer: IIpContainer, name: string, id: string) {
   return `${pipe(
     ipContainer.getIp(),
-    option.getOrElse(() => "<unknown_ip>"),
+    option.getOrElse(() => "<unknown_ip>")
   )} ${name} ${id}`;
 }

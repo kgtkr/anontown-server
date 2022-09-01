@@ -18,7 +18,7 @@ import { PortPick } from "../ports";
 */
 export async function getClient(
   { id }: { id: string },
-  { clientLoader, authContainer }: PortPick<"clientLoader" | "authContainer">,
+  { clientLoader, authContainer }: PortPick<"clientLoader" | "authContainer">
 ): Promise<IClientAPI> {
   const client = await clientLoader.load(id);
   return client.toAPI(authContainer.getTokenMasterOrNull());

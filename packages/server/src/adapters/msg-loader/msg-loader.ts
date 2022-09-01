@@ -8,8 +8,8 @@ export class MsgLoader implements IMsgLoader {
   loader: DataLoader<string, Msg>;
 
   constructor(msgRepo: IMsgRepo, auth: IAuthContainer) {
-    this.loader = loader(ids =>
-      msgRepo.find(auth.getToken(), { id: ids }, ids.length),
+    this.loader = loader((ids) =>
+      msgRepo.find(auth.getToken(), { id: ids }, ids.length)
     );
   }
 

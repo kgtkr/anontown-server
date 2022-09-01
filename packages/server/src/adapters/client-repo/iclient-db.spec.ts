@@ -15,7 +15,7 @@ describe("IClientDB", () => {
           user: new ObjectID(userID),
           date: new Date(0),
           update: new Date(100),
-        }),
+        })
       ).toEqual(
         new Client(
           clientID,
@@ -23,8 +23,8 @@ describe("IClientDB", () => {
           "https://hoge.com",
           userID,
           new Date(0),
-          new Date(100),
-        ),
+          new Date(100)
+        )
       );
     });
   });
@@ -39,7 +39,7 @@ describe("IClientDB", () => {
         "http://hoge.com",
         userID,
         new Date(0),
-        new Date(100),
+        new Date(100)
       );
 
       expect(fromClient(client)).toEqual({

@@ -7,12 +7,12 @@ export const subscription: G.SubscriptionResolvers = {
     subscribe: (_parent, args, context, _info) =>
       observableAsyncIterator(
         context.ports.resRepo.subscribeInsertEvent().pipe(
-          rxOps.filter(x => x.res.topic === args.topic),
-          rxOps.map(x => ({
+          rxOps.filter((x) => x.res.topic === args.topic),
+          rxOps.map((x) => ({
             count: x.count,
             res: x.res.toAPI(context.ports.authContainer.getTokenOrNull()),
-          })),
-        ),
+          }))
+        )
       ),
     resolve: (x: any) => {
       // TODO: こうしないと動かない何故

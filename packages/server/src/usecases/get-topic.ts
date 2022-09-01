@@ -18,7 +18,7 @@ import { PortPick } from "../ports";
 */
 export async function getTopic(
   { id }: { id: string },
-  { topicLoader }: PortPick<"topicLoader">,
+  { topicLoader }: PortPick<"topicLoader">
 ): Promise<ITopicAPI> {
   const topic = await topicLoader.load(id);
   return topic.toAPI();

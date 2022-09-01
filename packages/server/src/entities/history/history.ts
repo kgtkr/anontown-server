@@ -30,7 +30,7 @@ export class History extends Copyable<History> {
     text: string,
     date: Date,
     hash: string,
-    user: User,
+    user: User
   ): History {
     return new History(
       objidGenerator.generateObjectId(),
@@ -40,7 +40,7 @@ export class History extends Copyable<History> {
       text,
       date,
       hash,
-      user.id,
+      user.id
     );
   }
 
@@ -52,7 +52,7 @@ export class History extends Copyable<History> {
     readonly text: string,
     readonly date: Date,
     readonly hash: string,
-    readonly user: string,
+    readonly user: string
   ) {
     super(History);
   }
@@ -68,8 +68,8 @@ export class History extends Copyable<History> {
       hash: this.hash,
       self: pipe(
         authToken,
-        option.map(authToken => authToken.user === this.user),
-        option.toNullable,
+        option.map((authToken) => authToken.user === this.user),
+        option.toNullable
       ),
     };
   }

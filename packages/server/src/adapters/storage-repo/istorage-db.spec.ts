@@ -17,7 +17,7 @@ describe("IStorageDB", () => {
           user: new ObjectID(userID),
           key: "key",
           value: "value",
-        }),
+        })
       ).toEqual(storage);
 
       expect(
@@ -26,7 +26,7 @@ describe("IStorageDB", () => {
           user: new ObjectID(userID),
           key: "key",
           value: "value",
-        }),
+        })
       ).toEqual(storage.copy({ client: none }));
     });
   });

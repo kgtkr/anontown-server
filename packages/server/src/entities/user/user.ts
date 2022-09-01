@@ -32,7 +32,7 @@ export class User extends Copyable<User> {
     objidGenerator: IObjectIdGenerator,
     sn: string,
     pass: string,
-    now: Date,
+    now: Date
   ): User {
     paramsErrorMaker([
       {
@@ -58,7 +58,7 @@ export class User extends Copyable<User> {
       now,
       now,
       0,
-      now,
+      now
     );
   }
 
@@ -72,7 +72,7 @@ export class User extends Copyable<User> {
     readonly date: Date,
     // 毎日リセットされ、特殊動作をすると増えるポイント
     readonly point: number,
-    readonly lastOneTopic: Date,
+    readonly lastOneTopic: Date
   ) {
     super(User);
   }
@@ -87,7 +87,7 @@ export class User extends Copyable<User> {
   change(
     _authUser: IAuthUser,
     pass: string | undefined,
-    sn: string | undefined,
+    sn: string | undefined
   ): User {
     paramsErrorMaker([
       {

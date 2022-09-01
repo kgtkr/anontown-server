@@ -10,8 +10,10 @@ import {
 import { Copyable } from "../../utils";
 
 describe("TopicSearchBase", () => {
-  class TopicSearchBaseTest extends Copyable<TopicSearchBaseTest>
-    implements TopicSearchBase<"normal", TopicSearchBaseTest> {
+  class TopicSearchBaseTest
+    extends Copyable<TopicSearchBaseTest>
+    implements TopicSearchBase<"normal", TopicSearchBaseTest>
+  {
     readonly type = "normal" as const;
 
     toBaseAPI!: () => ITopicBaseAPI<"normal">;

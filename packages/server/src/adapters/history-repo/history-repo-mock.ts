@@ -13,13 +13,12 @@ export class HistoryRepoMock implements IHistoryRepo {
   }
 
   async update(history: History): Promise<void> {
-    this.histories[
-      this.histories.findIndex(h => h.id === history.id)
-    ] = fromHistory(history);
+    this.histories[this.histories.findIndex((h) => h.id === history.id)] =
+      fromHistory(history);
   }
 
   async findOne(id: string): Promise<History> {
-    const history = this.histories.find(h => h.id === id);
+    const history = this.histories.find((h) => h.id === id);
 
     if (history === undefined) {
       throw new AtNotFoundError("編集履歴が存在しません");
@@ -30,9 +29,11 @@ export class HistoryRepoMock implements IHistoryRepo {
 
   async find(query: G.HistoryQuery, limit: number): Promise<Array<History>> {
     const histories = this.histories
-      .filter(x => isNullish(query.id) || query.id.includes(x.id))
-      .filter(x => isNullish(query.topic) || query.topic.includes(x.body.topic))
-      .filter(x => {
+      .filter((x) => isNullish(query.id) || query.id.includes(x.id))
+      .filter(
+        (x) => isNullish(query.topic) || query.topic.includes(x.body.topic)
+      )
+      .filter((x) => {
         if (isNullish(query.date)) {
           return true;
         }
@@ -59,7 +60,7 @@ export class HistoryRepoMock implements IHistoryRepo {
       })
       .slice(0, limit);
 
-    const result = histories.map(h => toHistory(h));
+    const result = histories.map((h) => toHistory(h));
     if (
       !isNullish(query.date) &&
       (query.date.type === "gt" || query.date.type === "gte")

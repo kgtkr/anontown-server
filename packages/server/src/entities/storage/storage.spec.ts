@@ -63,7 +63,7 @@ describe("Storage", () => {
     it("正常に作成出来るか", () => {
       expect(Storage.create(authGeneral, "key", "value")).toEqual(storage);
       expect(Storage.create(authMaster, "key", "value")).toEqual(
-        storage.copy({ client: none }),
+        storage.copy({ client: none })
       );
     });
 

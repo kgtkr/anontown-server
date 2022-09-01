@@ -19,7 +19,7 @@ describe("ResFork", () => {
     new Date(0),
     10,
     new Date(50),
-    true,
+    true
   );
 
   const topicFork = new TopicFork(
@@ -30,7 +30,7 @@ describe("ResFork", () => {
     30,
     new Date(50),
     true,
-    "topic",
+    "topic"
   );
 
   const user = new User(
@@ -50,7 +50,7 @@ describe("ResFork", () => {
     new Date(20),
     new Date(10),
     0,
-    new Date(30),
+    new Date(30)
   );
 
   const token: IAuthToken = {
@@ -69,7 +69,7 @@ describe("ResFork", () => {
     Im.List(),
     5,
     "hash",
-    10,
+    10
   );
 
   describe("create", () => {
@@ -80,7 +80,7 @@ describe("ResFork", () => {
         user,
         token,
         topicFork,
-        new Date(90),
+        new Date(90)
       );
       expect(res).toEqual(
         new ResFork(
@@ -92,8 +92,8 @@ describe("ResFork", () => {
           Im.List(),
           5,
           topicNormal.hash(new Date(90), user),
-          0,
-        ),
+          0
+        )
       );
       expect(topic).toEqual(topicNormal.copy({ update: new Date(90) }));
     });

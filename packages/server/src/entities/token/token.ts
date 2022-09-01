@@ -31,7 +31,7 @@ export interface ITokenBaseAPI<T extends TokenType> {
   readonly type: T;
 }
 
-export type ITokenMasterAPI = ITokenBaseAPI<"master">
+export type ITokenMasterAPI = ITokenBaseAPI<"master">;
 
 export interface ITokenGeneralAPI extends ITokenBaseAPI<"general"> {
   readonly clientID: string;
@@ -65,8 +65,10 @@ export abstract class TokenBase<
   }
 }
 
-export class TokenMaster extends Copyable<TokenMaster>
-  implements TokenBase<"master", TokenMaster> {
+export class TokenMaster
+  extends Copyable<TokenMaster>
+  implements TokenBase<"master", TokenMaster>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     authUser: IAuthUser,
@@ -108,8 +110,10 @@ export class TokenMaster extends Copyable<TokenMaster>
 }
 applyMixins(TokenMaster, [TokenBase]);
 
-export class TokenGeneral extends Copyable<TokenGeneral>
-  implements TokenBase<"general", TokenGeneral> {
+export class TokenGeneral
+  extends Copyable<TokenGeneral>
+  implements TokenBase<"general", TokenGeneral>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     authToken: IAuthTokenMaster,

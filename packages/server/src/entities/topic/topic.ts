@@ -36,9 +36,9 @@ export interface ITopicSearchBaseAPI<T extends TopicSearchType>
   readonly text: string;
 }
 
-export type ITopicNormalAPI = ITopicSearchBaseAPI<"normal">
+export type ITopicNormalAPI = ITopicSearchBaseAPI<"normal">;
 
-export type ITopicOneAPI = ITopicSearchBaseAPI<"one">
+export type ITopicOneAPI = ITopicSearchBaseAPI<"one">;
 
 export interface ITopicForkAPI extends ITopicBaseAPI<"fork"> {
   readonly parentID: string;
@@ -181,8 +181,10 @@ export abstract class TopicSearchBase<
 }
 applyMixins(TopicSearchBase, [TopicBase]);
 
-export class TopicNormal extends Copyable<TopicNormal>
-  implements TopicSearchBase<"normal", TopicNormal> {
+export class TopicNormal
+  extends Copyable<TopicNormal>
+  implements TopicSearchBase<"normal", TopicNormal>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     title: string,
@@ -281,8 +283,10 @@ export class TopicNormal extends Copyable<TopicNormal>
 }
 applyMixins(TopicNormal, [TopicSearchBase]);
 
-export class TopicOne extends Copyable<TopicOne>
-  implements TopicSearchBase<"one", TopicOne> {
+export class TopicOne
+  extends Copyable<TopicOne>
+  implements TopicSearchBase<"one", TopicOne>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     title: string,
@@ -339,8 +343,10 @@ export class TopicOne extends Copyable<TopicOne>
 }
 applyMixins(TopicOne, [TopicSearchBase]);
 
-export class TopicFork extends Copyable<TopicFork>
-  implements TopicBase<"fork", TopicFork> {
+export class TopicFork
+  extends Copyable<TopicFork>
+  implements TopicBase<"fork", TopicFork>
+{
   static create(
     objidGenerator: IObjectIdGenerator,
     title: string,

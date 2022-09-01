@@ -23,7 +23,7 @@ export function toHistory(h: IHistoryDB): History {
     h.body.text,
     new Date(h.body.date),
     h.body.hash,
-    h.body.user,
+    h.body.user
   );
 }
 

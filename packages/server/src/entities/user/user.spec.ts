@@ -21,7 +21,7 @@ describe("User", () => {
     new Date(100),
     new Date(0),
     0,
-    new Date(150),
+    new Date(150)
   );
 
   describe("create", () => {
@@ -31,8 +31,8 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "scn",
           "pass",
-          new Date(0),
-        ),
+          new Date(0)
+        )
       ).toEqual(
         user.copy({
           resWait: {
@@ -46,7 +46,7 @@ describe("User", () => {
           },
           lastTopic: new Date(0),
           lastOneTopic: new Date(0),
-        }),
+        })
       );
     });
 
@@ -56,7 +56,7 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "scn",
           "x",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
 
@@ -65,7 +65,7 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "scn",
           "x".repeat(51),
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
 
@@ -74,7 +74,7 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "scn",
           "あ",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -85,7 +85,7 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "x",
           "pass",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
 
@@ -94,7 +94,7 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "x".repeat(21),
           "pass",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
 
@@ -103,7 +103,7 @@ describe("User", () => {
           new DummyObjectIdGenerator(userID),
           "あ",
           "pass",
-          new Date(0),
+          new Date(0)
         );
       }).toThrow(AtError);
     });
@@ -129,14 +129,14 @@ describe("User", () => {
         user.copy({
           sn: "scn2",
           pass: hash("pass" + Config.salt.pass),
-        }),
+        })
       );
 
       expect(user.change(authUser, "pass2", undefined)).toEqual(
         user.copy({
           sn: "scn",
           pass: hash("pass2" + Config.salt.pass),
-        }),
+        })
       );
     });
 
@@ -188,7 +188,7 @@ describe("User", () => {
     it("正常に使えるか", () => {
       expect(user.usePoint(1)).toEqual(user.copy({ point: 1 }));
       expect(user.copy({ lv: 5, point: 3 }).usePoint(1)).toEqual(
-        user.copy({ lv: 5, point: 4 }),
+        user.copy({ lv: 5, point: 4 })
       );
     });
 
@@ -234,7 +234,7 @@ describe("User", () => {
               d1: 49,
             },
           })
-          .changeLastRes(new Date(60 * 1000)),
+          .changeLastRes(new Date(60 * 1000))
       ).toEqual(
         user.copy({
           resWait: {
@@ -246,7 +246,7 @@ describe("User", () => {
             h12: 35,
             d1: 50,
           },
-        }),
+        })
       );
     });
 
@@ -370,7 +370,7 @@ describe("User", () => {
   describe("changeLastTopic", () => {
     it("正常に変更出来るか", () => {
       expect(user.changeLastTopic(new Date(100000000))).toEqual(
-        user.copy({ lastTopic: new Date(100000000) }),
+        user.copy({ lastTopic: new Date(100000000) })
       );
     });
 
@@ -384,7 +384,7 @@ describe("User", () => {
   describe("changeLastOneTopic", () => {
     it("正常に変更出来るか", () => {
       expect(user.changeLastOneTopic(new Date(100000000))).toEqual(
-        user.copy({ lastOneTopic: new Date(100000000) }),
+        user.copy({ lastOneTopic: new Date(100000000) })
       );
     });
 

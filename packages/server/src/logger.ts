@@ -8,7 +8,7 @@ function createFormatter(label: string) {
       // TODO: disableしない
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       return `${timestamp} [${label}] ${level}: ${message}`;
-    }),
+    })
   );
 }
 

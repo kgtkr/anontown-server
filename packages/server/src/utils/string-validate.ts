@@ -42,7 +42,7 @@ export interface ValidateError {
 
 export function checkString(
   validate: ValidateDataCache,
-  value: string,
+  value: string
 ): Either<ValidateError, string> {
   if (validate.reg.test(value)) {
     return right(value);
@@ -60,7 +60,7 @@ export function checkString(
 export function validateData(
   char: Array<CharType> | null,
   min: number | null,
-  max: number | null,
+  max: number | null
 ): ValidateDataCache {
   const validate = {
     char,
@@ -97,7 +97,7 @@ function charTypeToReg(type: CharType): string {
 function validateToReg(data: ValidateData): RegExp {
   const char =
     data.char !== null
-      ? `[${data.char.map(x => charTypeToReg(x)).join("")}]`
+      ? `[${data.char.map((x) => charTypeToReg(x)).join("")}]`
       : ".";
   const len = `{${data.min !== null ? data.min : 0},${
     data.max !== null ? data.max : ""
@@ -116,7 +116,7 @@ export interface ValidateRegExpError {
 
 export function checkRegExp(
   reg: RegExp,
-  value: string,
+  value: string
 ): Either<ValidateRegExpError, string> {
   if (reg.test(value)) {
     return right(value);

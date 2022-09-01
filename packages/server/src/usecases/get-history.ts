@@ -18,7 +18,7 @@ import { PortPick } from "../ports";
 */
 export async function getHistory(
   { id }: { id: string },
-  { historyLoader, authContainer }: PortPick<"historyLoader" | "authContainer">,
+  { historyLoader, authContainer }: PortPick<"historyLoader" | "authContainer">
 ): Promise<IHistoryAPI> {
   const history = await historyLoader.load(id);
   return history.toAPI(authContainer.getTokenOrNull());

@@ -21,8 +21,10 @@ import {
 } from "./itopic-db";
 
 describe("ITopicDB", () => {
-  class TopicSearchBaseTest extends Copyable<TopicSearchBaseTest>
-    implements TopicSearchBase<"normal", TopicSearchBaseTest> {
+  class TopicSearchBaseTest
+    extends Copyable<TopicSearchBaseTest>
+    implements TopicSearchBase<"normal", TopicSearchBaseTest>
+  {
     readonly type = "normal" as const;
 
     toBaseAPI!: () => ITopicBaseAPI<"normal">;
@@ -58,8 +60,10 @@ describe("ITopicDB", () => {
     true
   );
 
-  class TopicBaseTest extends Copyable<TopicBaseTest>
-    implements TopicBase<"normal", TopicBaseTest> {
+  class TopicBaseTest
+    extends Copyable<TopicBaseTest>
+    implements TopicBase<"normal", TopicBaseTest>
+  {
     readonly type = "normal" as const;
     toBaseAPI!: () => ITopicBaseAPI<"normal">;
     hash!: (date: Date, user: User) => string;

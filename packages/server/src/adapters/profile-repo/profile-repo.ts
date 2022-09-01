@@ -15,7 +15,7 @@ function toEntity(p: P.Profile): Profile {
     p.description,
     p.createdAt,
     p.updatedAt,
-    p.screenName,
+    p.screenName
   );
 }
 
@@ -46,7 +46,7 @@ export class ProfileRepo implements IProfileRepo {
 
   async find(
     auth: IAuthContainer,
-    query: G.ProfileQuery,
+    query: G.ProfileQuery
   ): Promise<Array<Profile>> {
     const filter: Array<P.Prisma.ProfileWhereInput> = [];
     if (query.self) {
@@ -63,7 +63,7 @@ export class ProfileRepo implements IProfileRepo {
         createdAt: "desc",
       },
     });
-    return profiles.map(p => toEntity(p));
+    return profiles.map((p) => toEntity(p));
   }
 
   async insert(profile: Profile): Promise<void> {

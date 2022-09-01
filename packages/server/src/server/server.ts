@@ -15,7 +15,7 @@ import { AppContext, createContext } from "./context";
 
 export async function serverRun() {
   const typeDefs = gql(
-    await fs.readFile(require.resolve("../../schema.gql"), "utf8"),
+    await fs.readFile(require.resolve("../../schema.gql"), "utf8")
   );
   const resolvers: IResolvers = combineResolvers([
     {
@@ -51,8 +51,8 @@ export async function serverRun() {
     plugins: [
       {
         requestDidStart: () => ({
-          willSendResponse: async response => {
-            const ctx = (response.context as unknown) as AppContext;
+          willSendResponse: async (response) => {
+            const ctx = response.context as unknown as AppContext;
 
             if (
               response.response.errors === undefined ||
@@ -104,7 +104,7 @@ export async function serverRun() {
     console.log(
       `Server ready at ${server.graphqlPath}, ${
         server.subscriptionsPath ?? "<unknown subscriptionsPath>"
-      }`,
+      }`
     );
   });
 }

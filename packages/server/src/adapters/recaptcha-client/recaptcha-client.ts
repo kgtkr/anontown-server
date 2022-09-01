@@ -13,7 +13,7 @@ export class RecaptchaClient implements IRecaptchaClient {
           secret: Config.recaptcha.secretKey,
           response: apiParamRecaptcha,
         },
-      },
+      }
     );
 
     if (!(result.data as any).success) {

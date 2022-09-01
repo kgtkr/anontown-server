@@ -4,7 +4,7 @@ import { AtError, Client, IClientRepo } from "../../";
 import { IAuthTokenMaster } from "../../auth";
 
 export function run(
-  $isolate: (callback: (repo: IClientRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IClientRepo) => Promise<void>) => Promise<void>
 ) {
   const client = new Client(
     new ObjectID().toHexString(),
@@ -12,12 +12,12 @@ export function run(
     "https://hoge.com",
     new ObjectID().toHexString(),
     new Date(0),
-    new Date(100),
+    new Date(100)
   );
 
   describe("findOne", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(client);
         await repo.insert(client.copy({ id: new ObjectID().toHexString() }));
 
@@ -26,7 +26,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(
           new Client(
             new ObjectID().toHexString(),
@@ -34,12 +34,12 @@ export function run(
             "https://hoge.com",
             new ObjectID().toHexString(),
             new Date(0),
-            new Date(10),
-          ),
+            new Date(10)
+          )
         );
 
         await expect(
-          repo.findOne(new ObjectID().toHexString()),
+          repo.findOne(new ObjectID().toHexString())
         ).rejects.toThrow(AtError);
       });
     });
@@ -47,7 +47,7 @@ export function run(
 
   describe("find", () => {
     it("正常に検索出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const user1 = new ObjectID().toHexString();
         const user2 = new ObjectID().toHexString();
 
@@ -91,19 +91,19 @@ export function run(
         expect(
           await repo.find(none, {
             id: [],
-          }),
+          })
         ).toEqual([]);
 
         expect(
           await repo.find(none, {
             id: [client1.id],
-          }),
+          })
         ).toEqual([client1]);
 
         expect(
           await repo.find(none, {
             id: [client1.id, new ObjectID().toHexString()],
-          }),
+          })
         ).toEqual([client1]);
 
         // self
@@ -123,8 +123,8 @@ export function run(
               user: user1,
               type: "master",
             }),
-            { self: true },
-          ),
+            { self: true }
+          )
         ).toEqual([client2, client1, client3]);
 
         // 複合
@@ -136,14 +136,14 @@ export function run(
               user: user1,
               type: "master",
             }),
-            { self: true, id: [client1.id, client4.id] },
-          ),
+            { self: true, id: [client1.id, client4.id] }
+          )
         ).toEqual([client1]);
       });
     });
 
     it("トークンがnullでselfがtrueの時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await expect(repo.find(none, { self: true })).rejects.toThrow(AtError);
       });
     });
@@ -151,7 +151,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(client);
 
         expect(await repo.findOne(client.id)).toEqual(client);
@@ -163,7 +163,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const client1 = client.copy({
           id: new ObjectID().toHexString(),
           name: "client1",

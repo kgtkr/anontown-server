@@ -2,7 +2,7 @@ import * as Im from "immutable";
 import { AtError, ITopicRepo, TopicFork, TopicNormal, TopicOne } from "../../";
 
 export function run(
-  $isolate: (callback: (repo: ITopicRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: ITopicRepo) => Promise<void>) => Promise<void>
 ) {
   const topicNormal = new TopicNormal(
     "topicn",
@@ -13,7 +13,7 @@ export function run(
     new Date(0),
     0,
     new Date(10),
-    true,
+    true
   );
 
   const topicOne = new TopicOne(
@@ -25,7 +25,7 @@ export function run(
     new Date(0),
     0,
     new Date(10),
-    true,
+    true
   );
 
   const topicFork = new TopicFork(
@@ -36,12 +36,12 @@ export function run(
     0,
     new Date(10),
     true,
-    "topicn",
+    "topicn"
   );
 
   describe("findOne", () => {
     it("正常に取得出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const topic1 = topicNormal.copy({ id: "topic1" });
         const topic2 = topicNormal.copy({ id: "topic2" });
 
@@ -53,7 +53,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(topicNormal.copy({ id: "topic1" }));
 
         await expect(repo.findOne("topic2")).rejects.toThrow(AtError);
@@ -63,7 +63,7 @@ export function run(
 
   describe("find", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const topic1 = topicNormal.copy({
           id: "topic1",
           tags: Im.List(["a"]),
@@ -135,8 +135,8 @@ export function run(
               id: [],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([]);
 
         expect(
@@ -145,8 +145,8 @@ export function run(
               id: ["topic1", "topic5", "other"],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic5, topic1]);
 
         // title
@@ -156,8 +156,8 @@ export function run(
               title: "",
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic5, topic4, topic3, topic6, topic2, topic1]);
 
         expect(
@@ -166,8 +166,8 @@ export function run(
               title: "x",
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic5, topic3, topic6, topic1]);
 
         expect(
@@ -176,8 +176,8 @@ export function run(
               title: "x a",
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([]);
 
         expect(
@@ -186,8 +186,8 @@ export function run(
               title: "x y",
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic3]);
 
         // tags
@@ -197,8 +197,8 @@ export function run(
               tags: [],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic5, topic4, topic3, topic6, topic2, topic1]);
 
         expect(
@@ -207,8 +207,8 @@ export function run(
               tags: ["a"],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic4, topic2, topic1]);
 
         expect(
@@ -217,8 +217,8 @@ export function run(
               tags: ["a", "b"],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic2]);
 
         expect(
@@ -227,8 +227,8 @@ export function run(
               tags: ["x"],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([]);
 
         // activeOnly
@@ -238,8 +238,8 @@ export function run(
               activeOnly: false,
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic5, topic4, topic3, topic6, topic2, topic1]);
 
         expect(
@@ -248,8 +248,8 @@ export function run(
               activeOnly: true,
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic5, topic3, topic2]);
 
         // parent
@@ -259,8 +259,8 @@ export function run(
               parent: "topic1",
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic6]);
 
         expect(
@@ -269,8 +269,8 @@ export function run(
               parent: "other",
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([]);
 
         // 複合
@@ -281,8 +281,8 @@ export function run(
               id: ["topic1", "topic3"],
             },
             0,
-            100,
-          ),
+            100
+          )
         ).toEqual([topic1]);
       });
     });
@@ -290,21 +290,21 @@ export function run(
 
   describe("findTags", () => {
     it("正常に検索出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(
-          topicNormal.copy({ id: "topic1", tags: Im.List(["a"]) }),
+          topicNormal.copy({ id: "topic1", tags: Im.List(["a"]) })
         );
         await repo.insert(
-          topicNormal.copy({ id: "topic2", tags: Im.List([]) }),
+          topicNormal.copy({ id: "topic2", tags: Im.List([]) })
         );
         await repo.insert(
-          topicOne.copy({ id: "topic3", tags: Im.List(["a", "b"]) }),
+          topicOne.copy({ id: "topic3", tags: Im.List(["a", "b"]) })
         );
         await repo.insert(
-          topicNormal.copy({ id: "topic4", tags: Im.List(["b"]) }),
+          topicNormal.copy({ id: "topic4", tags: Im.List(["b"]) })
         );
         await repo.insert(
-          topicNormal.copy({ id: "topic5", tags: Im.List(["b", "c"]) }),
+          topicNormal.copy({ id: "topic5", tags: Im.List(["b", "c"]) })
         );
         await repo.insert(topicFork.copy({ id: "topic6", parent: "topic1" }));
 
@@ -324,7 +324,7 @@ export function run(
 
   describe("cronTopicCheck", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const topic1 = topicNormal.copy({
           id: "topic1",
           update: new Date(20),
@@ -364,10 +364,10 @@ export function run(
 
         expect(await repo.findOne(topic1.id)).toEqual(topic1);
         expect(await repo.findOne(topic2.id)).toEqual(
-          topic2.copy({ active: false }),
+          topic2.copy({ active: false })
         );
         expect(await repo.findOne(topic3.id)).toEqual(
-          topic3.copy({ active: false }),
+          topic3.copy({ active: false })
         );
         expect(await repo.findOne(topic4.id)).toEqual(topic4);
         expect(await repo.findOne(topic5.id)).toEqual(topic5);
@@ -377,7 +377,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(topicNormal);
         await repo.insert(topicOne);
         await repo.insert(topicFork);
@@ -393,7 +393,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(topicNormal);
         await repo.insert(topicOne);
         await repo.insert(topicFork);

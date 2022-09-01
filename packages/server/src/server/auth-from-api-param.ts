@@ -8,7 +8,7 @@ import * as G from "../generated/graphql";
 
 export async function tokenHeaderToToken(
   tokenRepo: ITokenRepo,
-  apiParamToken: { id: string; key: string },
+  apiParamToken: { id: string; key: string }
 ): Promise<IAuthToken> {
   const token = await tokenRepo.findOne(apiParamToken.id);
   const authToken = token.auth(apiParamToken.key);
@@ -18,7 +18,7 @@ export async function tokenHeaderToToken(
 
 export async function authUserRequestToUser(
   userRepo: IUserRepo,
-  apiParamUser: G.AuthUser,
+  apiParamUser: G.AuthUser
 ): Promise<IAuthUser> {
   let id;
   if (!isNullish(apiParamUser.id) && isNullish(apiParamUser.sn)) {

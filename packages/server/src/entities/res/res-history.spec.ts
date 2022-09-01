@@ -13,7 +13,7 @@ describe("ResHistory", () => {
     new Date(0),
     10,
     new Date(50),
-    true,
+    true
   );
 
   const user = new User(
@@ -33,7 +33,7 @@ describe("ResHistory", () => {
     new Date(240),
     new Date(200),
     0,
-    new Date(260),
+    new Date(260)
   );
 
   const token: IAuthToken = {
@@ -51,7 +51,7 @@ describe("ResHistory", () => {
     "text",
     new Date(600),
     "hash",
-    "user",
+    "user"
   );
 
   const resHistory = new ResHistory(
@@ -63,7 +63,7 @@ describe("ResHistory", () => {
     Im.List(),
     5,
     "hash",
-    1,
+    1
   );
 
   describe("create", () => {
@@ -74,7 +74,7 @@ describe("ResHistory", () => {
         user,
         token,
         history,
-        new Date(1000),
+        new Date(1000)
       );
 
       expect(res).toEqual(
@@ -87,8 +87,8 @@ describe("ResHistory", () => {
           Im.List(),
           5,
           topicNormal.hash(new Date(1000), user),
-          0,
-        ),
+          0
+        )
       );
 
       expect(newTopic).toEqual(topicNormal.copy({ update: new Date(1000) }));

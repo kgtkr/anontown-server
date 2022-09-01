@@ -19,7 +19,7 @@ export interface ITokenBaseDB<T extends TokenType> {
   readonly date: Date;
 }
 
-export type ITokenMasterDB = ITokenBaseDB<"master">
+export type ITokenMasterDB = ITokenBaseDB<"master">;
 
 export interface ITokenGeneralDB extends ITokenBaseDB<"general"> {
   readonly client: ObjectID;
@@ -51,7 +51,7 @@ export function toTokenGeneral(t: ITokenGeneralDB): TokenGeneral {
     t.client.toString(),
     t.user.toString(),
     Im.List(t.req),
-    t.date,
+    t.date
   );
 }
 

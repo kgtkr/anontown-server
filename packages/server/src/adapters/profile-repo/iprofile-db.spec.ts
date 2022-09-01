@@ -12,7 +12,7 @@ describe("IProfileDB", () => {
     "text",
     new Date(0),
     new Date(100),
-    "sn",
+    "sn"
   );
 
   describe("fromProfile", () => {
@@ -40,7 +40,7 @@ describe("IProfileDB", () => {
           date: new Date(0),
           update: new Date(100),
           sn: "sn",
-        }),
+        })
       ).toEqual(profile);
     });
   });

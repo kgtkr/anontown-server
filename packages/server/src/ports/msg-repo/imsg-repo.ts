@@ -9,6 +9,6 @@ export interface IMsgRepo {
   find(
     authToken: IAuthToken,
     query: G.MsgQuery,
-    limit: number,
+    limit: number
   ): Promise<Array<Msg>>;
 }

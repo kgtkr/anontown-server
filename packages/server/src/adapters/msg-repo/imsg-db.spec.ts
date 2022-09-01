@@ -28,7 +28,7 @@ describe("IMsgDB", () => {
             text: "text",
             date: new Date(0).toISOString(),
           },
-        }),
+        })
       ).toEqual(msg);
     });
   });

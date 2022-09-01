@@ -9,7 +9,7 @@ export class ProfileRepoMock implements IProfileRepo {
   private profiles: Array<IProfileDB> = [];
 
   async findOne(id: string): Promise<Profile> {
-    const profile = this.profiles.find(x => x._id.toHexString() === id);
+    const profile = this.profiles.find((x) => x._id.toHexString() === id);
 
     if (profile === undefined) {
       throw new AtNotFoundError("プロフィールが存在しません");
@@ -20,21 +20,21 @@ export class ProfileRepoMock implements IProfileRepo {
 
   async find(
     auth: IAuthContainer,
-    query: G.ProfileQuery,
+    query: G.ProfileQuery
   ): Promise<Array<Profile>> {
     const self = query.self ? auth.getToken().user : null;
     const profiles = this.profiles
-      .filter(x => self === null || x.user.toHexString() === self)
+      .filter((x) => self === null || x.user.toHexString() === self)
       .filter(
-        x => isNullish(query.id) || query.id.includes(x._id.toHexString()),
+        (x) => isNullish(query.id) || query.id.includes(x._id.toHexString())
       )
       .sort((a, b) => b.date.valueOf() - a.date.valueOf());
 
-    return profiles.map(p => toProfile(p));
+    return profiles.map((p) => toProfile(p));
   }
 
   async insert(profile: Profile): Promise<void> {
-    if (this.profiles.findIndex(x => x.sn === profile.sn) !== -1) {
+    if (this.profiles.findIndex((x) => x.sn === profile.sn) !== -1) {
       throw new AtConflictError("スクリーンネームが使われています");
     }
 
@@ -44,14 +44,14 @@ export class ProfileRepoMock implements IProfileRepo {
   async update(profile: Profile): Promise<void> {
     if (
       this.profiles.findIndex(
-        x => x.sn === profile.sn && x._id.toHexString() !== profile.id,
+        (x) => x.sn === profile.sn && x._id.toHexString() !== profile.id
       ) !== -1
     ) {
       throw new AtConflictError("スクリーンネームが使われています");
     }
 
     this.profiles[
-      this.profiles.findIndex(x => x._id.toHexString() === profile.id)
+      this.profiles.findIndex((x) => x._id.toHexString() === profile.id)
     ] = fromProfile(profile);
   }
 }

@@ -39,7 +39,7 @@ export class ClientRepo implements IClientRepo {
 
   async find(
     authToken: Option<IAuthTokenMaster>,
-    query: G.ClientQuery,
+    query: G.ClientQuery
   ): Promise<Array<Client>> {
     if (query.self && option.isNone(authToken)) {
       throw new AtAuthError("認証が必要です");
@@ -61,7 +61,7 @@ export class ClientRepo implements IClientRepo {
       },
     });
 
-    return clients.map(c => toEntity(c));
+    return clients.map((c) => toEntity(c));
   }
 
   async insert(client: Client): Promise<void> {

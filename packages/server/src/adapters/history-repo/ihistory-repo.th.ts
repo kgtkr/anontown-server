@@ -2,7 +2,7 @@ import * as Im from "immutable";
 import { AtError, History, IHistoryRepo } from "../../";
 
 export function run(
-  $isolate: (callback: (repo: IHistoryRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IHistoryRepo) => Promise<void>) => Promise<void>
 ) {
   const history = new History(
     "history",
@@ -12,12 +12,12 @@ export function run(
     "text",
     new Date(0),
     "hash",
-    "user",
+    "user"
   );
 
   describe("findOne", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(history);
         await repo.insert(history.copy({ id: "topic2" }));
 
@@ -26,7 +26,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(
           new History(
             "history",
@@ -36,8 +36,8 @@ export function run(
             "text",
             new Date(0),
             "hash",
-            "user",
-          ),
+            "user"
+          )
         );
 
         await expect(repo.findOne("topic2")).rejects.toThrow(AtError);
@@ -47,7 +47,7 @@ export function run(
 
   describe("find", () => {
     it("正常に検索出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const history1 = history.copy({
           id: "history1",
           topic: "topic1",
@@ -123,8 +123,8 @@ export function run(
                 date: new Date(80).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([history4, history2]);
 
         expect(
@@ -135,8 +135,8 @@ export function run(
                 date: new Date(80).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([history4]);
 
         expect(
@@ -147,8 +147,8 @@ export function run(
                 date: new Date(50).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([history1, history3]);
 
         expect(
@@ -159,16 +159,16 @@ export function run(
                 date: new Date(50).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([history3]);
 
         // 複合
         expect(
           await repo.find(
             { topic: ["topic1"], id: ["history1", "history4"] },
-            100,
-          ),
+            100
+          )
         ).toEqual([history1]);
       });
     });
@@ -176,7 +176,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に保存出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(history);
 
         expect(await repo.findOne(history.id)).toEqual(history);
@@ -188,7 +188,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const history1 = history.copy({ id: "history1" });
         const history2 = history.copy({ id: "history2" });
         const history1update = history1.copy({ text: "update" });

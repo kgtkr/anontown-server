@@ -12,7 +12,7 @@ import {
 } from "../../";
 
 export function run(
-  $isolate: (callback: (repo: IResRepo) => Promise<void>) => Promise<void>,
+  $isolate: (callback: (repo: IResRepo) => Promise<void>) => Promise<void>
 ) {
   const resNormal = new ResNormal(
     some("name"),
@@ -28,7 +28,7 @@ export function run(
     Im.List(),
     5,
     "hash",
-    0,
+    0
   );
 
   const resHistory = new ResHistory(
@@ -40,7 +40,7 @@ export function run(
     Im.List(),
     5,
     "hash",
-    0,
+    0
   );
 
   const resTopic = new ResTopic(
@@ -51,7 +51,7 @@ export function run(
     Im.List(),
     5,
     "hash",
-    0,
+    0
   );
 
   const resFork = new ResFork(
@@ -63,12 +63,12 @@ export function run(
     Im.List(),
     5,
     "hash",
-    0,
+    0
   );
 
   describe("findOne", () => {
     it("正常に探せるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const res1 = resNormal.copy({ id: "res1" });
         const res2 = resHistory.copy({ id: "res2" });
         const res3 = resTopic.copy({ id: "res3" });
@@ -87,7 +87,7 @@ export function run(
     });
 
     it("存在しない時エラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(resNormal);
 
         await expect(repo.findOne("res2")).rejects.toThrow(AtError);
@@ -97,7 +97,7 @@ export function run(
 
   describe("insert", () => {
     it("正常に検索できるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await repo.insert(resNormal);
 
         expect(await repo.findOne(resNormal.id)).toEqual(resNormal);
@@ -109,7 +109,7 @@ export function run(
 
   describe("update", () => {
     it("正常に更新出来るか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const res1 = resNormal.copy({ id: "res1" });
         const res2 = resTopic.copy({ id: "res2" });
         const res3 = resFork.copy({ id: "res4" });
@@ -146,7 +146,7 @@ export function run(
   describe("find", () => {
     const notAuth = new AuthContainer(none);
     it("正常に検索できるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         const token: IAuthTokenMaster = {
           id: "token",
           key: "key",
@@ -229,8 +229,8 @@ export function run(
             {
               notice: true,
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res7]);
 
         expect(await repo.find(notAuth, { notice: false }, 100)).toEqual([
@@ -252,8 +252,8 @@ export function run(
             {
               hash: "hash2",
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res4]);
 
         // reply
@@ -263,8 +263,8 @@ export function run(
             {
               reply: "res6",
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res7]);
 
         // profile
@@ -274,8 +274,8 @@ export function run(
             {
               profile: "p1",
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res5]);
 
         // text
@@ -285,8 +285,8 @@ export function run(
             {
               text: "abc",
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res7]);
 
         // self
@@ -296,8 +296,8 @@ export function run(
             {
               self: true,
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res3]);
 
         expect(await repo.find(notAuth, { self: false }, 100)).toEqual([
@@ -322,8 +322,8 @@ export function run(
                 date: new Date(80).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res4, res2]);
 
         expect(
@@ -335,8 +335,8 @@ export function run(
                 date: new Date(80).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res4]);
 
         expect(
@@ -348,8 +348,8 @@ export function run(
                 date: new Date(20).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res5, res6]);
 
         expect(
@@ -361,8 +361,8 @@ export function run(
                 date: new Date(20).toISOString(),
               },
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res6]);
 
         // 複合
@@ -376,36 +376,36 @@ export function run(
               },
               id: ["res5", "res1"],
             },
-            100,
-          ),
+            100
+          )
         ).toEqual([res5]);
       });
     });
 
     it("通知フィルタでトークンがないとエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await expect(
           repo.find(
             notAuth,
             {
               notice: true,
             },
-            10,
-          ),
+            10
+          )
         ).rejects.toThrow(AtError);
       });
     });
 
     it("selfフィルタでトークンがないとエラーになるか", async () => {
-      await $isolate(async repo => {
+      await $isolate(async (repo) => {
         await expect(
           repo.find(
             notAuth,
             {
               self: true,
             },
-            10,
-          ),
+            10
+          )
         ).rejects.toThrow(AtError);
       });
     });

@@ -47,7 +47,7 @@ export class AtParamsError extends AtError {
     super({
       code: "params",
       message: "パラメーターが不正です",
-      data: data.map(x => ({ message: x.message, data: { field: x.field } })),
+      data: data.map((x) => ({ message: x.message, data: { field: x.field } })),
     });
   }
 }
@@ -63,7 +63,7 @@ export type paramsErrorMakerData =
 
 export function paramsErrorMaker(fs: Array<paramsErrorMakerData>) {
   const errors: Array<IParamErrorData> = [];
-  fs.forEach(f => {
+  fs.forEach((f) => {
     if (typeof f === "function") {
       const error = f();
       if (error !== null) {
@@ -75,8 +75,8 @@ export function paramsErrorMaker(fs: Array<paramsErrorMakerData>) {
           typeof f.val !== "object" || f.val === null
             ? fromNullable(f.val)
             : f.val,
-          option.map(val => !f.regex.test(val)),
-          option.getOrElse(() => false),
+          option.map((val) => !f.regex.test(val)),
+          option.getOrElse(() => false)
         )
       ) {
         errors.push({

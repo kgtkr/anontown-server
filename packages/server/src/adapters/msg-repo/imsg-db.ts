@@ -16,7 +16,7 @@ export function toMsg(m: IMsgDB): Msg {
     m.id,
     fromNullable(m.body.receiver),
     m.body.text,
-    new Date(m.body.date),
+    new Date(m.body.date)
   );
 }
 

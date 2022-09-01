@@ -80,13 +80,13 @@ export function toResNormal(db: IResNormalDB, replyCount: number): ResNormal {
     Im.List(db.body.votes),
     db.body.lv,
     db.body.hash,
-    replyCount,
+    replyCount
   );
 }
 
 export function toResHistory(
   db: IResHistoryDB,
-  replyCount: number,
+  replyCount: number
 ): ResHistory {
   return new ResHistory(
     db.body.history,
@@ -97,7 +97,7 @@ export function toResHistory(
     Im.List(db.body.votes),
     db.body.lv,
     db.body.hash,
-    replyCount,
+    replyCount
   );
 }
 
@@ -110,7 +110,7 @@ export function toResTopic(db: IResTopicDB, replyCount: number): ResTopic {
     Im.List(db.body.votes),
     db.body.lv,
     db.body.hash,
-    replyCount,
+    replyCount
   );
 }
 
@@ -124,7 +124,7 @@ export function toResFork(db: IResForkDB, replyCount: number): ResFork {
     Im.List(db.body.votes),
     db.body.lv,
     db.body.hash,
-    replyCount,
+    replyCount
   );
 }
 
@@ -144,7 +144,7 @@ export function toRes(db: IResDB, replyCount: number): Res {
 export function fromResBase<T extends ResType>() {
   return <C extends ResBase<T, C>, Body extends object>(
     res: C,
-    body: Body,
+    body: Body
   ): IResBaseDB<T, Body> => ({
     id: res.id,
     body: Object.assign({}, body, {

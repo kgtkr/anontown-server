@@ -13,8 +13,10 @@ import {
 import { Copyable } from "../../utils";
 
 describe("TopicBase", () => {
-  class TopicBaseTest extends Copyable<TopicBaseTest>
-    implements TopicBase<"normal", TopicBaseTest> {
+  class TopicBaseTest
+    extends Copyable<TopicBaseTest>
+    implements TopicBase<"normal", TopicBaseTest>
+  {
     readonly type = "normal" as const;
     toBaseAPI!: () => ITopicBaseAPI<"normal">;
     hash!: (date: Date, user: User) => string;

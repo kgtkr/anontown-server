@@ -11,7 +11,7 @@ export class ClientRepoMock implements IClientRepo {
   private clients: Array<IClientDB> = [];
 
   async findOne(id: string): Promise<Client> {
-    const client = this.clients.find(c => c._id.toHexString() === id);
+    const client = this.clients.find((c) => c._id.toHexString() === id);
 
     if (client === undefined) {
       throw new AtNotFoundError("クライアントが存在しません");
@@ -25,13 +25,13 @@ export class ClientRepoMock implements IClientRepo {
 
   async update(client: Client): Promise<void> {
     this.clients[
-      this.clients.findIndex(c => c._id.toHexString() === client.id)
+      this.clients.findIndex((c) => c._id.toHexString() === client.id)
     ] = fromClient(client);
   }
 
   async find(
     authToken: Option<IAuthTokenMaster>,
-    query: G.ClientQuery,
+    query: G.ClientQuery
   ): Promise<Array<Client>> {
     if (query.self && isNone(authToken)) {
       throw new AtAuthError("認証が必要です");
@@ -39,16 +39,16 @@ export class ClientRepoMock implements IClientRepo {
 
     const clients = this.clients
       .filter(
-        c =>
+        (c) =>
           !query.self ||
           isNone(authToken) ||
-          c.user.toHexString() === authToken.value.user,
+          c.user.toHexString() === authToken.value.user
       )
       .filter(
-        x => isNullish(query.id) || query.id.includes(x._id.toHexString()),
+        (x) => isNullish(query.id) || query.id.includes(x._id.toHexString())
       )
       .sort((a, b) => b.date.valueOf() - a.date.valueOf());
 
-    return clients.map(c => toClient(c));
+    return clients.map((c) => toClient(c));
   }
 }

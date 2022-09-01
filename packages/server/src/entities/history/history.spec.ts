@@ -23,7 +23,7 @@ describe("History", () => {
         new Date(80),
         new Date(20),
         0,
-        new Date(90),
+        new Date(90)
       );
 
       expect(
@@ -35,8 +35,8 @@ describe("History", () => {
           "text",
           new Date(300),
           "hash",
-          user,
-        ),
+          user
+        )
       ).toEqual(
         new History(
           "history",
@@ -46,8 +46,8 @@ describe("History", () => {
           "text",
           new Date(300),
           "hash",
-          "user",
-        ),
+          "user"
+        )
       );
     });
   });
@@ -60,7 +60,7 @@ describe("History", () => {
     "text",
     new Date(0),
     "hash",
-    "user",
+    "user"
   );
 
   describe("#toAPI", () => {
@@ -85,8 +85,8 @@ describe("History", () => {
             key: "key",
             user: "user",
             type: "master",
-          }),
-        ),
+          })
+        )
       ).toEqual({
         id: "history",
         topicID: "topic",
@@ -107,8 +107,8 @@ describe("History", () => {
             key: "key",
             user: "user2",
             type: "master",
-          }),
-        ),
+          })
+        )
       ).toEqual({
         id: "history",
         topicID: "topic",

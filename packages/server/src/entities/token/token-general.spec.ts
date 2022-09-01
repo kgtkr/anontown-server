@@ -21,7 +21,7 @@ describe("TokenMaster", () => {
     "https://hoge.com",
     userID,
     new Date(100),
-    new Date(200),
+    new Date(200)
   );
 
   const auth: IAuthTokenMaster = {
@@ -38,7 +38,7 @@ describe("TokenMaster", () => {
     clientID,
     userID,
     Im.List(),
-    new Date(300),
+    new Date(300)
   );
 
   describe("create", () => {
@@ -49,12 +49,12 @@ describe("TokenMaster", () => {
           auth,
           client,
           new Date(300),
-          new DummySafeIdGenerator("random"),
-        ),
+          new DummySafeIdGenerator("random")
+        )
       ).toEqual(
         token.copy({
           key: TokenBase.createTokenKey(new DummySafeIdGenerator("random")),
-        }),
+        })
       );
     });
   });
@@ -73,7 +73,7 @@ describe("TokenMaster", () => {
       const date = new Date(0);
       const { token: newToken, req } = token.createReq(
         date,
-        new DummySafeIdGenerator("random"),
+        new DummySafeIdGenerator("random")
       );
       const r = {
         key: TokenBase.createTokenKey(new DummySafeIdGenerator("random")),
@@ -123,7 +123,7 @@ describe("TokenMaster", () => {
             },
             { ...r, active: true },
           ]),
-        }),
+        })
       );
     });
   });

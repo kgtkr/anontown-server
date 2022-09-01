@@ -7,7 +7,7 @@ export class TopicLoader implements ITopicLoader {
   loader: DataLoader<string, Topic>;
 
   constructor(topicRepo: ITopicRepo) {
-    this.loader = loader(ids => topicRepo.find({ id: ids }, 0, ids.length));
+    this.loader = loader((ids) => topicRepo.find({ id: ids }, 0, ids.length));
   }
 
   load(id: string) {

@@ -10,7 +10,7 @@ export class MsgRepoMock implements IMsgRepo {
   private msgs: Array<IMsgDB> = [];
 
   async findOne(id: string): Promise<Msg> {
-    const msg = this.msgs.find(x => x.id === id);
+    const msg = this.msgs.find((x) => x.id === id);
 
     if (msg === undefined) {
       throw new AtNotFoundError("メッセージが存在しません");
@@ -22,14 +22,14 @@ export class MsgRepoMock implements IMsgRepo {
   async find(
     authToken: IAuthToken,
     query: G.MsgQuery,
-    limit: number,
+    limit: number
   ): Promise<Array<Msg>> {
     const msgs = this.msgs
       .filter(
-        x => x.body.receiver === null || x.body.receiver === authToken.user,
+        (x) => x.body.receiver === null || x.body.receiver === authToken.user
       )
-      .filter(x => isNullish(query.id) || query.id.includes(x.id))
-      .filter(x => {
+      .filter((x) => isNullish(query.id) || query.id.includes(x.id))
+      .filter((x) => {
         if (isNullish(query.date)) {
           return true;
         }
@@ -56,7 +56,7 @@ export class MsgRepoMock implements IMsgRepo {
       })
       .slice(0, limit);
 
-    const result = msgs.map(x => toMsg(x));
+    const result = msgs.map((x) => toMsg(x));
     if (
       !isNullish(query.date) &&
       (query.date.type === "gt" || query.date.type === "gte")
@@ -71,6 +71,6 @@ export class MsgRepoMock implements IMsgRepo {
   }
 
   async update(msg: Msg): Promise<void> {
-    this.msgs[this.msgs.findIndex(x => x.id === msg.id)] = fromMsg(msg);
+    this.msgs[this.msgs.findIndex((x) => x.id === msg.id)] = fromMsg(msg);
   }
 }

@@ -12,7 +12,7 @@ describe("Profile", () => {
     "text",
     new Date(0),
     new Date(100),
-    "sn",
+    "sn"
   );
 
   const auth: IAuthTokenMaster = {
@@ -41,8 +41,8 @@ describe("Profile", () => {
           some({
             ...auth,
             user: new ObjectID().toHexString(),
-          }),
-        ),
+          })
+        )
       ).toEqual({
         id: profileID,
         self: false,
@@ -76,8 +76,8 @@ describe("Profile", () => {
           "name",
           "text",
           "scn",
-          new Date(0),
-        ),
+          new Date(0)
+        )
       ).toEqual(profile.copy({ update: new Date(0), sn: "scn" }));
     });
   });

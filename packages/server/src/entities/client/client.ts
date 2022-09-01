@@ -25,7 +25,7 @@ export class Client extends Copyable<Client> {
     authToken: IAuthTokenMaster,
     name: string,
     url: string,
-    now: Date,
+    now: Date
   ): Client {
     paramsErrorMaker([
       {
@@ -48,7 +48,7 @@ export class Client extends Copyable<Client> {
       url,
       authToken.user,
       now,
-      now,
+      now
     );
   }
 
@@ -58,7 +58,7 @@ export class Client extends Copyable<Client> {
     readonly url: string,
     readonly user: string,
     readonly date: Date,
-    readonly update: Date,
+    readonly update: Date
   ) {
     super(Client);
   }
@@ -70,8 +70,8 @@ export class Client extends Copyable<Client> {
       url: this.url,
       self: pipe(
         authToken,
-        option.map(authToken => authToken.user === this.user),
-        option.toNullable,
+        option.map((authToken) => authToken.user === this.user),
+        option.toNullable
       ),
       date: this.date.toISOString(),
       update: this.update.toISOString(),
@@ -82,7 +82,7 @@ export class Client extends Copyable<Client> {
     authToken: IAuthTokenMaster,
     name: string | undefined,
     url: string | undefined,
-    now: Date,
+    now: Date
   ): Client {
     if (authToken.user !== this.user) {
       throw new AtRightError("人のクライアント変更は出来ません");

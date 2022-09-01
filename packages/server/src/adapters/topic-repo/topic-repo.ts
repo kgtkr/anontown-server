@@ -21,7 +21,7 @@ function toEntity(
     _count: {
       reses: number;
     } | null;
-  },
+  }
 ): Topic {
   switch (model.type) {
     case "FORK":
@@ -33,15 +33,17 @@ function toEntity(
         model._count?.reses ?? 0,
         model.ageUpdatedAt,
         model.active,
-        nullUnwrap(model.parentId),
+        nullUnwrap(model.parentId)
       );
     case "NORMAL":
     case "ONE": {
       const tags = pipe(
         model.tags,
-        A.sort(Ord.contramap<number, P.TopicTag>(x => x.order)(Ord.ordNumber)),
+        A.sort(
+          Ord.contramap<number, P.TopicTag>((x) => x.order)(Ord.ordNumber)
+        ),
         A.map(({ tag }) => tag),
-        xs => Im.List(xs),
+        (xs) => Im.List(xs)
       );
 
       switch (model.type) {
@@ -55,7 +57,7 @@ function toEntity(
             model.createdAt,
             model._count?.reses ?? 0,
             model.ageUpdatedAt,
-            model.active,
+            model.active
           );
         case "ONE":
           return new TopicOne(
@@ -67,7 +69,7 @@ function toEntity(
             model.createdAt,
             model._count?.reses ?? 0,
             model.ageUpdatedAt,
-            model.active,
+            model.active
           );
       }
     }
@@ -114,7 +116,7 @@ function fromEntity(entity: Topic): Omit<P.Prisma.TopicCreateInput, "id"> {
 }
 
 function tagsFromEntity(
-  topic: TopicOne | TopicNormal,
+  topic: TopicOne | TopicNormal
 ): Array<P.Prisma.TopicTagCreateManyInput> {
   return topic.tags
     .toArray()
@@ -168,13 +170,13 @@ export class TopicRepo implements ITopicRepo {
       take: limit,
     });
 
-    return tags.map(x => ({ name: x.tag, count: x._count.tag }));
+    return tags.map((x) => ({ name: x.tag, count: x._count.tag }));
   }
 
   async find(
     query: G.TopicQuery,
     skip: number,
-    limit: number,
+    limit: number
   ): Promise<Array<Topic>> {
     const filter: Array<P.Prisma.TopicWhereInput> = [];
     if (!isNullish(query.id)) {
@@ -186,7 +188,9 @@ export class TopicRepo implements ITopicRepo {
     }
 
     if (!isNullish(query.title)) {
-      for (const title of query.title.split(/\s/).filter(x => x.length !== 0)) {
+      for (const title of query.title
+        .split(/\s/)
+        .filter((x) => x.length !== 0)) {
         filter.push({
           title: {
             contains: title,
@@ -230,7 +234,7 @@ export class TopicRepo implements ITopicRepo {
       skip: skip,
     });
 
-    return topics.map(x => toEntity(x));
+    return topics.map((x) => toEntity(x));
   }
 
   async cronTopicCheck(now: Date): Promise<void> {

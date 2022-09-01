@@ -15,6 +15,6 @@ export interface IResRepo {
   find(
     auth: IAuthContainer,
     query: G.ResQuery,
-    limit: number,
+    limit: number
   ): Promise<Array<Res>>;
 }

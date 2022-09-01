@@ -4,8 +4,10 @@ import { Copyable } from "../../utils";
 import { applyMixins } from "../../utils";
 
 describe("TokenBase", () => {
-  class TokenBaseTest extends Copyable<TokenBaseTest>
-    implements TokenBase<"general", TokenBaseTest> {
+  class TokenBaseTest
+    extends Copyable<TokenBaseTest>
+    implements TokenBase<"general", TokenBaseTest>
+  {
     readonly type = "general" as const;
 
     toBaseAPI!: () => ITokenBaseAPI<"general">;

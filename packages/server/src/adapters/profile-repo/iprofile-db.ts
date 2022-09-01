@@ -19,7 +19,7 @@ export function toProfile(p: IProfileDB): Profile {
     p.text,
     p.date,
     p.update,
-    p.sn,
+    p.sn
   );
 }
 

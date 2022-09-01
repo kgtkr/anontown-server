@@ -49,7 +49,7 @@ export type ITopicForkDB = ITopicBaseDB<
 export function fromTopicBase<T extends TopicType>() {
   return <C extends TopicBase<T, C>, Body extends object>(
     topic: C,
-    body: Body,
+    body: Body
   ): ITopicBaseDB<T, Body> => ({
     id: topic.id,
     body: Object.assign({}, body, {
@@ -75,7 +75,7 @@ export function fromTopicSearchBase<
 
 export function toTopicNormal(
   db: ITopicNormalDB,
-  resCount: number,
+  resCount: number
 ): TopicNormal {
   return new TopicNormal(
     db.id,
@@ -86,7 +86,7 @@ export function toTopicNormal(
     new Date(db.body.date),
     resCount,
     new Date(db.body.ageUpdate),
-    db.body.active,
+    db.body.active
   );
 }
 
@@ -104,7 +104,7 @@ export function toTopicOne(db: ITopicOneDB, resCount: number): TopicOne {
     new Date(db.body.date),
     resCount,
     new Date(db.body.ageUpdate),
-    db.body.active,
+    db.body.active
   );
 }
 
@@ -121,7 +121,7 @@ export function toTopicFork(db: ITopicForkDB, resCount: number): TopicFork {
     resCount,
     new Date(db.body.ageUpdate),
     db.body.active,
-    db.body.parent,
+    db.body.parent
   );
 }
 

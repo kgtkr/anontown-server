@@ -28,13 +28,13 @@ function toEntity(
     _count: {
       replieds: number;
     } | null;
-  },
+  }
 ): Res {
   const votes = pipe(
     model.votes,
-    A.sort(Ord.contramap<number, P.ResVote>(x => x.order)(Ord.ordNumber)),
-    A.map(v => ({ user: v.userId, value: v.vote })),
-    xs => Im.List(xs),
+    A.sort(Ord.contramap<number, P.ResVote>((x) => x.order)(Ord.ordNumber)),
+    A.map((v) => ({ user: v.userId, value: v.vote })),
+    (xs) => Im.List(xs)
   );
   switch (model.type) {
     case "NORMAL":
@@ -43,10 +43,10 @@ function toEntity(
         nullUnwrap(model.content),
         pipe(
           O.fromNullable(model.reply),
-          O.map(replyRes => ({
+          O.map((replyRes) => ({
             res: replyRes.id,
             user: replyRes.userId,
-          })),
+          }))
         ),
         (() => {
           const deleteFlag = nullUnwrap(model.deleteFlag);
@@ -68,7 +68,7 @@ function toEntity(
         votes,
         model.lv,
         model.hash,
-        model._count?.replieds ?? 0,
+        model._count?.replieds ?? 0
       );
     case "HISTORY":
       return new ResHistory(
@@ -80,7 +80,7 @@ function toEntity(
         votes,
         model.lv,
         model.hash,
-        model._count?.replieds ?? 0,
+        model._count?.replieds ?? 0
       );
     case "TOPIC":
       return new ResTopic(
@@ -91,7 +91,7 @@ function toEntity(
         votes,
         model.lv,
         model.hash,
-        model._count?.replieds ?? 0,
+        model._count?.replieds ?? 0
       );
     case "FORK":
       return new ResFork(
@@ -103,7 +103,7 @@ function toEntity(
         votes,
         model.lv,
         model.hash,
-        model._count?.replieds ?? 0,
+        model._count?.replieds ?? 0
       );
   }
 }
@@ -126,8 +126,8 @@ function fromEntity(entity: Res): Omit<P.Prisma.ResUncheckedCreateInput, "id"> {
         content: entity.text,
         replyId: pipe(
           entity.reply,
-          O.map(reply => reply.res),
-          O.toNullable,
+          O.map((reply) => reply.res),
+          O.toNullable
         ),
         deleteFlag: (() => {
           switch (entity.deleteFlag) {
@@ -175,7 +175,7 @@ export class ResRepo implements IResRepo {
   constructor(private prisma: PrismaTransactionClient) {}
 
   subscribeInsertEvent(): Observable<{ res: Res; count: number }> {
-    return new Observable<{ res: Res; count: number }>(subscriber => {
+    return new Observable<{ res: Res; count: number }>((subscriber) => {
       const subRedis = createRedisClient();
       void subRedis.subscribe(ResPubSubChannel);
       subRedis.on("message", (_channel: any, message: string) => {
@@ -261,7 +261,7 @@ export class ResRepo implements IResRepo {
   async find(
     auth: IAuthContainer,
     query: G.ResQuery,
-    limit: number,
+    limit: number
   ): Promise<Array<Res>> {
     const filter: Array<P.Prisma.ResWhereInput> = [];
 
@@ -322,7 +322,7 @@ export class ResRepo implements IResRepo {
     }
 
     if (!isNullish(query.text)) {
-      for (const text of query.text.split(/\s/).filter(x => x.length !== 0)) {
+      for (const text of query.text.split(/\s/).filter((x) => x.length !== 0)) {
         filter.push({
           content: {
             contains: text,
@@ -353,7 +353,7 @@ export class ResRepo implements IResRepo {
       take: limit,
     });
 
-    const result = reses.map(h => toEntity(h));
+    const result = reses.map((h) => toEntity(h));
     if (
       !isNullish(query.date) &&
       (query.date.type === "gt" || query.date.type === "gte")
