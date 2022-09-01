@@ -10,6 +10,7 @@ COPY packages/server/package.json packages/server/package-lock.json packages/ser
 RUN npm ci
 
 COPY packages ./packages
+COPY tsconfig.json tsconfig.base.json ./
 RUN npm run build
 
 CMD npm start
