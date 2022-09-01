@@ -2,3 +2,4 @@
 /packages/*/node_modules/
 .tsbuildinfo
 *.tsbuildinfo
+.envrc.local
