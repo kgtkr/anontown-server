@@ -7,7 +7,6 @@ import { Storage } from "../../entities";
 import * as G from "../../generated/graphql";
 import { IStorageRepo } from "../../ports";
 import * as P from "@prisma/client";
-import { PrismaTransactionClient } from "../../prisma-client";
 
 function toEntity(db: P.Storage): Storage {
   return new Storage(
@@ -43,7 +42,7 @@ function fromEntity(
 }
 
 export class StorageRepo implements IStorageRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async find(
     token: IAuthToken,

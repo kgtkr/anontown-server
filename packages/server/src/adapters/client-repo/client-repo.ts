@@ -7,7 +7,6 @@ import { Client } from "../../entities";
 import * as G from "../../generated/graphql";
 import { IClientRepo } from "../../ports";
 import * as P from "@prisma/client";
-import { PrismaTransactionClient } from "../../prisma-client";
 
 function toEntity(c: P.Client): Client {
   return new Client(c.id, c.name, c.url, c.userId, c.createdAt, c.updatedAt);
@@ -24,7 +23,7 @@ function fromEntity(client: Client): Omit<P.Prisma.ClientCreateInput, "id"> {
 }
 
 export class ClientRepo implements IClientRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async findOne(id: string): Promise<Client> {
     const client = await this.prisma.client.findUnique({

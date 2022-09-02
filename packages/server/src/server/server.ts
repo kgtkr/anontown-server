@@ -48,24 +48,6 @@ export async function serverRun() {
 
       return createContext({});
     },
-    plugins: [
-      {
-        requestDidStart: () => ({
-          willSendResponse: async (response) => {
-            const ctx = response.context as unknown as AppContext;
-
-            if (
-              response.response.errors === undefined ||
-              response.response.errors.length === 0
-            ) {
-              await ctx.prismaOnSuccess();
-            } else {
-              await ctx.prismaOnError(response.response.errors);
-            }
-          },
-        }),
-      },
-    ],
     introspection: true,
     playground: {
       tabs: [

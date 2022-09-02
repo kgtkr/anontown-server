@@ -11,7 +11,6 @@ import * as G from "../../generated/graphql";
 import { ITopicRepo } from "../../ports";
 import * as P from "@prisma/client";
 import * as Im from "immutable";
-import { PrismaTransactionClient } from "../../prisma-client";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as A from "fp-ts/lib/Array";
 import * as Ord from "fp-ts/lib/Ord";
@@ -117,18 +116,17 @@ function fromEntity(entity: Topic): Omit<P.Prisma.TopicCreateInput, "id"> {
 
 function tagsFromEntity(
   topic: TopicOne | TopicNormal
-): Array<P.Prisma.TopicTagCreateManyInput> {
+): Array<P.Prisma.TopicTagCreateWithoutTopicInput> {
   return topic.tags
     .toArray()
-    .map<P.Prisma.TopicTagCreateManyInput>((tag, i) => ({
-      topicId: topic.id,
+    .map<P.Prisma.TopicTagCreateWithoutTopicInput>((tag, i) => ({
       order: i,
       tag: tag,
     }));
 }
 
 export class TopicRepo implements ITopicRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async findOne(id: string): Promise<Topic> {
     const topic = await this.prisma.topic.findUnique({
@@ -260,14 +258,16 @@ export class TopicRepo implements ITopicRepo {
       data: {
         ...model,
         id: topic.id,
+        tags:
+          topic.type === "one" || topic.type === "normal"
+            ? {
+                createMany: {
+                  data: tagsFromEntity(topic),
+                },
+              }
+            : undefined,
       },
     });
-
-    if (topic.type === "one" || topic.type === "normal") {
-      await this.prisma.topicTag.createMany({
-        data: tagsFromEntity(topic),
-      });
-    }
   }
 
   async update(topic: Topic): Promise<void> {
@@ -275,15 +275,18 @@ export class TopicRepo implements ITopicRepo {
 
     await this.prisma.topic.update({
       where: { id: topic.id },
-      data: model,
+      data: {
+        ...model,
+        tags:
+          topic.type === "one" || topic.type === "normal"
+            ? {
+                deleteMany: {},
+                createMany: {
+                  data: tagsFromEntity(topic),
+                },
+              }
+            : undefined,
+      },
     });
-    if (topic.type === "one" || topic.type === "normal") {
-      await this.prisma.topicTag.deleteMany({
-        where: { topicId: topic.id },
-      });
-      await this.prisma.topicTag.createMany({
-        data: tagsFromEntity(topic),
-      });
-    }
   }
 }

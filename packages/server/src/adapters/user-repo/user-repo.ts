@@ -2,7 +2,6 @@ import { AtConflictError, AtNotFoundError } from "../../at-error";
 import { ResWaitCountKey, User } from "../../entities";
 import { IUserRepo } from "../../ports";
 import * as P from "@prisma/client";
-import { PrismaTransactionClient } from "../../prisma-client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
 function toEntity(u: P.User): User {
@@ -47,7 +46,7 @@ function fromEntity(user: User): Omit<P.Prisma.UserCreateInput, "id"> {
 }
 
 export class UserRepo implements IUserRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async findOne(id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });

@@ -6,7 +6,6 @@ import * as G from "../../generated/graphql";
 import { IMsgRepo } from "../../ports";
 import * as P from "@prisma/client";
 import * as O from "fp-ts/lib/Option";
-import { PrismaTransactionClient } from "../../prisma-client";
 
 function toEntity(m: P.Msg): Msg {
   return new Msg(
@@ -26,7 +25,7 @@ function fromEntity(msg: Msg): Omit<P.Prisma.MsgCreateInput, "id"> {
 }
 
 export class MsgRepo implements IMsgRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async findOne(id: string): Promise<Msg> {
     const msg = await this.prisma.msg.findUnique({ where: { id } });

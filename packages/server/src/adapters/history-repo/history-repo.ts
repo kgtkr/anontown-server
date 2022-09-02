@@ -3,7 +3,6 @@ import { AtNotFoundError } from "../../at-error";
 import { History } from "../../entities";
 import * as G from "../../generated/graphql";
 import { IHistoryRepo } from "../../ports";
-import { PrismaTransactionClient } from "../../prisma-client";
 import * as P from "@prisma/client";
 import * as Im from "immutable";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -47,18 +46,17 @@ function fromEntity(history: History): Omit<P.Prisma.HistoryCreateInput, "id"> {
 
 function tagsFromEntity(
   history: History
-): Array<P.Prisma.HistoryTagCreateManyInput> {
+): Array<P.Prisma.HistoryTagCreateWithoutHistoryInput> {
   return history.tags
     .toArray()
-    .map<P.Prisma.HistoryTagCreateManyInput>((tag, i) => ({
-      historyId: history.id,
+    .map<P.Prisma.HistoryTagCreateWithoutHistoryInput>((tag, i) => ({
       order: i,
       tag: tag,
     }));
 }
 
 export class HistoryRepo implements IHistoryRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async insert(history: History): Promise<void> {
     const model = fromEntity(history);
@@ -66,11 +64,12 @@ export class HistoryRepo implements IHistoryRepo {
       data: {
         ...model,
         id: history.id,
+        tags: {
+          createMany: {
+            data: tagsFromEntity(history),
+          },
+        },
       },
-    });
-
-    await this.prisma.historyTag.createMany({
-      data: tagsFromEntity(history),
     });
   }
 
@@ -79,13 +78,15 @@ export class HistoryRepo implements IHistoryRepo {
 
     await this.prisma.history.update({
       where: { id: history.id },
-      data: model,
-    });
-    await this.prisma.historyTag.deleteMany({
-      where: { historyId: history.id },
-    });
-    await this.prisma.historyTag.createMany({
-      data: tagsFromEntity(history),
+      data: {
+        ...model,
+        tags: {
+          deleteMany: {},
+          createMany: {
+            data: tagsFromEntity(history),
+          },
+        },
+      },
     });
   }
 

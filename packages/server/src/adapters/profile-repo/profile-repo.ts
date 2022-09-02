@@ -3,7 +3,6 @@ import { AtConflictError, AtNotFoundError } from "../../at-error";
 import { Profile } from "../../entities";
 import * as G from "../../generated/graphql";
 import { IAuthContainer, IProfileRepo } from "../../ports";
-import { PrismaTransactionClient } from "../../prisma-client";
 import * as P from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
@@ -31,7 +30,7 @@ function fromEntity(profile: Profile): Omit<P.Prisma.ProfileCreateInput, "id"> {
 }
 
 export class ProfileRepo implements IProfileRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async findOne(id: string): Promise<Profile> {
     const profile = await this.prisma.profile.findUnique({

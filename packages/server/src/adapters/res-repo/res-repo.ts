@@ -7,7 +7,6 @@ import * as G from "../../generated/graphql";
 import { IAuthContainer, IResRepo } from "../../ports";
 import { z } from "zod";
 import * as P from "@prisma/client";
-import { PrismaTransactionClient } from "../../prisma-client";
 import * as O from "fp-ts/lib/Option";
 import * as Im from "immutable";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -162,9 +161,10 @@ function fromEntity(entity: Res): Omit<P.Prisma.ResUncheckedCreateInput, "id"> {
   }
 }
 
-function votesFromEntity(res: Res): Array<P.Prisma.ResVoteCreateManyInput> {
+function votesFromEntity(
+  res: Res
+): Array<P.Prisma.ResVoteCreateWithoutResInput> {
   return res.votes.toArray().map((vote, i) => ({
-    resId: res.id,
     userId: vote.user,
     vote: vote.value,
     order: i,
@@ -172,7 +172,7 @@ function votesFromEntity(res: Res): Array<P.Prisma.ResVoteCreateManyInput> {
 }
 
 export class ResRepo implements IResRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   subscribeInsertEvent(): Observable<{ res: Res; count: number }> {
     return new Observable<{ res: Res; count: number }>((subscriber) => {
@@ -229,10 +229,12 @@ export class ResRepo implements IResRepo {
       data: {
         ...model,
         id: res.id,
+        votes: {
+          createMany: {
+            data: votesFromEntity(res),
+          },
+        },
       },
-    });
-    await this.prisma.resVote.createMany({
-      data: votesFromEntity(res),
     });
 
     const data: ResPubSub = {
@@ -246,15 +248,15 @@ export class ResRepo implements IResRepo {
 
     await this.prisma.res.update({
       where: { id: res.id },
-      data: model,
-    });
-    await this.prisma.resVote.deleteMany({
-      where: {
-        resId: res.id,
+      data: {
+        ...model,
+        votes: {
+          deleteMany: {},
+          createMany: {
+            data: votesFromEntity(res),
+          },
+        },
       },
-    });
-    await this.prisma.resVote.createMany({
-      data: votesFromEntity(res),
     });
   }
 

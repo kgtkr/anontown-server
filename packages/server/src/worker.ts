@@ -14,13 +14,11 @@ function runTopicWorker() {
     cronTime: "00 00 * * * *",
     onTick: () => {
       void (async () => {
-        await prisma.$transaction(async (prismaTransaction) => {
-          const logger = new Logger();
-          const topicRepo = new TopicRepo(prismaTransaction);
+        const logger = new Logger();
+        const topicRepo = new TopicRepo(prisma);
 
-          logger.info("TopicCron");
-          await topicRepo.cronTopicCheck(new Date());
-        });
+        logger.info("TopicCron");
+        await topicRepo.cronTopicCheck(new Date());
       })();
     },
     start: false,
@@ -34,13 +32,11 @@ function runUserWorker() {
       cronTime,
       onTick: () => {
         void (async () => {
-          await prisma.$transaction(async (prismaTransaction) => {
-            const logger = new Logger();
-            const userRepo = new UserRepo(prismaTransaction);
+          const logger = new Logger();
+          const userRepo = new UserRepo(prisma);
 
-            logger.info(`UserCron ${key}`);
-            await userRepo.cronCountReset(key);
-          });
+          logger.info(`UserCron ${key}`);
+          await userRepo.cronCountReset(key);
         })();
       },
       start: false,
@@ -58,10 +54,8 @@ function runUserWorker() {
     cronTime: "00 00 00 * * *",
     onTick: () => {
       void (async () => {
-        await prisma.$transaction(async (prismaTransaction) => {
-          const userRepo = new UserRepo(prismaTransaction);
-          await userRepo.cronPointReset();
-        });
+        const userRepo = new UserRepo(prisma);
+        await userRepo.cronPointReset();
       })();
     },
     start: false,

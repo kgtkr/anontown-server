@@ -5,7 +5,6 @@ import { ITokenRepo } from "../../ports";
 import * as P from "@prisma/client";
 import { nullUnwrap } from "@kgtkr/utils";
 import * as Im from "immutable";
-import { PrismaTransactionClient } from "../../prisma-client";
 import * as A from "fp-ts/lib/Array";
 import * as Ord from "fp-ts/lib/Ord";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -72,17 +71,18 @@ function fromEntity(token: Token): Omit<P.Prisma.TokenCreateInput, "id"> {
 
 function reqsFromEntity(
   token: TokenGeneral
-): Array<P.Prisma.TokenReqCreateManyInput> {
-  return token.req.toArray().map<P.Prisma.TokenReqCreateManyInput>((req) => ({
-    key: req.key,
-    expires: req.expireDate,
-    active: req.active,
-    tokenId: token.id,
-  }));
+): Array<P.Prisma.TokenReqCreateWithoutTokenInput> {
+  return token.req
+    .toArray()
+    .map<P.Prisma.TokenReqCreateWithoutTokenInput>((req) => ({
+      key: req.key,
+      expires: req.expireDate,
+      active: req.active,
+    }));
 }
 
 export class TokenRepo implements ITokenRepo {
-  constructor(private prisma: PrismaTransactionClient) {}
+  constructor(private prisma: P.Prisma.TransactionClient) {}
 
   async findOne(id: string): Promise<Token> {
     const token = await this.prisma.token.findUnique({
@@ -113,23 +113,37 @@ export class TokenRepo implements ITokenRepo {
 
   async insert(token: Token): Promise<void> {
     await this.prisma.token.create({
-      data: { ...fromEntity(token), id: token.id },
+      data: {
+        ...fromEntity(token),
+        id: token.id,
+        reqs:
+          token.type === "general"
+            ? {
+                createMany: {
+                  data: reqsFromEntity(token),
+                },
+              }
+            : undefined,
+      },
     });
-    if (token.type === "general") {
-      await this.prisma.tokenReq.createMany({ data: reqsFromEntity(token) });
-    }
   }
 
   async update(token: Token): Promise<void> {
     await this.prisma.token.update({
       where: { id: token.id },
-      data: fromEntity(token),
+      data: {
+        ...fromEntity(token),
+        reqs:
+          token.type === "general"
+            ? {
+                deleteMany: {},
+                createMany: {
+                  data: reqsFromEntity(token),
+                },
+              }
+            : undefined,
+      },
     });
-
-    if (token.type === "general") {
-      await this.prisma.tokenReq.deleteMany({ where: { tokenId: token.id } });
-      await this.prisma.tokenReq.createMany({ data: reqsFromEntity(token) });
-    }
   }
 
   async delClientToken(
