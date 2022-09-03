@@ -14,4 +14,4 @@ COPY packages ./packages
 COPY lerna.json tsconfig.base.json ./
 RUN npx lerna run build
 
-CMD npx lerna run start --scope @anontown/server --stream 
+CMD npx lerna run start --scope @anontown-backend/server --stream 

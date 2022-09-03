@@ -1,5 +1,5 @@
 {
-  "name": "@anontown/server-root",
+  "name": "@anontown-backend/root",
   "private": true,
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.36.1",
@@ -17,7 +17,7 @@
     "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}'",
     "format:check": "prettier --check 'packages/*/src/**/*.{ts,tsx}'",
     "format": "prettier --write 'packages/*/src/**/*.{ts,tsx}'",
-    "dev": "lerna run --include-dependencies --parallel --stream --scope @anontown/server dev"
+    "dev": "lerna run --include-dependencies --parallel --stream --scope @anontown-backend/server dev"
   },
   "workspaces": [
     "packages/server"
