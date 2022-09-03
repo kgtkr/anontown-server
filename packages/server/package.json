@@ -56,7 +56,8 @@
   },
   "scripts": {
     "start": "node ./dist/app.js",
-    "build": "graphql-codegen && prisma generate && tsc",
+    "build": "npm run codegen && tsc",
+    "codegen": "graphql-codegen && prisma generate",
     "dev": "run-p graphql-codegen:watch prisma-codegen:watch start-dev",
     "start-dev": "ts-node-dev ./src/app.ts",
     "graphql-codegen:watch": "graphql-codegen -w",
