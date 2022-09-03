@@ -9,7 +9,8 @@
     "prettier": "^2.7.1",
     "typescript": "^4.8.2",
     "@lerna-lite/run": "^1.11.2",
-    "@lerna-lite/cli": "^1.11.2"
+    "@lerna-lite/cli": "^1.11.2",
+    "eslint-plugin-import": "^2.26.0"
   },
   "scripts": {
     "lint": "eslint 'packages/*/src/**/*.{ts,tsx}'",
