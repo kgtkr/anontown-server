@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npx lerna run codegen
+      - run: npx lerna run build
       - run: npm run format:check
       - run: npm run lint
       - run: |
