@@ -3,8 +3,13 @@ import { IAuthTokenMaster } from "../../auth";
 import { Client } from "../../entities";
 
 export type ClientRepoQuery = {
-  id?: string[];
-  self?: boolean;
+  id: string[] | null;
+  self: boolean | null;
+};
+
+export const emptyClientRepoQuery: ClientRepoQuery = {
+  id: null,
+  self: null,
 };
 
 export interface IClientRepo {

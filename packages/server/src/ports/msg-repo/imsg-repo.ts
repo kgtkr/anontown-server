@@ -3,8 +3,13 @@ import { Msg } from "../../entities";
 import { DateQuery } from "../types";
 
 export type MsgRepoQuery = {
-  date?: DateQuery;
-  id?: string[];
+  date: DateQuery | null;
+  id: string[] | null;
+};
+
+export const emptyMsgRepoQuery: MsgRepoQuery = {
+  date: null,
+  id: null,
 };
 
 export interface IMsgRepo {

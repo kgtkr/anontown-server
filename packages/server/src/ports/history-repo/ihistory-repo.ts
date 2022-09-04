@@ -2,10 +2,17 @@ import { History } from "../../entities";
 import { DateQuery } from "../types";
 
 export type HistoryRepoQuery = {
-  date?: DateQuery;
-  id?: string[];
-  topic?: string[];
+  date: DateQuery | null;
+  id: string[] | null;
+  topic: string[] | null;
 };
+
+export const emptyHistoryRepoQuery: HistoryRepoQuery = {
+  date: null,
+  id: null,
+  topic: null,
+};
+
 export interface IHistoryRepo {
   insert(history: History): Promise<void>;
   update(history: History): Promise<void>;

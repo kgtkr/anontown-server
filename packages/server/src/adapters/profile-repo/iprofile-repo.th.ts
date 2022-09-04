@@ -1,6 +1,12 @@
 import { none, some } from "fp-ts/lib/Option";
 import { ObjectID } from "bson";
-import { AtError, AuthContainer, IProfileRepo, Profile } from "../../";
+import {
+  AtError,
+  AuthContainer,
+  IProfileRepo,
+  Profile,
+  emptyProfileRepoQuery,
+} from "../../";
 import { IAuthToken } from "../../auth";
 
 export function run(
@@ -86,12 +92,11 @@ export function run(
         await repo.insert(profile4);
 
         // id
-        expect(await repo.find(new AuthContainer(none), {})).toEqual([
-          profile4,
-          profile2,
-          profile1,
-          profile3,
-        ]);
+        expect(
+          await repo.find(new AuthContainer(none), {
+            ...emptyProfileRepoQuery,
+          })
+        ).toEqual([profile4, profile2, profile1, profile3]);
 
         // self
         expect(
@@ -104,22 +109,27 @@ export function run(
                 type: "master",
               })
             ),
-            { self: true }
+            { ...emptyProfileRepoQuery, self: true }
           )
         ).toEqual([profile2, profile1, profile3]);
 
         expect(
           await repo.find(new AuthContainer(none), {
+            ...emptyProfileRepoQuery,
             self: false,
           })
         ).toEqual([profile4, profile2, profile1, profile3]);
 
         // id
-        expect(await repo.find(new AuthContainer(none), { id: [] })).toEqual(
-          []
-        );
         expect(
           await repo.find(new AuthContainer(none), {
+            ...emptyProfileRepoQuery,
+            id: [],
+          })
+        ).toEqual([]);
+        expect(
+          await repo.find(new AuthContainer(none), {
+            ...emptyProfileRepoQuery,
             id: [profile1.id, profile2.id, new ObjectID().toHexString()],
           })
         ).toEqual([profile2, profile1]);
@@ -144,7 +154,10 @@ export function run(
     it("認証していない状態でselfしたらエラーになるか", async () => {
       await $isolate(async (repo) => {
         await expect(
-          repo.find(new AuthContainer(none), { self: true })
+          repo.find(new AuthContainer(none), {
+            ...emptyProfileRepoQuery,
+            self: true,
+          })
         ).rejects.toThrow(AtError);
       });
     });

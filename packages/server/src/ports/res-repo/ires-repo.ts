@@ -5,15 +5,27 @@ import { IAuthContainer } from "../auth-container/index";
 import { DateQuery } from "../types";
 
 export type ResRepoQuery = {
-  date?: DateQuery;
-  hash?: string;
-  id?: string[];
-  notice?: boolean;
-  profile?: string;
-  reply?: string;
-  self?: boolean;
-  text?: string;
-  topic?: string;
+  date: DateQuery | null;
+  hash: string | null;
+  id: string[] | null;
+  notice: boolean | null;
+  profile: string | null;
+  reply: string | null;
+  self: boolean | null;
+  text: string | null;
+  topic: string | null;
+};
+
+export const emptyResRepoQuery: ResRepoQuery = {
+  date: null,
+  hash: null,
+  id: null,
+  notice: null,
+  profile: null,
+  reply: null,
+  self: null,
+  text: null,
+  topic: null,
 };
 
 export interface IResRepo {

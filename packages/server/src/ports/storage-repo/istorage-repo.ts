@@ -2,8 +2,13 @@ import { IAuthToken } from "../../auth";
 import { Storage } from "../../entities";
 
 export type StorageRepoQuery = {
-  key?: string[];
+  key: string[] | null;
 };
+
+export const emptyStorageRepoQuery: StorageRepoQuery = {
+  key: null,
+};
+
 export interface IStorageRepo {
   findOneKey(token: IAuthToken, key: string): Promise<Storage>;
   find(token: IAuthToken, query: StorageRepoQuery): Promise<Array<Storage>>;

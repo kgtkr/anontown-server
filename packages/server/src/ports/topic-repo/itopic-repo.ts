@@ -1,13 +1,21 @@
 import { Topic } from "../../entities";
-import * as G from "../../generated/graphql";
 
 export type TopicRepoQuery = {
-  activeOnly?: boolean;
-  id?: string[];
-  parent?: string;
-  tags?: string[];
-  title?: string;
+  activeOnly: boolean | null;
+  id: string[] | null;
+  parent: string | null;
+  tags: string[] | null;
+  title: string | null;
 };
+
+export const emptyTopicRepoQuery: TopicRepoQuery = {
+  activeOnly: null,
+  id: null,
+  parent: null,
+  tags: null,
+  title: null,
+};
+
 export interface ITopicRepo {
   findOne(id: string): Promise<Topic>;
 

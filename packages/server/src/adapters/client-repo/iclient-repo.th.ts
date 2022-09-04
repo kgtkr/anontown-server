@@ -1,6 +1,6 @@
 import { none, some } from "fp-ts/lib/Option";
 import { ObjectID } from "bson";
-import { AtError, Client, IClientRepo } from "../../";
+import { AtError, Client, IClientRepo, emptyClientRepoQuery } from "../../";
 import { IAuthTokenMaster } from "../../auth";
 
 export function run(
@@ -79,41 +79,37 @@ export function run(
 
         // 無
 
-        expect(await repo.find(none, {})).toEqual([
-          client4,
-          client2,
-          client1,
-          client3,
-        ]);
+        expect(
+          await repo.find(none, {
+            ...emptyClientRepoQuery,
+          })
+        ).toEqual([client4, client2, client1, client3]);
 
         // id
 
         expect(
           await repo.find(none, {
+            ...emptyClientRepoQuery,
             id: [],
           })
         ).toEqual([]);
 
         expect(
-          await repo.find(none, {
-            id: [client1.id],
-          })
+          await repo.find(none, { ...emptyClientRepoQuery, id: [client1.id] })
         ).toEqual([client1]);
 
         expect(
           await repo.find(none, {
+            ...emptyClientRepoQuery,
             id: [client1.id, new ObjectID().toHexString()],
           })
         ).toEqual([client1]);
 
         // self
 
-        expect(await repo.find(none, { self: false })).toEqual([
-          client4,
-          client2,
-          client1,
-          client3,
-        ]);
+        expect(
+          await repo.find(none, { ...emptyClientRepoQuery, self: false })
+        ).toEqual([client4, client2, client1, client3]);
 
         expect(
           await repo.find(
@@ -123,7 +119,7 @@ export function run(
               user: user1,
               type: "master",
             }),
-            { self: true }
+            { ...emptyClientRepoQuery, self: true }
           )
         ).toEqual([client2, client1, client3]);
 
@@ -144,7 +140,9 @@ export function run(
 
     it("トークンがnullでselfがtrueの時エラーになるか", async () => {
       await $isolate(async (repo) => {
-        await expect(repo.find(none, { self: true })).rejects.toThrow(AtError);
+        await expect(
+          repo.find(none, { ...emptyClientRepoQuery, self: true })
+        ).rejects.toThrow(AtError);
       });
     });
   });

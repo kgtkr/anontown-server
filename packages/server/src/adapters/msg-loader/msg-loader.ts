@@ -1,6 +1,6 @@
 import * as DataLoader from "dataloader";
 import { Msg } from "../../entities/index";
-import { IAuthContainer, IMsgRepo } from "../../ports/index";
+import { emptyMsgRepoQuery, IAuthContainer, IMsgRepo } from "../../ports/index";
 import { IMsgLoader } from "../../ports/msg-loader/msg-loader";
 import { loader } from "../loader-helper";
 
@@ -9,7 +9,11 @@ export class MsgLoader implements IMsgLoader {
 
   constructor(msgRepo: IMsgRepo, auth: IAuthContainer) {
     this.loader = loader((ids) =>
-      msgRepo.find(auth.getToken(), { id: ids }, ids.length)
+      msgRepo.find(
+        auth.getToken(),
+        { ...emptyMsgRepoQuery, id: ids },
+        ids.length
+      )
     );
   }
 
