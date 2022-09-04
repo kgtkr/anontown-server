@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server-koa";
 import cors from "@koa/cors";
-import express from "express";
+import Koa from "koa";
 import { either } from "fp-ts";
 import * as fs from "fs/promises";
 import { createServer } from "http";
@@ -10,13 +10,15 @@ import { Config } from "../config";
 import { resolvers as appResolvers } from "../resolvers";
 import { runWorker } from "../worker";
 import { AppContext, createContext } from "./context";
+import Router from "@koa/router";
 
 export async function serverRun() {
   const typeDefs = gql(
     await fs.readFile(require.resolve("../../schema.gql"), "utf8")
   );
 
-  const app = express();
+  const app = new Koa();
+  const router = new Router();
 
   const server = new ApolloServer({
     typeDefs,
@@ -68,8 +70,11 @@ export async function serverRun() {
 
   runWorker();
 
-  app.get("/ping", cors(), (_req, res) => res.send("OK"));
+  router.get("/ping", (ctx, _next) => (ctx.body = "OK"));
   server.applyMiddleware({ app, path: "/" });
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+  app.use(cors());
 
   const httpServer = createServer(app);
   server.installSubscriptionHandlers(httpServer);
