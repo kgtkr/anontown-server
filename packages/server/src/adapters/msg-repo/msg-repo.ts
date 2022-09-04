@@ -3,7 +3,7 @@ import { AtNotFoundError } from "../../at-error";
 import { IAuthToken } from "../../auth";
 import { Msg } from "../../entities";
 import * as G from "../../generated/graphql";
-import { IMsgRepo } from "../../ports";
+import { IMsgRepo, MsgRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 import * as O from "fp-ts/lib/Option";
 
@@ -38,7 +38,7 @@ export class MsgRepo implements IMsgRepo {
 
   async find(
     authToken: IAuthToken,
-    query: G.MsgQuery,
+    query: MsgRepoQuery,
     limit: number
   ): Promise<Array<Msg>> {
     const filter: Array<P.Prisma.MsgWhereInput> = [

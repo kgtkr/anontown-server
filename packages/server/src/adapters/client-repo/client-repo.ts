@@ -5,7 +5,7 @@ import { AtAuthError, AtNotFoundError } from "../../at-error";
 import { IAuthTokenMaster } from "../../auth";
 import { Client } from "../../entities";
 import * as G from "../../generated/graphql";
-import { IClientRepo } from "../../ports";
+import { ClientRepoQuery, IClientRepo } from "../../ports";
 import * as P from "@prisma/client";
 
 function toEntity(c: P.Client): Client {
@@ -38,7 +38,7 @@ export class ClientRepo implements IClientRepo {
 
   async find(
     authToken: Option<IAuthTokenMaster>,
-    query: G.ClientQuery
+    query: ClientRepoQuery
   ): Promise<Array<Client>> {
     if (query.self && option.isNone(authToken)) {
       throw new AtAuthError("認証が必要です");

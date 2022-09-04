@@ -13,8 +13,10 @@ import {
 import { subscription } from "./subscription";
 import { token, tokenGeneral } from "./token";
 import { topic, topicFork, topicSearch } from "./topic";
+import { DateTimeResolver } from "graphql-scalars";
 
 export const resolvers: G.Resolvers = {
+  DateTime: DateTimeResolver,
   History: history,
   Mutation: mutation,
   Query: query,

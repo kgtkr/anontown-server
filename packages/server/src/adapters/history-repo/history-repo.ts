@@ -1,8 +1,7 @@
 import { isNullish } from "@kgtkr/utils";
 import { AtNotFoundError } from "../../at-error";
 import { History } from "../../entities";
-import * as G from "../../generated/graphql";
-import { IHistoryRepo } from "../../ports";
+import { HistoryRepoQuery, IHistoryRepo } from "../../ports";
 import * as P from "@prisma/client";
 import * as Im from "immutable";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -102,7 +101,7 @@ export class HistoryRepo implements IHistoryRepo {
     return toEntity(history);
   }
 
-  async find(query: G.HistoryQuery, limit: number): Promise<Array<History>> {
+  async find(query: HistoryRepoQuery, limit: number): Promise<Array<History>> {
     const filter: Array<P.Prisma.HistoryWhereInput> = [];
     if (!isNullish(query.id)) {
       filter.push({

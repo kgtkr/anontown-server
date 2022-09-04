@@ -1,10 +1,8 @@
-import { combineResolvers } from "apollo-resolvers";
-import { ApolloServer, gql, IResolvers } from "apollo-server-express";
-import cors from "cors";
+import { ApolloServer, gql } from "apollo-server-koa";
+import cors from "@koa/cors";
 import express from "express";
 import { either } from "fp-ts";
 import * as fs from "fs/promises";
-import { GraphQLDateTime } from "graphql-iso-date";
 import { createServer } from "http";
 import * as t from "io-ts";
 import { AtErrorSymbol, AtServerError } from "../at-error";
@@ -17,18 +15,12 @@ export async function serverRun() {
   const typeDefs = gql(
     await fs.readFile(require.resolve("../../schema.gql"), "utf8")
   );
-  const resolvers: IResolvers = combineResolvers([
-    {
-      DateTime: GraphQLDateTime,
-    },
-    appResolvers,
-  ]);
 
   const app = express();
 
   const server = new ApolloServer({
     typeDefs,
-    resolvers,
+    appResolvers,
     context: (params: unknown): Promise<AppContext> => {
       const decodedParams = t.UnknownRecord.decode(params);
       if (either.isRight(decodedParams)) {

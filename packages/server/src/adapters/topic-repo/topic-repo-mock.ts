@@ -4,7 +4,7 @@ import { AuthContainer } from "..";
 import { AtNotFoundError } from "../../at-error";
 import { Topic } from "../../entities";
 import * as G from "../../generated/graphql";
-import { IResRepo, ITopicRepo } from "../../ports";
+import { IResRepo, ITopicRepo, TopicRepoQuery } from "../../ports";
 import {
   fromTopic,
   ITopicDB,
@@ -46,7 +46,7 @@ export class TopicRepoMock implements ITopicRepo {
   }
 
   async find(
-    query: G.TopicQuery,
+    query: TopicRepoQuery,
     skip: number,
     limit: number
   ): Promise<Array<Topic>> {

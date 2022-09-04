@@ -5,7 +5,7 @@ import { AtNotFoundError } from "../../at-error";
 import { IAuthToken } from "../../auth";
 import { Storage } from "../../entities";
 import * as G from "../../generated/graphql";
-import { IStorageRepo } from "../../ports";
+import { IStorageRepo, StorageRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 
 function toEntity(db: P.Storage): Storage {
@@ -46,7 +46,7 @@ export class StorageRepo implements IStorageRepo {
 
   async find(
     token: IAuthToken,
-    query: G.StorageQuery
+    query: StorageRepoQuery
   ): Promise<Array<Storage>> {
     const filter: Array<P.Prisma.StorageWhereInput> = [
       {

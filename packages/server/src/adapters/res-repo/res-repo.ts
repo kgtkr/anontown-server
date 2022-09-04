@@ -4,7 +4,7 @@ import { AtNotFoundError } from "../../at-error";
 import { createRedisClient, RedisClient } from "../../db";
 import { Res, ResNormal, ResHistory, ResFork, ResTopic } from "../../entities";
 import * as G from "../../generated/graphql";
-import { IAuthContainer, IResRepo } from "../../ports";
+import { IAuthContainer, IResRepo, ResRepoQuery } from "../../ports";
 import { z } from "zod";
 import * as P from "@prisma/client";
 import * as O from "fp-ts/lib/Option";
@@ -262,7 +262,7 @@ export class ResRepo implements IResRepo {
 
   async find(
     auth: IAuthContainer,
-    query: G.ResQuery,
+    query: ResRepoQuery,
     limit: number
   ): Promise<Array<Res>> {
     const filter: Array<P.Prisma.ResWhereInput> = [];

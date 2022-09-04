@@ -2,6 +2,19 @@ import { Observable } from "rxjs";
 import { Res } from "../../entities";
 import * as G from "../../generated/graphql";
 import { IAuthContainer } from "../auth-container/index";
+import { DateQuery } from "../types";
+
+export type ResRepoQuery = {
+  date?: DateQuery;
+  hash?: string;
+  id?: string[];
+  notice?: boolean;
+  profile?: string;
+  reply?: string;
+  self?: boolean;
+  text?: string;
+  topic?: string;
+};
 
 export interface IResRepo {
   subscribeInsertEvent(): Observable<{ res: Res; count: number }>;
@@ -14,7 +27,7 @@ export interface IResRepo {
 
   find(
     auth: IAuthContainer,
-    query: G.ResQuery,
+    query: ResRepoQuery,
     limit: number
   ): Promise<Array<Res>>;
 }
