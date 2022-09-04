@@ -13,7 +13,7 @@ import { AppContext, createContext } from "./context";
 import Router from "@koa/router";
 import {
   ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageGraphQLPlayground,
 } from "apollo-server-core";
 
 export async function serverRun() {
@@ -48,17 +48,6 @@ export async function serverRun() {
       return createContext({});
     },
     introspection: true,
-    playground: {
-      tabs: [
-        {
-          endpoint: "/",
-          query: "",
-          headers: {
-            "X-Token": "",
-          },
-        },
-      ],
-    },
     debug: false,
     formatError: (error: any) => {
       console.log(error);
@@ -73,7 +62,17 @@ export async function serverRun() {
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
-      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      ApolloServerPluginLandingPageGraphQLPlayground({
+        tabs: [
+          {
+            endpoint: "/",
+            query: "",
+            headers: {
+              "X-Token": "",
+            },
+          },
+        ],
+      }),
     ],
   });
   await server.start();
@@ -92,9 +91,5 @@ export async function serverRun() {
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: Config.server.port }, resolve)
   );
-  console.log(
-    `Server ready at ${server.graphqlPath}, ${
-      server.subscriptionsPath ?? "<unknown subscriptionsPath>"
-    }`
-  );
+  console.log("Server ready");
 }
