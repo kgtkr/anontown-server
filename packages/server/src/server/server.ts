@@ -11,6 +11,10 @@ import { resolvers as appResolvers } from "../resolvers";
 import { runWorker } from "../worker";
 import { AppContext, createContext } from "./context";
 import Router from "@koa/router";
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageLocalDefault,
+} from "apollo-server-core";
 
 export async function serverRun() {
   const typeDefs = gql(
@@ -19,10 +23,11 @@ export async function serverRun() {
 
   const app = new Koa();
   const router = new Router();
+  const httpServer = createServer();
 
   const server = new ApolloServer({
     typeDefs,
-    appResolvers,
+    resolvers: appResolvers,
     context: (params: unknown): Promise<AppContext> => {
       const decodedParams = t.UnknownRecord.decode(params);
       if (either.isRight(decodedParams)) {
@@ -66,7 +71,12 @@ export async function serverRun() {
     subscriptions: {
       path: "/",
     },
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+    ],
   });
+  await server.start();
 
   runWorker();
 
@@ -76,14 +86,15 @@ export async function serverRun() {
   app.use(router.allowedMethods());
   app.use(cors());
 
-  const httpServer = createServer(app);
+  httpServer.on("request", app.callback());
   server.installSubscriptionHandlers(httpServer);
 
-  httpServer.listen({ port: Config.server.port }, () => {
-    console.log(
-      `Server ready at ${server.graphqlPath}, ${
-        server.subscriptionsPath ?? "<unknown subscriptionsPath>"
-      }`
-    );
-  });
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: Config.server.port }, resolve)
+  );
+  console.log(
+    `Server ready at ${server.graphqlPath}, ${
+      server.subscriptionsPath ?? "<unknown subscriptionsPath>"
+    }`
+  );
 }
