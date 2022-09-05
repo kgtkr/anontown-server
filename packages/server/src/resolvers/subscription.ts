@@ -7,13 +7,11 @@ export const subscription: G.SubscriptionResolvers = {
     subscribe: (_parent, args, context, _info) =>
       ixa.from(context.ports.resRepo.subscribeInsertEvent(args.topic)).pipe(
         ixaOps.map((data) => ({
-          count: data.count,
-          res: data.res.toAPI(context.ports.authContainer.getTokenOrNull()),
+          resAdded: {
+            count: data.count,
+            res: data.res.toAPI(context.ports.authContainer.getTokenOrNull()),
+          },
         }))
       ),
-    resolve: (x: any) => {
-      // TODO: こうしないと動かない何故
-      return x;
-    },
   },
 };
