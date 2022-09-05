@@ -5,7 +5,7 @@ import { IAuthToken } from "../../auth";
 import { Config } from "../../config";
 import { Constant } from "../../constant";
 import { IObjectIdGenerator } from "../../ports";
-import { hash , applyMixins , Copyable } from "../../utils";
+import { hash, applyMixins, Copyable } from "../../utils";
 import { History } from "../history";
 import { Res, ResFork, ResHistory, ResTopic } from "../res";
 import { User } from "../user";

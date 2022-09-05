@@ -1,6 +1,6 @@
 import { ITokenBaseAPI, TokenBase } from "../../";
 import { DummySafeIdGenerator } from "../../adapters/index";
-import { Copyable , applyMixins } from "../../utils";
+import { Copyable, applyMixins } from "../../utils";
 
 describe("TokenBase", () => {
   class TokenBaseTest

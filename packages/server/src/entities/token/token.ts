@@ -4,7 +4,7 @@ import { IAuthTokenGeneral, IAuthTokenMaster, IAuthUser } from "../../auth";
 import { Config } from "../../config";
 import { Constant } from "../../constant";
 import { IObjectIdGenerator, ISafeIdGenerator } from "../../ports";
-import { Copyable , hash , applyMixins } from "../../utils";
+import { Copyable, hash, applyMixins } from "../../utils";
 import { Client } from "../client";
 
 export interface ITokenReq {

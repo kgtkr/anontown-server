@@ -7,7 +7,7 @@ import { IAuthUser } from "../../auth";
 import { Config } from "../../config";
 import { Constant } from "../../constant";
 import { IObjectIdGenerator } from "../../ports";
-import { Copyable , hash } from "../../utils";
+import { Copyable, hash } from "../../utils";
 
 export type ResWaitCountKey = Exclude<keyof IResWait, "last">;
 
