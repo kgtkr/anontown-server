@@ -1,10 +1,8 @@
 import { ApolloServer, gql } from "apollo-server-koa";
 import cors from "@koa/cors";
 import Koa from "koa";
-import { either } from "fp-ts";
 import * as fs from "fs/promises";
 import { createServer } from "http";
-import * as t from "io-ts";
 import { AtErrorSymbol, AtServerError } from "../at-error";
 import { Config } from "../config";
 import { resolvers as appResolvers } from "../resolvers";
@@ -15,6 +13,9 @@ import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageGraphQLPlayground,
 } from "apollo-server-core";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 
 export async function serverRun() {
   const typeDefs = gql(
@@ -24,28 +25,28 @@ export async function serverRun() {
   const app = new Koa();
   const router = new Router();
   const httpServer = createServer();
+  const schema = makeExecutableSchema({ typeDefs, resolvers: appResolvers });
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/",
+  });
+  const serverCleanup = useServer(
+    {
+      schema,
+      context: ({ connectionParams }) => {
+        return createContext({
+          "x-token": connectionParams?.["token"],
+        });
+      },
+    },
+    wsServer
+  );
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers: appResolvers,
-    context: (params: unknown): Promise<AppContext> => {
-      const decodedParams = t.UnknownRecord.decode(params);
-      if (either.isRight(decodedParams)) {
-        const { req, connection } = decodedParams.right;
-        const decodedReq = t.type({ headers: t.UnknownRecord }).decode(req);
-        const decodeConnection = t
-          .type({ context: t.UnknownRecord })
-          .decode(connection);
-        if (either.isRight(decodedReq)) {
-          return createContext(decodedReq.right.headers);
-        }
-
-        if (either.isRight(decodeConnection)) {
-          return createContext(decodeConnection.right.context);
-        }
-      }
-
-      return createContext({});
+    schema,
+    context: (params): Promise<AppContext> => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      return createContext(params.ctx.request.headers);
     },
     introspection: true,
     debug: false,
@@ -56,9 +57,6 @@ export async function serverRun() {
       } else {
         return new AtServerError().data;
       }
-    },
-    subscriptions: {
-      path: "/",
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -73,6 +71,15 @@ export async function serverRun() {
           },
         ],
       }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
     ],
   });
   await server.start();
@@ -86,7 +93,6 @@ export async function serverRun() {
   app.use(cors());
 
   httpServer.on("request", app.callback());
-  server.installSubscriptionHandlers(httpServer);
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: Config.server.port }, resolve)
