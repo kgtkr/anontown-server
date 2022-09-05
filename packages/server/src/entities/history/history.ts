@@ -16,7 +16,7 @@ export interface IHistoryAPI {
   readonly title: string;
   readonly tags: Array<string>;
   readonly text: string;
-  readonly date: string;
+  readonly date: Date;
   readonly hash: string;
   readonly self: boolean | null;
 }
@@ -64,7 +64,7 @@ export class History extends Copyable<History> {
       title: this.title,
       tags: this.tags.toArray(),
       text: this.text,
-      date: this.date.toISOString(),
+      date: this.date,
       hash: this.hash,
       self: pipe(
         authToken,
