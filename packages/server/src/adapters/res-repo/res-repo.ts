@@ -1,9 +1,7 @@
 import { isNullish, nullUnwrap } from "@kgtkr/utils";
-import { Observable } from "rxjs";
 import { AtNotFoundError } from "../../at-error";
 import { createRedisClient, RedisClient } from "../../db";
 import { Res, ResNormal, ResHistory, ResFork, ResTopic } from "../../entities";
-import * as G from "../../generated/graphql";
 import { IAuthContainer, IResRepo, ResRepoQuery } from "../../ports";
 import { z } from "zod";
 import * as P from "@prisma/client";
@@ -12,9 +10,20 @@ import * as Im from "immutable";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as A from "fp-ts/lib/Array";
 import * as Ord from "fp-ts/lib/Ord";
+import { RedisPubSub } from "graphql-redis-subscriptions";
+import * as ixa from "ix/asynciterable";
+import * as ixaOps from "ix/asynciterable/operators";
+
+// TODO: 他にイベントができたらグローバルな場所もしくは適切な抽象化レイヤーに移動
+const pubsub = new RedisPubSub({
+  subscriber: createRedisClient(),
+  publisher: RedisClient(),
+});
 
 const ResPubSub = z.object({
   id: z.string(),
+  topic: z.string(),
+  count: z.number(),
 });
 
 type ResPubSub = z.infer<typeof ResPubSub>;
@@ -174,32 +183,31 @@ function votesFromEntity(
 export class ResRepo implements IResRepo {
   constructor(private prisma: P.Prisma.TransactionClient) {}
 
-  subscribeInsertEvent(): Observable<{ res: Res; count: number }> {
-    return new Observable<{ res: Res; count: number }>((subscriber) => {
-      const subRedis = createRedisClient();
-      void subRedis.subscribe(ResPubSubChannel);
-      subRedis.on("message", (_channel: any, message: string) => {
-        void (async () => {
-          const unknownData: unknown = JSON.parse(message);
-          try {
-            const data = ResPubSub.parse(unknownData);
-            const res = await this.findOne(data.id);
-            const count = await this.prisma.res.count({
-              where: { topicId: res.topic },
-            });
-            subscriber.next({
-              res: res,
-              count: count,
-            });
-          } catch (e) {
-            console.error(e);
+  subscribeInsertEvent(
+    topicId: string
+  ): AsyncIterable<{ res: Res; count: number }> {
+    return ixa
+      .from(pubsub.asyncIterator(ResPubSubChannel))
+      .pipe(
+        ixaOps.map((message) => {
+          if (typeof message !== "string") {
+            throw new Error(`invalid message: ${String(message)}`);
           }
-        })();
-      });
-      return () => {
-        subRedis.disconnect();
-      };
-    });
+          const unknownData: unknown = JSON.parse(message);
+          return ResPubSub.parse(unknownData);
+        })
+      )
+      .pipe(ixaOps.filter((data) => data.id === topicId))
+      .pipe(
+        ixaOps.map(async (data) => {
+          const res = await this.findOne(data.id);
+
+          return {
+            res: res,
+            count: data.count,
+          };
+        })
+      );
   }
 
   async findOne(id: string): Promise<Res> {
@@ -236,11 +244,16 @@ export class ResRepo implements IResRepo {
         },
       },
     });
+    const count = await this.prisma.res.count({
+      where: { topicId: res.topic },
+    });
 
     const data: ResPubSub = {
       id: res.id,
+      topic: res.topic,
+      count,
     };
-    await RedisClient().publish(ResPubSubChannel, JSON.stringify(data));
+    await pubsub.publish(ResPubSubChannel, data);
   }
 
   async update(res: Res): Promise<void> {

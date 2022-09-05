@@ -1,18 +1,15 @@
-import * as rxOps from "rxjs/operators";
 import * as G from "../generated/graphql";
-import { observableAsyncIterator } from "../utils";
+import * as ixa from "ix/asynciterable";
+import * as ixaOps from "ix/asynciterable/operators";
 
 export const subscription: G.SubscriptionResolvers = {
   resAdded: {
     subscribe: (_parent, args, context, _info) =>
-      observableAsyncIterator(
-        context.ports.resRepo.subscribeInsertEvent().pipe(
-          rxOps.filter((x) => x.res.topic === args.topic),
-          rxOps.map((x) => ({
-            count: x.count,
-            res: x.res.toAPI(context.ports.authContainer.getTokenOrNull()),
-          }))
-        )
+      ixa.from(context.ports.resRepo.subscribeInsertEvent(args.topic)).pipe(
+        ixaOps.map((data) => ({
+          count: data.count,
+          res: data.res.toAPI(context.ports.authContainer.getTokenOrNull()),
+        }))
       ),
     resolve: (x: any) => {
       // TODO: こうしないと動かない何故
