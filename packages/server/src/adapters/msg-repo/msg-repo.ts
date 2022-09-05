@@ -2,7 +2,6 @@ import { isNullish } from "@kgtkr/utils";
 import { AtNotFoundError } from "../../at-error";
 import { IAuthToken } from "../../auth";
 import { Msg } from "../../entities";
-import * as G from "../../generated/graphql";
 import { IMsgRepo, MsgRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 import * as O from "fp-ts/lib/Option";

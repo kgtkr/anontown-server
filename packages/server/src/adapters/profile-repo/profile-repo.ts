@@ -1,7 +1,6 @@
 import { isNullish } from "@kgtkr/utils";
 import { AtConflictError, AtNotFoundError } from "../../at-error";
 import { Profile } from "../../entities";
-import * as G from "../../generated/graphql";
 import { IAuthContainer, IProfileRepo, ProfileRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";

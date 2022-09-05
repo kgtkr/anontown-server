@@ -2,7 +2,6 @@ import { isNullish } from "@kgtkr/utils";
 import { AtNotFoundError } from "../../at-error";
 import { IAuthToken } from "../../auth";
 import { Msg } from "../../entities";
-import * as G from "../../generated/graphql";
 import { IMsgRepo, MsgRepoQuery } from "../../ports";
 import { fromMsg, IMsgDB, toMsg } from "./imsg-db";
 

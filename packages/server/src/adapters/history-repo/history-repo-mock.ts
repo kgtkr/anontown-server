@@ -1,7 +1,6 @@
 import { isNullish } from "@kgtkr/utils";
 import { AtNotFoundError } from "../../at-error";
 import { History } from "../../entities";
-import * as G from "../../generated/graphql";
 import { HistoryRepoQuery, IHistoryRepo } from "../../ports";
 import { fromHistory, IHistoryDB, toHistory } from "./ihistory-db";
 

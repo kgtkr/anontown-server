@@ -4,7 +4,6 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { AtNotFoundError } from "../../at-error";
 import { IAuthToken } from "../../auth";
 import { Storage } from "../../entities";
-import * as G from "../../generated/graphql";
 import { IStorageRepo, StorageRepoQuery } from "../../ports";
 import { fromStorage, IStorageDB, toStorage } from "./isotrage-db";
 

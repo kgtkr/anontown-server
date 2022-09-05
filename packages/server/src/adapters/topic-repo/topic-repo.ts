@@ -7,7 +7,6 @@ import {
   TopicNormal,
   TopicOne,
 } from "../../entities";
-import * as G from "../../generated/graphql";
 import { ITopicRepo, TopicRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 import * as Im from "immutable";

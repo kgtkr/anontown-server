@@ -3,7 +3,6 @@ import { isNone, Option } from "fp-ts/lib/Option";
 import { AtAuthError, AtNotFoundError } from "../../at-error";
 import { IAuthTokenMaster } from "../../auth";
 import { Client } from "../../entities";
-import * as G from "../../generated/graphql";
 import { ClientRepoQuery, IClientRepo } from "../../ports";
 import { fromClient, IClientDB, toClient } from "./iclient-db";
 
