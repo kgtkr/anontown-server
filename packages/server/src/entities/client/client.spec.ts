@@ -292,8 +292,8 @@ describe("Client", () => {
         name: "name",
         url: "http://hoge.com",
         self: true,
-        date: new Date(0).toISOString(),
-        update: new Date(100).toISOString(),
+        date: new Date(0),
+        update: new Date(100),
       });
     });
 
@@ -310,8 +310,8 @@ describe("Client", () => {
         name: "name",
         url: "http://hoge.com",
         self: false,
-        date: new Date(0).toISOString(),
-        update: new Date(100).toISOString(),
+        date: new Date(0),
+        update: new Date(100),
       });
     });
 
@@ -321,8 +321,8 @@ describe("Client", () => {
         name: "name",
         url: "http://hoge.com",
         self: null,
-        date: new Date(0).toISOString(),
-        update: new Date(100).toISOString(),
+        date: new Date(0),
+        update: new Date(100),
       });
     });
   });

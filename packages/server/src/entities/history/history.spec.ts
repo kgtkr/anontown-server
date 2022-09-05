@@ -71,7 +71,7 @@ describe("History", () => {
         title: "title",
         tags: ["x"],
         text: "text",
-        date: new Date(0).toISOString(),
+        date: new Date(0),
         hash: "hash",
         self: null,
       });
@@ -93,7 +93,7 @@ describe("History", () => {
         title: "title",
         tags: ["x"],
         text: "text",
-        date: new Date(0).toISOString(),
+        date: new Date(0),
         hash: "hash",
         self: true,
       });
@@ -115,7 +115,7 @@ describe("History", () => {
         title: "title",
         tags: ["x"],
         text: "text",
-        date: new Date(0).toISOString(),
+        date: new Date(0),
         hash: "hash",
         self: false,
       });

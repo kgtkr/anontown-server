@@ -29,8 +29,8 @@ describe("Profile", () => {
         self: true,
         name: "name",
         text: "text",
-        date: new Date(0).toISOString(),
-        update: new Date(100).toISOString(),
+        date: new Date(0),
+        update: new Date(100),
         sn: "sn",
       });
     });
@@ -48,8 +48,8 @@ describe("Profile", () => {
         self: false,
         name: "name",
         text: "text",
-        date: new Date(0).toISOString(),
-        update: new Date(100).toISOString(),
+        date: new Date(0),
+        update: new Date(100),
         sn: "sn",
       });
     });
@@ -60,8 +60,8 @@ describe("Profile", () => {
         self: null,
         name: "name",
         text: "text",
-        date: new Date(0).toISOString(),
-        update: new Date(100).toISOString(),
+        date: new Date(0),
+        update: new Date(100),
         sn: "sn",
       });
     });

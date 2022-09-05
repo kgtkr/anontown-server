@@ -23,7 +23,7 @@ describe("Msg", () => {
         id: "msg",
         priv: true,
         text: "text",
-        date: new Date(0).toISOString(),
+        date: new Date(0),
       });
     });
 
@@ -32,7 +32,7 @@ describe("Msg", () => {
         id: "msg",
         priv: false,
         text: "text",
-        date: new Date(0).toISOString(),
+        date: new Date(0),
       });
     });
 
