@@ -1,8 +1,7 @@
 import { none, Option, some } from "fp-ts/lib/Option";
 import * as Im from "immutable";
 import { AtError, IAuthToken, IResBaseAPI, IVote, ResBase, User } from "../../";
-import { Copyable } from "../../utils";
-import { applyMixins } from "../../utils";
+import { Copyable , applyMixins } from "../../utils";
 
 describe("ResBase", () => {
   class ResBaseTest

@@ -1,23 +1,17 @@
 import { isNullish } from "@kgtkr/utils";
-import { Observable, Subject } from "rxjs";
 import { AtNotFoundError } from "../../at-error";
 import { Res } from "../../entities";
-import * as G from "../../generated/graphql";
-import { IAuthContainer, IResRepo } from "../../ports";
+import { IAuthContainer, IResRepo, ResRepoQuery } from "../../ports";
 import { fromRes, IResDB, toRes } from "./ires-db";
 
 export class ResRepoMock implements IResRepo {
-  readonly insertEvent: Subject<{ res: Res; count: number }> = new Subject<{
-    res: Res;
-    count: number;
-  }>();
   private reses: Array<IResDB> = [];
 
-  subscribeInsertEvent(): Observable<{
+  subscribeInsertEvent(_topicId: string): AsyncIterable<{
     res: Res;
     count: number;
   }> {
-    return this.insertEvent;
+    throw new Error("Method not implemented.");
   }
 
   async findOne(id: string): Promise<Res> {
@@ -32,9 +26,6 @@ export class ResRepoMock implements IResRepo {
 
   async insert(res: Res): Promise<void> {
     this.reses.push(fromRes(res));
-
-    const resCount = (await this.resCount([res.topic])).get(res.topic) || 0;
-    this.insertEvent.next({ res, count: resCount });
   }
 
   async update(res: Res): Promise<void> {
@@ -67,7 +58,7 @@ export class ResRepoMock implements IResRepo {
 
   async find(
     auth: IAuthContainer,
-    query: G.ResQuery,
+    query: ResRepoQuery,
     limit: number
   ): Promise<Array<Res>> {
     const notice = query.notice ? auth.getToken().user : null;

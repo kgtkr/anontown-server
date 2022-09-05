@@ -3,8 +3,12 @@ import { none } from "fp-ts/lib/Option";
 import { AuthContainer } from "..";
 import { AtNotFoundError } from "../../at-error";
 import { Topic } from "../../entities";
-import * as G from "../../generated/graphql";
-import { IResRepo, ITopicRepo } from "../../ports";
+import {
+  emptyResRepoQuery,
+  IResRepo,
+  ITopicRepo,
+  TopicRepoQuery,
+} from "../../ports";
 import {
   fromTopic,
   ITopicDB,
@@ -46,7 +50,7 @@ export class TopicRepoMock implements ITopicRepo {
   }
 
   async find(
-    query: G.TopicQuery,
+    query: TopicRepoQuery,
     skip: number,
     limit: number
   ): Promise<Array<Topic>> {
@@ -114,7 +118,7 @@ export class TopicRepoMock implements ITopicRepo {
         const count = (
           await this.resRepo.find(
             new AuthContainer(none),
-            { topic: t.id },
+            { ...emptyResRepoQuery, topic: t.id },
             99999
           )
         ).length;

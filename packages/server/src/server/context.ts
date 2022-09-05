@@ -26,8 +26,7 @@ import {
 } from "../adapters";
 import { FixIpContainer } from "../adapters/fix-ip-container/index";
 import { AtAuthError } from "../at-error";
-import { ITokenRepo } from "../ports";
-import { Ports } from "../ports";
+import { ITokenRepo , Ports } from "../ports";
 import * as authFromApiParam from "./auth-from-api-param";
 
 export interface AppContext {

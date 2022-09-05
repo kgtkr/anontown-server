@@ -7,8 +7,7 @@ import {
   TopicNormal,
   TopicOne,
 } from "../../entities";
-import * as G from "../../generated/graphql";
-import { ITopicRepo } from "../../ports";
+import { ITopicRepo, TopicRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 import * as Im from "immutable";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -172,7 +171,7 @@ export class TopicRepo implements ITopicRepo {
   }
 
   async find(
-    query: G.TopicQuery,
+    query: TopicRepoQuery,
     skip: number,
     limit: number
   ): Promise<Array<Topic>> {

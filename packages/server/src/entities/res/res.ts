@@ -10,8 +10,7 @@ import {
 import { IAuthToken } from "../../auth";
 import { Constant } from "../../constant";
 import { IObjectIdGenerator } from "../../ports/index";
-import { Copyable } from "../../utils";
-import { applyMixins } from "../../utils";
+import { Copyable , applyMixins } from "../../utils";
 import { History } from "../history";
 import { Profile } from "../profile";
 import { Topic, TopicFork, TopicNormal, TopicOne } from "../topic";

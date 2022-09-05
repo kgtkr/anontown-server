@@ -9,6 +9,7 @@ import {
   ResHistory,
   ResNormal,
   ResTopic,
+  emptyResRepoQuery,
 } from "../../";
 
 export function run(
@@ -203,120 +204,69 @@ export function run(
         await repo.insert(res9);
 
         // 無
-        expect(await repo.find(notAuth, {}, 100)).toEqual([
+        expect(await repo.find(notAuth, { ...emptyResRepoQuery }, 100)).toEqual(
+          [res4, res2, res9, res7, res1, res8, res3, res5, res6]
+        );
+
+        expect(await repo.find(notAuth, { ...emptyResRepoQuery }, 3)).toEqual([
           res4,
           res2,
           res9,
-          res7,
-          res1,
-          res8,
-          res3,
-          res5,
-          res6,
         ]);
-
-        expect(await repo.find(notAuth, {}, 3)).toEqual([res4, res2, res9]);
 
         // topic
-        expect(await repo.find(notAuth, { topic: "topic2" }, 100)).toEqual([
-          res2,
-        ]);
-
-        // notice
-        expect(
-          await repo.find(
-            auth,
-            {
-              notice: true,
-            },
-            100
-          )
-        ).toEqual([res7]);
-
-        expect(await repo.find(notAuth, { notice: false }, 100)).toEqual([
-          res4,
-          res2,
-          res9,
-          res7,
-          res1,
-          res8,
-          res3,
-          res5,
-          res6,
-        ]);
-
-        // hash
         expect(
           await repo.find(
             notAuth,
-            {
-              hash: "hash2",
-            },
+            { ...emptyResRepoQuery, topic: "topic2" },
             100
           )
+        ).toEqual([res2]);
+
+        // notice
+        expect(
+          await repo.find(auth, { ...emptyResRepoQuery, notice: true }, 100)
+        ).toEqual([res7]);
+
+        expect(
+          await repo.find(notAuth, { ...emptyResRepoQuery, notice: false }, 100)
+        ).toEqual([res4, res2, res9, res7, res1, res8, res3, res5, res6]);
+
+        // hash
+        expect(
+          await repo.find(notAuth, { ...emptyResRepoQuery, hash: "hash2" }, 100)
         ).toEqual([res4]);
 
         // reply
         expect(
-          await repo.find(
-            notAuth,
-            {
-              reply: "res6",
-            },
-            100
-          )
+          await repo.find(notAuth, { ...emptyResRepoQuery, reply: "res6" }, 100)
         ).toEqual([res7]);
 
         // profile
         expect(
-          await repo.find(
-            notAuth,
-            {
-              profile: "p1",
-            },
-            100
-          )
+          await repo.find(notAuth, { ...emptyResRepoQuery, profile: "p1" }, 100)
         ).toEqual([res5]);
 
         // text
         expect(
-          await repo.find(
-            notAuth,
-            {
-              text: "abc",
-            },
-            100
-          )
+          await repo.find(notAuth, { ...emptyResRepoQuery, text: "abc" }, 100)
         ).toEqual([res7]);
 
         // self
         expect(
-          await repo.find(
-            user2Auth,
-            {
-              self: true,
-            },
-            100
-          )
+          await repo.find(user2Auth, { ...emptyResRepoQuery, self: true }, 100)
         ).toEqual([res3]);
 
-        expect(await repo.find(notAuth, { self: false }, 100)).toEqual([
-          res4,
-          res2,
-          res9,
-          res7,
-          res1,
-          res8,
-          res3,
-          res5,
-          res6,
-        ]);
+        expect(
+          await repo.find(notAuth, { ...emptyResRepoQuery, self: false }, 100)
+        ).toEqual([res4, res2, res9, res7, res1, res8, res3, res5, res6]);
 
         // date
         expect(
           await repo.find(
             notAuth,
             {
+              ...emptyResRepoQuery,
               date: {
                 type: "gte",
                 date: new Date(80).toISOString(),
@@ -330,6 +280,7 @@ export function run(
           await repo.find(
             notAuth,
             {
+              ...emptyResRepoQuery,
               date: {
                 type: "gt",
                 date: new Date(80).toISOString(),
@@ -343,6 +294,7 @@ export function run(
           await repo.find(
             notAuth,
             {
+              ...emptyResRepoQuery,
               date: {
                 type: "lte",
                 date: new Date(20).toISOString(),
@@ -356,6 +308,7 @@ export function run(
           await repo.find(
             notAuth,
             {
+              ...emptyResRepoQuery,
               date: {
                 type: "lt",
                 date: new Date(20).toISOString(),
@@ -370,6 +323,7 @@ export function run(
           await repo.find(
             notAuth,
             {
+              ...emptyResRepoQuery,
               date: {
                 type: "lte",
                 date: new Date(20).toISOString(),
@@ -385,13 +339,7 @@ export function run(
     it("通知フィルタでトークンがないとエラーになるか", async () => {
       await $isolate(async (repo) => {
         await expect(
-          repo.find(
-            notAuth,
-            {
-              notice: true,
-            },
-            10
-          )
+          repo.find(notAuth, { ...emptyResRepoQuery, notice: true }, 10)
         ).rejects.toThrow(AtError);
       });
     });
@@ -399,13 +347,7 @@ export function run(
     it("selfフィルタでトークンがないとエラーになるか", async () => {
       await $isolate(async (repo) => {
         await expect(
-          repo.find(
-            notAuth,
-            {
-              self: true,
-            },
-            10
-          )
+          repo.find(notAuth, { ...emptyResRepoQuery, self: true }, 10)
         ).rejects.toThrow(AtError);
       });
     });

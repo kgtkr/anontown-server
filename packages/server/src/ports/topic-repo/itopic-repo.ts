@@ -1,5 +1,20 @@
 import { Topic } from "../../entities";
-import * as G from "../../generated/graphql";
+
+export type TopicRepoQuery = {
+  activeOnly: boolean | null;
+  id: string[] | null;
+  parent: string | null;
+  tags: string[] | null;
+  title: string | null;
+};
+
+export const emptyTopicRepoQuery: TopicRepoQuery = {
+  activeOnly: null,
+  id: null,
+  parent: null,
+  tags: null,
+  title: null,
+};
 
 export interface ITopicRepo {
   findOne(id: string): Promise<Topic>;
@@ -12,5 +27,9 @@ export interface ITopicRepo {
 
   cronTopicCheck(now: Date): Promise<void>;
 
-  find(query: G.TopicQuery, skip: number, limit: number): Promise<Array<Topic>>;
+  find(
+    query: TopicRepoQuery,
+    skip: number,
+    limit: number
+  ): Promise<Array<Topic>>;
 }

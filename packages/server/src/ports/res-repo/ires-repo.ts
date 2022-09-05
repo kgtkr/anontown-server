@@ -1,10 +1,35 @@
-import { Observable } from "rxjs";
 import { Res } from "../../entities";
-import * as G from "../../generated/graphql";
 import { IAuthContainer } from "../auth-container/index";
+import { DateQuery } from "../types";
+
+export type ResRepoQuery = {
+  date: DateQuery | null;
+  hash: string | null;
+  id: string[] | null;
+  notice: boolean | null;
+  profile: string | null;
+  reply: string | null;
+  self: boolean | null;
+  text: string | null;
+  topic: string | null;
+};
+
+export const emptyResRepoQuery: ResRepoQuery = {
+  date: null,
+  hash: null,
+  id: null,
+  notice: null,
+  profile: null,
+  reply: null,
+  self: null,
+  text: null,
+  topic: null,
+};
 
 export interface IResRepo {
-  subscribeInsertEvent(): Observable<{ res: Res; count: number }>;
+  subscribeInsertEvent(
+    topicId: string
+  ): AsyncIterable<{ res: Res; count: number }>;
 
   findOne(id: string): Promise<Res>;
 
@@ -14,7 +39,7 @@ export interface IResRepo {
 
   find(
     auth: IAuthContainer,
-    query: G.ResQuery,
+    query: ResRepoQuery,
     limit: number
   ): Promise<Array<Res>>;
 }

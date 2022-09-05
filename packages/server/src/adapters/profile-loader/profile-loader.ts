@@ -1,6 +1,7 @@
 import * as DataLoader from "dataloader";
 import { Profile } from "../../entities/index";
 import {
+  emptyProfileRepoQuery,
   IAuthContainer,
   IProfileLoader,
   IProfileRepo,
@@ -11,7 +12,9 @@ export class ProfileLoader implements IProfileLoader {
   loader: DataLoader<string, Profile>;
 
   constructor(profileRepo: IProfileRepo, auth: IAuthContainer) {
-    this.loader = loader((ids) => profileRepo.find(auth, { id: ids }));
+    this.loader = loader((ids) =>
+      profileRepo.find(auth, { ...emptyProfileRepoQuery, id: ids })
+    );
   }
 
   load(id: string) {

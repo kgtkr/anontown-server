@@ -1,5 +1,11 @@
 import { none, some } from "fp-ts/lib/Option";
-import { AtError, IAuthTokenMaster, IMsgRepo, Msg } from "../../";
+import {
+  AtError,
+  IAuthTokenMaster,
+  IMsgRepo,
+  Msg,
+  emptyMsgRepoQuery,
+} from "../../";
 
 export function run(
   $isolate: (callback: (repo: IMsgRepo) => Promise<void>) => Promise<void>
@@ -95,37 +101,36 @@ export function run(
         await repo.insert(msg9);
 
         // 無
-        expect(await repo.find(token, {}, 100)).toEqual([
-          msg4,
-          msg9,
-          msg7,
-          msg1,
-          msg8,
-          msg3,
-          msg5,
-          msg6,
-        ]);
-
-        expect(await repo.find(token, {}, 3)).toEqual([msg4, msg9, msg7]);
-
-        // id
+        expect(
+          await repo.find(
+            token,
+            {
+              ...emptyMsgRepoQuery,
+            },
+            100
+          )
+        ).toEqual([msg4, msg9, msg7, msg1, msg8, msg3, msg5, msg6]);
 
         expect(
           await repo.find(
             token,
             {
-              id: [],
+              ...emptyMsgRepoQuery,
             },
-            100
+            3
           )
+        ).toEqual([msg4, msg9, msg7]);
+
+        // id
+
+        expect(
+          await repo.find(token, { ...emptyMsgRepoQuery, id: [] }, 100)
         ).toEqual([]);
 
         expect(
           await repo.find(
             token,
-            {
-              id: ["msg1", "msg2", "msg3"],
-            },
+            { ...emptyMsgRepoQuery, id: ["msg1", "msg2", "msg3"] },
             100
           )
         ).toEqual([msg1, msg3]);
@@ -136,6 +141,7 @@ export function run(
           await repo.find(
             token,
             {
+              ...emptyMsgRepoQuery,
               date: {
                 type: "gte",
                 date: new Date(70).toISOString(),
@@ -149,6 +155,7 @@ export function run(
           await repo.find(
             token,
             {
+              ...emptyMsgRepoQuery,
               date: {
                 type: "gt",
                 date: new Date(70).toISOString(),
@@ -162,6 +169,7 @@ export function run(
           await repo.find(
             token,
             {
+              ...emptyMsgRepoQuery,
               date: {
                 type: "lte",
                 date: new Date(30).toISOString(),
@@ -175,6 +183,7 @@ export function run(
           await repo.find(
             token,
             {
+              ...emptyMsgRepoQuery,
               date: {
                 type: "lt",
                 date: new Date(30).toISOString(),

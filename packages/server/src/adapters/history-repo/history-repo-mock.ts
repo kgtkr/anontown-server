@@ -1,8 +1,7 @@
 import { isNullish } from "@kgtkr/utils";
 import { AtNotFoundError } from "../../at-error";
 import { History } from "../../entities";
-import * as G from "../../generated/graphql";
-import { IHistoryRepo } from "../../ports";
+import { HistoryRepoQuery, IHistoryRepo } from "../../ports";
 import { fromHistory, IHistoryDB, toHistory } from "./ihistory-db";
 
 export class HistoryRepoMock implements IHistoryRepo {
@@ -27,7 +26,7 @@ export class HistoryRepoMock implements IHistoryRepo {
     return toHistory(history);
   }
 
-  async find(query: G.HistoryQuery, limit: number): Promise<Array<History>> {
+  async find(query: HistoryRepoQuery, limit: number): Promise<Array<History>> {
     const histories = this.histories
       .filter((x) => isNullish(query.id) || query.id.includes(x.id))
       .filter(

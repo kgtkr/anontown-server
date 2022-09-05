@@ -6,6 +6,7 @@ import {
   IAuthTokenMaster,
   IStorageRepo,
   Storage,
+  emptyStorageRepoQuery,
 } from "../../";
 
 export function run(
@@ -220,13 +221,17 @@ export function run(
         await repo.save(storage6);
         await repo.save(storage7);
 
-        expect(await repo.find(authMaster, {})).toEqual([storage1, storage2]);
+        expect(
+          await repo.find(authMaster, { ...emptyStorageRepoQuery })
+        ).toEqual([storage1, storage2]);
         expect(await repo.find(authMaster, { key: [] })).toEqual([]);
         expect(await repo.find(authMaster, { key: [key1] })).toEqual([
           storage1,
         ]);
 
-        expect(await repo.find(authGeneral, {})).toEqual([storage4, storage5]);
+        expect(
+          await repo.find(authGeneral, { ...emptyStorageRepoQuery })
+        ).toEqual([storage4, storage5]);
         expect(await repo.find(authGeneral, { key: [] })).toEqual([]);
         expect(await repo.find(authGeneral, { key: [key2] })).toEqual([
           storage5,

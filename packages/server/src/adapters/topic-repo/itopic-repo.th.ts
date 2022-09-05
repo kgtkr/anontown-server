@@ -1,5 +1,12 @@
 import * as Im from "immutable";
-import { AtError, ITopicRepo, TopicFork, TopicNormal, TopicOne } from "../../";
+import {
+  AtError,
+  ITopicRepo,
+  TopicFork,
+  TopicNormal,
+  TopicOne,
+  emptyTopicRepoQuery,
+} from "../../";
 
 export function run(
   $isolate: (callback: (repo: ITopicRepo) => Promise<void>) => Promise<void>
@@ -117,7 +124,7 @@ export function run(
         await repo.insert(topic6);
 
         // 無
-        expect(await repo.find({}, 0, 100)).toEqual([
+        expect(await repo.find({ ...emptyTopicRepoQuery }, 0, 100)).toEqual([
           topic5,
           topic4,
           topic3,
@@ -126,24 +133,20 @@ export function run(
           topic1,
         ]);
 
-        expect(await repo.find({}, 1, 3)).toEqual([topic4, topic3, topic6]);
+        expect(await repo.find({ ...emptyTopicRepoQuery }, 1, 3)).toEqual([
+          topic4,
+          topic3,
+          topic6,
+        ]);
 
         // id
         expect(
-          await repo.find(
-            {
-              id: [],
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, id: [] }, 0, 100)
         ).toEqual([]);
 
         expect(
           await repo.find(
-            {
-              id: ["topic1", "topic5", "other"],
-            },
+            { ...emptyTopicRepoQuery, id: ["topic1", "topic5", "other"] },
             0,
             100
           )
@@ -151,135 +154,60 @@ export function run(
 
         // title
         expect(
-          await repo.find(
-            {
-              title: "",
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, title: "" }, 0, 100)
         ).toEqual([topic5, topic4, topic3, topic6, topic2, topic1]);
 
         expect(
-          await repo.find(
-            {
-              title: "x",
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, title: "x" }, 0, 100)
         ).toEqual([topic5, topic3, topic6, topic1]);
 
         expect(
-          await repo.find(
-            {
-              title: "x a",
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, title: "x a" }, 0, 100)
         ).toEqual([]);
 
         expect(
-          await repo.find(
-            {
-              title: "x y",
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, title: "x y" }, 0, 100)
         ).toEqual([topic3]);
 
         // tags
         expect(
-          await repo.find(
-            {
-              tags: [],
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, tags: [] }, 0, 100)
         ).toEqual([topic5, topic4, topic3, topic6, topic2, topic1]);
 
         expect(
-          await repo.find(
-            {
-              tags: ["a"],
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, tags: ["a"] }, 0, 100)
         ).toEqual([topic4, topic2, topic1]);
 
         expect(
-          await repo.find(
-            {
-              tags: ["a", "b"],
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, tags: ["a", "b"] }, 0, 100)
         ).toEqual([topic2]);
 
         expect(
-          await repo.find(
-            {
-              tags: ["x"],
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, tags: ["x"] }, 0, 100)
         ).toEqual([]);
 
         // activeOnly
         expect(
-          await repo.find(
-            {
-              activeOnly: false,
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, activeOnly: false }, 0, 100)
         ).toEqual([topic5, topic4, topic3, topic6, topic2, topic1]);
 
         expect(
-          await repo.find(
-            {
-              activeOnly: true,
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, activeOnly: true }, 0, 100)
         ).toEqual([topic5, topic3, topic2]);
 
         // parent
         expect(
-          await repo.find(
-            {
-              parent: "topic1",
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, parent: "topic1" }, 0, 100)
         ).toEqual([topic6]);
 
         expect(
-          await repo.find(
-            {
-              parent: "other",
-            },
-            0,
-            100
-          )
+          await repo.find({ ...emptyTopicRepoQuery, parent: "other" }, 0, 100)
         ).toEqual([]);
 
         // 複合
         expect(
           await repo.find(
-            {
-              tags: ["a"],
-              id: ["topic1", "topic3"],
-            },
+            { ...emptyTopicRepoQuery, tags: ["a"], id: ["topic1", "topic3"] },
             0,
             100
           )

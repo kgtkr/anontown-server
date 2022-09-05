@@ -8,7 +8,7 @@ generates:
       - "typescript-resolvers"
 config:
     scalars:
-      DateTime: string
+      DateTime: Date
     enumsAsTypes: true
     contextType: ../server#AppContext
     mappers:

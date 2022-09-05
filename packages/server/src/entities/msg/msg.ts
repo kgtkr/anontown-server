@@ -11,7 +11,7 @@ export interface IMsgAPI {
   readonly id: string;
   readonly priv: boolean;
   readonly text: string;
-  readonly date: string;
+  readonly date: Date;
 }
 
 export class Msg extends Copyable<Msg> {
@@ -56,7 +56,7 @@ export class Msg extends Copyable<Msg> {
       id: this.id,
       priv: pipe(this.receiver, option.isSome),
       text: this.text,
-      date: this.date.toISOString(),
+      date: this.date,
     };
   }
 }

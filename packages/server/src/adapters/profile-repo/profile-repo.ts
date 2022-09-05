@@ -1,8 +1,7 @@
 import { isNullish } from "@kgtkr/utils";
 import { AtConflictError, AtNotFoundError } from "../../at-error";
 import { Profile } from "../../entities";
-import * as G from "../../generated/graphql";
-import { IAuthContainer, IProfileRepo } from "../../ports";
+import { IAuthContainer, IProfileRepo, ProfileRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
@@ -45,7 +44,7 @@ export class ProfileRepo implements IProfileRepo {
 
   async find(
     auth: IAuthContainer,
-    query: G.ProfileQuery
+    query: ProfileRepoQuery
   ): Promise<Array<Profile>> {
     const filter: Array<P.Prisma.ProfileWhereInput> = [];
     if (query.self) {

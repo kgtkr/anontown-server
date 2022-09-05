@@ -4,8 +4,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { AtNotFoundError } from "../../at-error";
 import { IAuthToken } from "../../auth";
 import { Storage } from "../../entities";
-import * as G from "../../generated/graphql";
-import { IStorageRepo } from "../../ports";
+import { IStorageRepo, StorageRepoQuery } from "../../ports";
 import { fromStorage, IStorageDB, toStorage } from "./isotrage-db";
 
 export class StorageRepoMock implements IStorageRepo {
@@ -13,7 +12,7 @@ export class StorageRepoMock implements IStorageRepo {
 
   async find(
     token: IAuthToken,
-    query: G.StorageQuery
+    query: StorageRepoQuery
   ): Promise<Array<Storage>> {
     const storages = this.storages
       .filter(

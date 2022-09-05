@@ -1,65 +1,54 @@
-import { combineResolvers } from "apollo-resolvers";
-import { ApolloServer, gql, IResolvers } from "apollo-server-express";
-import cors from "cors";
-import express from "express";
-import { either } from "fp-ts";
+import { ApolloServer, gql } from "apollo-server-koa";
+import cors from "@koa/cors";
+import Koa from "koa";
 import * as fs from "fs/promises";
-import { GraphQLDateTime } from "graphql-iso-date";
 import { createServer } from "http";
-import * as t from "io-ts";
 import { AtErrorSymbol, AtServerError } from "../at-error";
 import { Config } from "../config";
 import { resolvers as appResolvers } from "../resolvers";
 import { runWorker } from "../worker";
 import { AppContext, createContext } from "./context";
+import Router from "@koa/router";
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} from "apollo-server-core";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 
 export async function serverRun() {
   const typeDefs = gql(
     await fs.readFile(require.resolve("../../schema.gql"), "utf8")
   );
-  const resolvers: IResolvers = combineResolvers([
-    {
-      DateTime: GraphQLDateTime,
-    },
-    appResolvers,
-  ]);
 
-  const app = express();
+  const app = new Koa();
+  const router = new Router();
+  const httpServer = createServer();
+  const schema = makeExecutableSchema({ typeDefs, resolvers: appResolvers });
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/",
+  });
+  const serverCleanup = useServer(
+    {
+      schema,
+      context: ({ connectionParams }) => {
+        return createContext({
+          "x-token": connectionParams?.["token"],
+        });
+      },
+    },
+    wsServer
+  );
 
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: (params: unknown): Promise<AppContext> => {
-      const decodedParams = t.UnknownRecord.decode(params);
-      if (either.isRight(decodedParams)) {
-        const { req, connection } = decodedParams.right;
-        const decodedReq = t.type({ headers: t.UnknownRecord }).decode(req);
-        const decodeConnection = t
-          .type({ context: t.UnknownRecord })
-          .decode(connection);
-        if (either.isRight(decodedReq)) {
-          return createContext(decodedReq.right.headers);
-        }
-
-        if (either.isRight(decodeConnection)) {
-          return createContext(decodeConnection.right.context);
-        }
-      }
-
-      return createContext({});
+    schema,
+    context: (params): Promise<AppContext> => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      return createContext(params.ctx.request.headers);
     },
     introspection: true,
-    playground: {
-      tabs: [
-        {
-          endpoint: "/",
-          query: "",
-          headers: {
-            "X-Token": "",
-          },
-        },
-      ],
-    },
     debug: false,
     formatError: (error: any) => {
       console.log(error);
@@ -69,24 +58,44 @@ export async function serverRun() {
         return new AtServerError().data;
       }
     },
-    subscriptions: {
-      path: "/",
-    },
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      ApolloServerPluginLandingPageGraphQLPlayground({
+        tabs: [
+          {
+            endpoint: "/",
+            query: "",
+            headers: {
+              "X-Token": "",
+            },
+          },
+        ],
+      }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
   });
+  await server.start();
 
   runWorker();
 
-  app.get("/ping", cors(), (_req, res) => res.send("OK"));
+  router.get("/ping", (ctx, _next) => (ctx.body = "OK"));
   server.applyMiddleware({ app, path: "/" });
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+  app.use(cors());
 
-  const httpServer = createServer(app);
-  server.installSubscriptionHandlers(httpServer);
+  httpServer.on("request", app.callback());
 
-  httpServer.listen({ port: Config.server.port }, () => {
-    console.log(
-      `Server ready at ${server.graphqlPath}, ${
-        server.subscriptionsPath ?? "<unknown subscriptionsPath>"
-      }`
-    );
-  });
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: Config.server.port }, resolve)
+  );
+  console.log("Server ready");
 }

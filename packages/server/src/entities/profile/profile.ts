@@ -15,8 +15,8 @@ export interface IProfileAPI {
   readonly self: boolean | null;
   readonly name: string;
   readonly text: string;
-  readonly date: string;
-  readonly update: string;
+  readonly date: Date;
+  readonly update: Date;
   readonly sn: string;
 }
 
@@ -83,8 +83,8 @@ export class Profile extends Copyable<Profile> {
       ),
       name: this.name,
       text: this.text,
-      date: this.date.toISOString(),
-      update: this.update.toISOString(),
+      date: this.date,
+      update: this.update,
       sn: this.sn,
     };
   }

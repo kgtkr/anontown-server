@@ -15,8 +15,8 @@ export interface IClientAPI {
     マスター権限で認証していなければnull。自分のクライアントかどうか
   */
   readonly self: boolean | null;
-  readonly date: string;
-  readonly update: string;
+  readonly date: Date;
+  readonly update: Date;
 }
 
 export class Client extends Copyable<Client> {
@@ -73,8 +73,8 @@ export class Client extends Copyable<Client> {
         option.map((authToken) => authToken.user === this.user),
         option.toNullable
       ),
-      date: this.date.toISOString(),
-      update: this.update.toISOString(),
+      date: this.date,
+      update: this.update,
     };
   }
 
