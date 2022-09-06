@@ -23,6 +23,8 @@ export async function serverRun() {
   );
 
   const app = new Koa();
+  app.use(cors());
+
   const router = new Router();
   const httpServer = createServer();
   const schema = makeExecutableSchema({ typeDefs, resolvers: appResolvers });
@@ -90,7 +92,6 @@ export async function serverRun() {
   server.applyMiddleware({ app, path: "/" });
   app.use(router.routes());
   app.use(router.allowedMethods());
-  app.use(cors());
 
   httpServer.on("request", app.callback());
 
