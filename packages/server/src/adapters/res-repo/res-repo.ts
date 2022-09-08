@@ -188,16 +188,12 @@ export class ResRepo implements IResRepo {
   ): AsyncIterable<{ res: Res; count: number }> {
     return ixa
       .from(pubsub.asyncIterator(ResPubSubChannel))
+      .pipe(ixaOps.map((message) => ResPubSub.parse(message)))
       .pipe(
-        ixaOps.map((message) => {
-          if (typeof message !== "string") {
-            throw new Error(`invalid message: ${String(message)}`);
-          }
-          const unknownData: unknown = JSON.parse(message);
-          return ResPubSub.parse(unknownData);
+        ixaOps.filter((data) => {
+          return data.topic === topicId;
         })
       )
-      .pipe(ixaOps.filter((data) => data.id === topicId))
       .pipe(
         ixaOps.map(async (data) => {
           const res = await this.findOne(data.id);
