@@ -2,8 +2,6 @@ import { option } from "fp-ts";
 import { fromNullable, Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
 
-export const AtErrorSymbol = Symbol("AtError");
-
 export interface AtErrorPublic {
   code: string;
   message: string;
@@ -11,19 +9,8 @@ export interface AtErrorPublic {
 }
 
 export class AtError extends Error {
-  [AtErrorSymbol] = true;
   constructor(public data: AtErrorPublic) {
     super(data.message);
-  }
-}
-
-export class AtServerError extends AtError {
-  constructor() {
-    super({
-      code: "server",
-      message: "サーバー内部エラー",
-      data: null,
-    });
   }
 }
 

@@ -3,7 +3,7 @@ import cors from "@koa/cors";
 import Koa from "koa";
 import * as fs from "fs/promises";
 import { createServer } from "http";
-import { AtErrorSymbol, AtServerError } from "../at-error";
+import { AtError } from "../at-error";
 import { Config } from "../config";
 import { resolvers as appResolvers } from "../resolvers";
 import { runWorker } from "../worker";
@@ -52,12 +52,21 @@ export async function serverRun() {
     },
     introspection: true,
     debug: false,
-    formatError: (error: any) => {
+    formatError: (error) => {
       console.log(error);
-      if (error.extensions.exception[AtErrorSymbol]) {
-        return error.extensions.exception.data;
+      if (error.extensions.exception instanceof AtError) {
+        const atError = error.extensions.exception as AtError;
+        return {
+          message: atError.data.message,
+          extensions: {
+            code: atError.data.code,
+            data: atError.data.data,
+          },
+        };
       } else {
-        return new AtServerError().data;
+        return {
+          message: "サーバー内部エラー",
+        };
       }
     },
     plugins: [
