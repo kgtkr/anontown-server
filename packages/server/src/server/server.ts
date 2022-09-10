@@ -54,8 +54,8 @@ export async function serverRun() {
     debug: false,
     formatError: (error) => {
       console.log(error);
-      if (error.extensions.exception instanceof AtError) {
-        const atError = error.extensions.exception as AtError;
+      if (error.originalError instanceof AtError) {
+        const atError = error.originalError;
         return {
           message: atError.data.message,
           extensions: {
