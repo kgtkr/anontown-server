@@ -15,6 +15,7 @@
     "cron": "^2.1.0",
     "crypto-js": "^4.1.1",
     "dataloader": "^1.4.0",
+    "faktory-worker": "^4.5.1",
     "fp-ts": "^2.12.3",
     "graphql": "^16.6.0",
     "graphql-redis-subscriptions": "^2.5.0",
