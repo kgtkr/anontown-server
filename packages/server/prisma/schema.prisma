@@ -39,8 +39,8 @@ model Profile {
 }
 
 enum TokenType {
-  GENERAL  @map(name: "general")
-  MASTER   @map(name: "master")
+  GENERAL @map(name: "general")
+  MASTER  @map(name: "master")
 
   @@map("token_type")
 }
@@ -113,18 +113,18 @@ model Storage {
 }
 
 enum ResType {
-  NORMAL   @map(name: "normal")
-  HISTORY  @map(name: "history")
-  TOPIC    @map(name: "topic")
-  FORK     @map(name: "fork")
+  NORMAL  @map(name: "normal")
+  HISTORY @map(name: "history")
+  TOPIC   @map(name: "topic")
+  FORK    @map(name: "fork")
 
   @@map("res_type")
 }
 
 enum ResDeleteFlag {
-  ACTIVE  @map(name: "active")
-  SELF    @map(name: "self")
-  FREEZE  @map(name: "freeze")
+  ACTIVE @map(name: "active")
+  SELF   @map(name: "self")
+  FREEZE @map(name: "freeze")
 
   @@map("res_delete_flag")
 }
@@ -230,9 +230,9 @@ model Msg {
 }
 
 enum TopicType {
-  NORMAL  @map(name: "normal")
-  ONE     @map(name: "one")
-  FORK    @map(name: "fork")
+  NORMAL @map(name: "normal")
+  ONE    @map(name: "one")
+  FORK   @map(name: "fork")
 }
 
 model Topic {
@@ -274,4 +274,25 @@ model TopicTag {
   @@id([topicId, order])
   @@index([tag])
   @@map("topic_tags")
+}
+
+model PushSubscriptions {
+  id       String @id @db.VarChar(64)
+  userId   String @map("user_id") @db.VarChar(64)
+  endpoint String @db.VarChar(255)
+  p256dh   String @db.VarChar(255)
+  auth     String @db.VarChar(255)
+
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+model TopicSubscriptions {
+  userId  String @map("user_id") @db.VarChar(64)
+  topicId String @map("topic_id") @db.VarChar(64)
+
+  @@id([userId, topicId])
+  @@index([topicId])
+  @@index([userId])
+  @@map("topic_subscriptions")
 }
