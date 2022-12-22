@@ -277,13 +277,14 @@ model TopicTag {
 }
 
 model PushSubscriptions {
-  id       String @id @db.VarChar(64)
   userId   String @map("user_id") @db.VarChar(64)
   endpoint String @db.VarChar(255)
   p256dh   String @db.VarChar(255)
   auth     String @db.VarChar(255)
 
+  @@id([userId, endpoint])
   @@index([userId])
+  @@index([endpoint])
   @@map("push_subscriptions")
 }
 
