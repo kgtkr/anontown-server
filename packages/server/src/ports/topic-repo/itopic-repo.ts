@@ -32,4 +32,9 @@ export interface ITopicRepo {
     skip: number,
     limit: number
   ): Promise<Array<Topic>>;
+
+  subscriptionUserIds(topicId: string): Promise<Array<string>>;
+  enableSubscription(topicId: string, userId: string): Promise<void>;
+  disableSubscription(topicId: string, userId: string): Promise<void>;
+  getSubscription(topicId: string, userId: string): Promise<boolean>;
 }

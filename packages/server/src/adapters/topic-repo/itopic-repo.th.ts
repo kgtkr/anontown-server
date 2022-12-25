@@ -342,4 +342,70 @@ export function run(
 
     // TODO:存在しないID
   });
+
+  describe("subscriptionUserIds", () => {
+    it("正常に取得出来るか", async () => {
+      await $isolate(async (repo) => {
+        await repo.insert(topicNormal);
+
+        await repo.enableSubscription(topicNormal.id, "user1");
+        await repo.enableSubscription(topicNormal.id, "user2");
+
+        expect(await repo.subscriptionUserIds(topicNormal.id)).toEqual([
+          "user1",
+          "user2",
+        ]);
+      });
+    });
+  });
+
+  describe("enableSubscription", () => {
+    it("正常に有効化出来るか", async () => {
+      await $isolate(async (repo) => {
+        await repo.insert(topicNormal);
+
+        await repo.enableSubscription(topicNormal.id, "user1");
+        await repo.enableSubscription(topicNormal.id, "user1");
+
+        expect(await repo.subscriptionUserIds(topicNormal.id)).toEqual([
+          "user1",
+        ]);
+      });
+    });
+  });
+
+  describe("disableSubscription", () => {
+    it("正常に無効化出来るか", async () => {
+      await $isolate(async (repo) => {
+        await repo.insert(topicNormal);
+
+        await repo.enableSubscription(topicNormal.id, "user1");
+        await repo.disableSubscription(topicNormal.id, "user1");
+        await repo.disableSubscription(topicNormal.id, "user1");
+
+        expect(await repo.subscriptionUserIds(topicNormal.id)).toEqual([]);
+      });
+    });
+  });
+
+  describe("getSubscription", () => {
+    it("正常に取得出来るか", async () => {
+      await $isolate(async (repo) => {
+        await repo.insert(topicNormal);
+
+        await repo.enableSubscription(topicNormal.id, "user1");
+        await repo.enableSubscription(topicNormal.id, "user2");
+
+        expect(await repo.getSubscription(topicNormal.id, "user1")).toEqual(
+          true
+        );
+        expect(await repo.getSubscription(topicNormal.id, "user2")).toEqual(
+          true
+        );
+        expect(await repo.getSubscription(topicNormal.id, "user3")).toEqual(
+          false
+        );
+      });
+    });
+  });
 }

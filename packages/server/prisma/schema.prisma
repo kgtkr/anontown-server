@@ -236,13 +236,14 @@ enum TopicType {
 }
 
 model Topic {
-  id           String    @id @db.VarChar(64)
-  type         TopicType
-  title        String    @db.Text
-  updatedAt    DateTime  @map("updated_at") @db.Timestamptz(3)
-  createdAt    DateTime  @map("created_at") @db.Timestamptz(3)
-  ageUpdatedAt DateTime  @map("age_updated_at") @db.Timestamptz(3)
-  active       Boolean   @map("active")
+  id                 String               @id @db.VarChar(64)
+  type               TopicType
+  title              String               @db.Text
+  updatedAt          DateTime             @map("updated_at") @db.Timestamptz(3)
+  createdAt          DateTime             @map("created_at") @db.Timestamptz(3)
+  ageUpdatedAt       DateTime             @map("age_updated_at") @db.Timestamptz(3)
+  active             Boolean              @map("active")
+  topicSubscriptions TopicSubscriptions[]
 
   // search
   tags        TopicTag[]
@@ -291,6 +292,7 @@ model PushSubscriptions {
 model TopicSubscriptions {
   userId  String @map("user_id") @db.VarChar(64)
   topicId String @map("topic_id") @db.VarChar(64)
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([userId, topicId])
   @@index([topicId])

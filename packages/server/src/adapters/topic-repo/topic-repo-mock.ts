@@ -19,6 +19,7 @@ import {
 
 export class TopicRepoMock implements ITopicRepo {
   private topics: Array<ITopicDB> = [];
+  private subscriptions: Map<string, Set<string>> = new Map();
 
   constructor(public resRepo: IResRepo) {}
 
@@ -125,5 +126,26 @@ export class TopicRepoMock implements ITopicRepo {
         return toTopic(t, count);
       })
     );
+  }
+
+  async subscriptionUserIds(topicId: string): Promise<Array<string>> {
+    return Array.from(this.subscriptions.get(topicId) || []);
+  }
+
+  async enableSubscription(topicId: string, userId: string): Promise<void> {
+    const subs = this.subscriptions.get(topicId) || new Set();
+    subs.add(userId);
+    this.subscriptions.set(topicId, subs);
+  }
+
+  async disableSubscription(topicId: string, userId: string): Promise<void> {
+    const subs = this.subscriptions.get(topicId) || new Set();
+    subs.delete(userId);
+    this.subscriptions.set(topicId, subs);
+  }
+
+  async getSubscription(topicId: string, userId: string): Promise<boolean> {
+    const subs = this.subscriptions.get(topicId) || new Set();
+    return subs.has(userId);
   }
 }

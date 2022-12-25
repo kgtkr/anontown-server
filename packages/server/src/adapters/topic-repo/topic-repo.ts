@@ -288,4 +288,54 @@ export class TopicRepo implements ITopicRepo {
       },
     });
   }
+
+  async subscriptionUserIds(topicId: string): Promise<Array<string>> {
+    const result = await this.prisma.topicSubscriptions.findMany({
+      where: {
+        topicId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    return result.map((x) => x.userId);
+  }
+  async enableSubscription(topicId: string, userId: string): Promise<void> {
+    await this.prisma.topicSubscriptions.upsert({
+      where: {
+        userId_topicId: {
+          userId,
+          topicId,
+        },
+      },
+      create: {
+        userId,
+        topicId,
+      },
+      update: {},
+    });
+  }
+
+  async disableSubscription(topicId: string, userId: string): Promise<void> {
+    // deleteManyを使っているのは存在しない時にエラーにならないようにするため
+    // https://github.com/prisma/prisma/issues/4072
+    await this.prisma.topicSubscriptions.deleteMany({
+      where: {
+        userId,
+        topicId,
+      },
+    });
+  }
+  async getSubscription(topicId: string, userId: string): Promise<boolean> {
+    const result = await this.prisma.topicSubscriptions.findUnique({
+      where: {
+        userId_topicId: {
+          userId,
+          topicId,
+        },
+      },
+    });
+    return result !== null;
+  }
 }
