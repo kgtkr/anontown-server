@@ -1,5 +1,6 @@
 import * as G from "../generated/graphql";
 import { getTopic } from "../usecases";
+import * as O from "fp-ts/Option";
 
 export const topic: G.TopicResolvers = {
   __resolveType(obj) {
@@ -11,6 +12,17 @@ export const topic: G.TopicResolvers = {
       case "fork":
         return "TopicFork";
     }
+  },
+  subscribe: async (topic, _args, context, _info) => {
+    // TODO: N+1
+    const token = context.ports.authContainer.getTokenOrNull();
+    if (O.isNone(token)) {
+      return null;
+    }
+    return await context.ports.topicRepo.getSubscription(
+      topic.id,
+      token.value.user
+    );
   },
 };
 

@@ -266,6 +266,7 @@ interface Topic {
   date: DateTime!
   resCount: Int!
   active: Boolean!
+  subscribe: Boolean
 }
 
 interface TopicSearch {
@@ -495,6 +496,13 @@ type Mutation {
     recaptcha: String!
   ): CreateUserResponse!
   updateUser(sn: String, pass: String, auth: AuthUser!): UpdateUserResponse!
+  resisterPushSubscription(
+    endpoint: String!
+    p256dh: String!
+    auth: String!
+  ): Boolean # void
+  subscribeTopic(topic: ID!): Boolean # void
+  unsubscribeTopic(topic: ID!): Boolean # void
 }
 
 type ResSubscript {
