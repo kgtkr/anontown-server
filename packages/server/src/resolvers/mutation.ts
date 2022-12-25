@@ -16,6 +16,7 @@ import {
 import * as formatter from "../formatter";
 import * as G from "../generated/graphql";
 import * as authFromApiParam from "../server/auth-from-api-param";
+import * as O from "fp-ts/Option";
 
 export const mutation: G.MutationResolvers = {
   createUser: async (_obj, args, context, _info) => {
@@ -164,6 +165,39 @@ export const mutation: G.MutationResolvers = {
     if (api.type !== "normal") {
       throw new Error();
     }
+
+    if (O.isSome(res.reply)) {
+      await context.ports.notificationQueue.enqueue([
+        {
+          userId: res.reply.value.user,
+          payload: JSON.stringify({
+            title: "あなたのレスにリプライがありました",
+            // TODO: markdownを解釈する
+            body: res.text,
+            data: {
+              // TODO: フロントのURLを設定できるように
+              url: `https://anontown.com/topics/${res.topic}/reses/${res.id}`,
+            },
+          }),
+        },
+      ]);
+    }
+    const subscriptionUsers = await context.ports.topicRepo.subscriptionUserIds(
+      res.topic
+    );
+    await context.ports.notificationQueue.enqueue(
+      subscriptionUsers.map((userId) => ({
+        userId,
+        payload: JSON.stringify({
+          title: "あなたが購読しているトピックに新しいレスがありました",
+          body: res.text,
+          data: {
+            url: `https://anontown.com/topics/${res.topic}/reses/${res.id}`,
+          },
+        }),
+      }))
+    );
+
     return api;
   },
   voteRes: async (_obj, args, context, _info) => {

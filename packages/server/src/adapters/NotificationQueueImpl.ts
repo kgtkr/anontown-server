@@ -10,7 +10,9 @@ export class NotificationQueueImpl implements NotificationQueue {
     private faktory: FaktoryClient
   ) {}
 
-  async queue(payloads: { userId: string; payload: string }[]): Promise<void> {
+  async enqueue(
+    payloads: { userId: string; payload: string }[]
+  ): Promise<void> {
     const userIds = payloads.map((payload) => payload.userId);
     const pushSubscriptionWithUserIds = await this.pushSubscriptionsRepo.list(
       userIds
