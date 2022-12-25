@@ -7,6 +7,6 @@ export interface PushSubscriptionsRepo {
       userId: string;
     }[]
   >;
-  add(userId: string, subscription: webpush.PushSubscription): Promise<void>;
+  upsert(userId: string, subscription: webpush.PushSubscription): Promise<void>;
   delete(userId: string, endpoint: string): Promise<void>;
 }

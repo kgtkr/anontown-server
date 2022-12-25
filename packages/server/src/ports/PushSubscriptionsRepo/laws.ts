@@ -14,14 +14,29 @@ export function check(
     },
   };
 
-  describe("add", () => {
-    it("正常に追加できるか", async () => {
+  describe("upsert", () => {
+    it("正常に追加と更新をできるか", async () => {
       await $isolate(async (repo) => {
-        await repo.add("user", PushSubscription);
+        await repo.upsert("user", PushSubscription);
         await expect(repo.list(["user"])).resolves.toEqual([
           {
             userId: "user",
             pushSubscription: PushSubscription,
+          },
+        ]);
+
+        const PushSubscription2 = {
+          ...PushSubscription,
+          keys: {
+            p256dh: "p256dh2",
+            auth: "auth2",
+          },
+        };
+        await repo.upsert("user", PushSubscription2);
+        await expect(repo.list(["user"])).resolves.toEqual([
+          {
+            userId: "user",
+            pushSubscription: PushSubscription2,
           },
         ]);
       });
@@ -31,7 +46,7 @@ export function check(
   describe("delete", () => {
     it("正常に削除できるか", async () => {
       await $isolate(async (repo) => {
-        await repo.add("user", PushSubscription);
+        await repo.upsert("user", PushSubscription);
         await repo.delete("user", "endpoint");
         await expect(repo.list(["user"])).resolves.toEqual([]);
       });
@@ -50,8 +65,8 @@ export function check(
           endpoint: "endpoint2",
         };
 
-        await repo.add("user1", PushSubscription1);
-        await repo.add("user2", PushSubscription2);
+        await repo.upsert("user1", PushSubscription1);
+        await repo.upsert("user2", PushSubscription2);
         await expect(repo.list(["user1"])).resolves.toEqual([
           {
             userId: "user1",

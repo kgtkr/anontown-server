@@ -22,14 +22,19 @@ export class PushSubscriptionsRepoImpl implements PushSubscriptionsRepo {
       },
     }));
   }
-  async add(
+  async upsert(
     userId: string,
     subscription: webpush.PushSubscription
   ): Promise<void> {
-    await this.prisma.pushSubscriptions.create({
-      data: {
+    await this.prisma.pushSubscriptions.upsert({
+      where: { userId_endpoint: { userId, endpoint: subscription.endpoint } },
+      create: {
         userId,
         endpoint: subscription.endpoint,
+        p256dh: subscription.keys.p256dh,
+        auth: subscription.keys.auth,
+      },
+      update: {
         p256dh: subscription.keys.p256dh,
         auth: subscription.keys.auth,
       },
