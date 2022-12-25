@@ -18,7 +18,12 @@ export function check(
     it("正常に追加できるか", async () => {
       await $isolate(async (repo) => {
         await repo.add("user", PushSubscription);
-        await expect(repo.list(["user"])).resolves.toEqual([PushSubscription]);
+        await expect(repo.list(["user"])).resolves.toEqual([
+          {
+            userId: "user",
+            pushSubscription: PushSubscription,
+          },
+        ]);
       });
     });
   });
@@ -48,10 +53,16 @@ export function check(
         await repo.add("user1", PushSubscription1);
         await repo.add("user2", PushSubscription2);
         await expect(repo.list(["user1"])).resolves.toEqual([
-          PushSubscription1,
+          {
+            userId: "user1",
+            pushSubscription: PushSubscription1,
+          },
         ]);
         await expect(repo.list(["user2"])).resolves.toEqual([
-          PushSubscription2,
+          {
+            userId: "user2",
+            pushSubscription: PushSubscription2,
+          },
         ]);
       });
     });
