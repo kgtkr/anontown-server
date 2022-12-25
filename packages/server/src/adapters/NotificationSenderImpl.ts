@@ -18,7 +18,7 @@ export class NotificationSenderImpl implements NotificationSender {
       );
     }
     if (result.statusCode !== 201) {
-      throw new Error(`[NotificationSenderImpl] ${result}`);
+      throw new Error(`[NotificationSenderImpl] ${String(result)}`);
     }
   }
 }
