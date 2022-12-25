@@ -49,9 +49,9 @@ export interface Ports {
   recaptcha: IRecaptchaClient;
   safeIdGenerator: ISafeIdGenerator;
   objectIdGenerator: IObjectIdGenerator;
-  // pushSubscriptionsRepo: PushSubscriptionsRepo;
-  // notificationQueue: NotificationQueue;
-  // notificationSender: NotificationSender;
+  pushSubscriptionsRepo: PushSubscriptionsRepo;
+  notificationQueue: NotificationQueue;
+  notificationSender: NotificationSender;
 }
 
 export type PortPick<K extends keyof Ports> = Pick<Ports, K>;

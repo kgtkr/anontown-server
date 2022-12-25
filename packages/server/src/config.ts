@@ -16,4 +16,7 @@ export const Config = {
     siteKey: process.env.RECAPTCHA_SITE_KET as string,
     secretKey: process.env.RECAPTCHA_SECRET_KET as string,
   },
+  faktory: {
+    url: process.env.FAKTORY_URL as string,
+  },
 };
