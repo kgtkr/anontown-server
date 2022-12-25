@@ -95,7 +95,7 @@ export async function serverRun() {
   });
   await server.start();
 
-  runWorker();
+  await runWorker();
 
   router.get("/ping", (ctx, _next) => (ctx.body = "OK"));
   server.applyMiddleware({ app, path: "/" });
