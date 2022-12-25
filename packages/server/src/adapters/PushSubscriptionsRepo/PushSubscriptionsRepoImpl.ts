@@ -5,15 +5,20 @@ import * as P from "@prisma/client";
 export class PushSubscriptionsRepoImpl implements PushSubscriptionsRepo {
   constructor(private prisma: P.Prisma.TransactionClient) {}
 
-  async list(userId: string): Promise<webpush.PushSubscription[]> {
+  async list(
+    userIds: string[]
+  ): Promise<{ userId: string; pushSubscription: webpush.PushSubscription }[]> {
     const models = await this.prisma.pushSubscriptions.findMany({
-      where: { userId },
+      where: { userId: { in: userIds } },
     });
     return models.map((model) => ({
-      endpoint: model.endpoint,
-      keys: {
-        p256dh: model.p256dh,
-        auth: model.auth,
+      userId: model.userId,
+      pushSubscription: {
+        endpoint: model.endpoint,
+        keys: {
+          p256dh: model.p256dh,
+          auth: model.auth,
+        },
       },
     }));
   }
