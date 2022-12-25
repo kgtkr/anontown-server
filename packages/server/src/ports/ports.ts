@@ -21,8 +21,11 @@ import {
   ITopicLoader,
   ITopicRepo,
   IUserRepo,
-} from "../ports";
+} from ".";
 
+import { PushSubscriptionsRepo } from "./PushSubscriptionsRepo";
+import { NotificationQueue } from "./NotificationQueue";
+import { NotificationSender } from "./NotificationSender";
 export interface Ports {
   authContainer: IAuthContainer;
   ipContainer: IIpContainer;
@@ -46,6 +49,9 @@ export interface Ports {
   recaptcha: IRecaptchaClient;
   safeIdGenerator: ISafeIdGenerator;
   objectIdGenerator: IObjectIdGenerator;
+  // pushSubscriptionsRepo: PushSubscriptionsRepo;
+  // notificationQueue: NotificationQueue;
+  // notificationSender: NotificationSender;
 }
 
 export type PortPick<K extends keyof Ports> = Pick<Ports, K>;

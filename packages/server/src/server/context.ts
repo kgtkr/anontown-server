@@ -28,6 +28,10 @@ import { FixIpContainer } from "../adapters/fix-ip-container/index";
 import { AtAuthError } from "../at-error";
 import { ITokenRepo, Ports } from "../ports";
 import * as authFromApiParam from "./auth-from-api-param";
+import { NotificationQueueImpl } from "../adapters/NotificationQueueImpl";
+import { PushSubscriptionsRepoImpl } from "../adapters/PushSubscriptionsRepoImpl";
+import { NotificationSenderImpl } from "../adapters/NotificationSenderImpl";
+import faktory from "faktory-worker";
 
 export interface AppContext {
   ports: Ports;

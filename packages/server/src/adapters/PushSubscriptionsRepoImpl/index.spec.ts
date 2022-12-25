@@ -1,4 +1,4 @@
-import { PushSubscriptionsRepoImpl } from "./PushSubscriptionsRepoImpl";
+import { PushSubscriptionsRepoImpl } from ".";
 import { $transactionAfterRollback } from "../../prisma-client";
 
 import { check } from "../../ports/PushSubscriptionsRepo/laws";
