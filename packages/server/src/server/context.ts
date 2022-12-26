@@ -1,33 +1,11 @@
 import { prisma } from "../prisma-client";
 import { array, option } from "fp-ts";
 import { none, some } from "fp-ts/lib/Option";
-import {
-  AuthContainer,
-  ClientLoader,
-  ClientRepo,
-  FixClock,
-  HistoryLoader,
-  HistoryRepo,
-  Logger,
-  MsgLoader,
-  MsgRepo,
-  ObjectIdGenerator,
-  ProfileLoader,
-  ProfileRepo,
-  RecaptchaClient,
-  ResLoader,
-  ResRepo,
-  SafeIdGenerator,
-  StorageRepo,
-  TokenRepo,
-  TopicLoader,
-  TopicRepo,
-  UserRepo,
-} from "../adapters";
-import { FixIpContainer } from "../adapters/fix-ip-container/index";
+import { TokenRepo } from "../adapters";
 import { AtAuthError } from "../at-error";
 import { ITokenRepo, Ports } from "../ports";
 import * as authFromApiParam from "./auth-from-api-param";
+import { createPorts } from "../createPorts";
 
 export interface AppContext {
   ports: Ports;
@@ -56,60 +34,16 @@ export async function createContext(
   headers: Record<string, unknown>
 ): Promise<AppContext> {
   const xRealIp = headers["x-real-ip"];
-  const ipContainer = new FixIpContainer(
-    typeof xRealIp === "string" ? some(xRealIp) : none
-  );
-
-  const logger = new Logger();
-
-  const tokenRepo = new TokenRepo(prisma);
-
+  const ip = typeof xRealIp === "string" ? some(xRealIp) : none;
   const token = await createToken(
     headers["x-token"] || headers["X-Token"],
-    tokenRepo
+    new TokenRepo(prisma)
   );
 
-  const authContainer = new AuthContainer(token);
-
-  const clientRepo = new ClientRepo(prisma);
-  const historyRepo = new HistoryRepo(prisma);
-  const msgRepo = new MsgRepo(prisma);
-  const profileRepo = new ProfileRepo(prisma);
-  const resRepo = new ResRepo(prisma);
-  const topicRepo = new TopicRepo(prisma);
-  const userRepo = new UserRepo(prisma);
-  const storageRepo = new StorageRepo(prisma);
-  const clientLoader = new ClientLoader(clientRepo, authContainer);
-  const historyLoader = new HistoryLoader(historyRepo);
-  const msgLoader = new MsgLoader(msgRepo, authContainer);
-  const profileLoader = new ProfileLoader(profileRepo, authContainer);
-  const resLoader = new ResLoader(resRepo, authContainer);
-  const topicLoader = new TopicLoader(topicRepo);
-
   return {
-    ports: {
-      authContainer,
-      ipContainer,
-      clock: new FixClock(new Date()),
-      logger,
-      recaptcha: new RecaptchaClient(),
-      safeIdGenerator: new SafeIdGenerator(),
-      objectIdGenerator: new ObjectIdGenerator(),
-      clientRepo,
-      historyRepo,
-      msgRepo,
-      profileRepo,
-      resRepo,
-      tokenRepo,
-      topicRepo,
-      userRepo,
-      storageRepo,
-      clientLoader,
-      historyLoader,
-      msgLoader,
-      profileLoader,
-      resLoader,
-      topicLoader,
-    },
+    ports: createPorts({
+      token,
+      ip,
+    }),
   };
 }

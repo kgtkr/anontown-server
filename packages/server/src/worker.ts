@@ -2,8 +2,26 @@ import { CronJob } from "cron";
 import { Logger, TopicRepo, UserRepo } from "./adapters";
 import { ResWaitCountKey } from "./entities";
 import { prisma } from "./prisma-client";
+import faktory from "faktory-worker";
+import { Config } from "./config";
+import * as SendPushNotificationJob from "./jobs/SendPushNotification";
+import { createPorts, PortsConfig } from "./createPorts";
 
-export function runWorker(): void {
+export async function runWorker(): Promise<void> {
+  const worker = await faktory.work({
+    url: Config.faktory.url,
+  });
+
+  worker.register(SendPushNotificationJob.JobType, async (raw) => {
+    const ports = createPorts(PortsConfig);
+    const arg = SendPushNotificationJob.Arg.parse(raw);
+    await ports.notificationSender.sendNotification(
+      arg.userId,
+      arg.pushSubscription,
+      arg.payload
+    );
+  });
+
   runTopicWorker();
   runUserWorker();
 }

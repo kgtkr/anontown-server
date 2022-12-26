@@ -14,6 +14,14 @@ services:
       - redis:/var/lib/postgresql/data
     ports:
       - 6379:6379
+  faktory:
+    image: contribsys/faktory:1.6.2
+    ports:
+      - 7419:7419
+      - 7420:7420
+    volumes:
+      - faktory:/var/lib/faktory/db
 volumes:
   postgres:
   redis:
+  faktory:

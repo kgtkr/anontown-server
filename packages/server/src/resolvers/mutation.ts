@@ -16,6 +16,7 @@ import {
 import * as formatter from "../formatter";
 import * as G from "../generated/graphql";
 import * as authFromApiParam from "../server/auth-from-api-param";
+import * as O from "fp-ts/Option";
 
 export const mutation: G.MutationResolvers = {
   createUser: async (_obj, args, context, _info) => {
@@ -164,6 +165,44 @@ export const mutation: G.MutationResolvers = {
     if (api.type !== "normal") {
       throw new Error();
     }
+
+    if (O.isSome(res.reply) && res.user !== res.reply.value.user) {
+      await context.ports.notificationQueue.enqueue([
+        {
+          userId: res.reply.value.user,
+          payload: JSON.stringify({
+            title: "あなたのレスにリプライがありました",
+            // TODO: markdownを解釈する
+            body: res.text,
+            data: {
+              // TODO: フロントのURLを設定できるように
+              url: `https://anontown.com/topics/${res.topic}/reses/${res.id}`,
+            },
+          }),
+        },
+      ]);
+    }
+    const subscriptionUsers = await context.ports.topicRepo.subscriptionUserIds(
+      res.topic
+    );
+    await context.ports.notificationQueue.enqueue(
+      subscriptionUsers
+        .filter((userId) => userId !== res.user)
+        .filter(
+          (userId) => O.isNone(res.reply) || userId !== res.reply.value.user
+        )
+        .map((userId) => ({
+          userId,
+          payload: JSON.stringify({
+            title: "あなたが購読しているトピックに新しいレスがありました",
+            body: res.text,
+            data: {
+              url: `https://anontown.com/topics/${res.topic}/reses/${res.id}`,
+            },
+          }),
+        }))
+    );
+
     return api;
   },
   voteRes: async (_obj, args, context, _info) => {
@@ -474,5 +513,32 @@ export const mutation: G.MutationResolvers = {
     );
 
     return topic.toAPI();
+  },
+  resisterPushSubscription: async (_obj, args, context, _info) => {
+    await context.ports.pushSubscriptionsRepo.upsert(
+      context.ports.authContainer.getToken().user,
+      {
+        endpoint: args.endpoint,
+        keys: {
+          p256dh: args.p256dh,
+          auth: args.auth,
+        },
+      }
+    );
+    return null;
+  },
+  subscribeTopic: async (_obj, args, context, _info) => {
+    await context.ports.topicRepo.enableSubscription(
+      args.topic,
+      context.ports.authContainer.getToken().user
+    );
+    return null;
+  },
+  unsubscribeTopic: async (_obj, args, context, _info) => {
+    await context.ports.topicRepo.disableSubscription(
+      args.topic,
+      context.ports.authContainer.getToken().user
+    );
+    return null;
   },
 };

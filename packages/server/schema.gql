@@ -266,6 +266,7 @@ interface Topic {
   date: DateTime!
   resCount: Int!
   active: Boolean!
+  subscribe: Boolean
 }
 
 interface TopicSearch {
@@ -275,6 +276,7 @@ interface TopicSearch {
   date: DateTime!
   resCount: Int!
   active: Boolean!
+  subscribe: Boolean
 
   tags: [String!]!
   text: String!
@@ -287,6 +289,7 @@ type TopicNormal implements Topic & TopicSearch {
   date: DateTime!
   resCount: Int!
   active: Boolean!
+  subscribe: Boolean
 
   tags: [String!]!
   text: String!
@@ -299,6 +302,7 @@ type TopicOne implements Topic & TopicSearch {
   date: DateTime!
   resCount: Int!
   active: Boolean!
+  subscribe: Boolean
 
   tags: [String!]!
   text: String!
@@ -311,6 +315,7 @@ type TopicFork implements Topic {
   date: DateTime!
   resCount: Int!
   active: Boolean!
+  subscribe: Boolean
 
   parent: TopicNormal!
 }
@@ -495,6 +500,13 @@ type Mutation {
     recaptcha: String!
   ): CreateUserResponse!
   updateUser(sn: String, pass: String, auth: AuthUser!): UpdateUserResponse!
+  resisterPushSubscription(
+    endpoint: String!
+    p256dh: String!
+    auth: String!
+  ): Boolean # void
+  subscribeTopic(topic: ID!): Boolean # void
+  unsubscribeTopic(topic: ID!): Boolean # void
 }
 
 type ResSubscript {
