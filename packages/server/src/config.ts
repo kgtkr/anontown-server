@@ -19,4 +19,9 @@ export const Config = {
   faktory: {
     url: process.env.FAKTORY_URL as string,
   },
+  vapid: {
+    subject: process.env.VAPID_SUBJECT as string,
+    publicKey: process.env.VAPID_PUBLIC_KEY as string,
+    privateKey: process.env.VAPID_PRIVATE_KEY as string,
+  },
 };
