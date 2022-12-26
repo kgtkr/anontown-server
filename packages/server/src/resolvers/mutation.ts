@@ -524,15 +524,15 @@ export const mutation: G.MutationResolvers = {
   },
   subscribeTopic: async (_obj, args, context, _info) => {
     await context.ports.topicRepo.enableSubscription(
-      context.ports.authContainer.getToken().user,
-      args.topic
+      args.topic,
+      context.ports.authContainer.getToken().user
     );
     return null;
   },
   unsubscribeTopic: async (_obj, args, context, _info) => {
     await context.ports.topicRepo.disableSubscription(
-      context.ports.authContainer.getToken().user,
-      args.topic
+      args.topic,
+      context.ports.authContainer.getToken().user
     );
     return null;
   },
