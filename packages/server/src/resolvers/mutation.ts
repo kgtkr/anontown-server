@@ -166,7 +166,7 @@ export const mutation: G.MutationResolvers = {
       throw new Error();
     }
 
-    if (O.isSome(res.reply)) {
+    if (O.isSome(res.reply) && res.user !== res.reply.value.user) {
       await context.ports.notificationQueue.enqueue([
         {
           userId: res.reply.value.user,
@@ -186,16 +186,18 @@ export const mutation: G.MutationResolvers = {
       res.topic
     );
     await context.ports.notificationQueue.enqueue(
-      subscriptionUsers.map((userId) => ({
-        userId,
-        payload: JSON.stringify({
-          title: "あなたが購読しているトピックに新しいレスがありました",
-          body: res.text,
-          data: {
-            url: `https://anontown.com/topics/${res.topic}/reses/${res.id}`,
-          },
-        }),
-      }))
+      subscriptionUsers
+        .filter((userId) => userId !== res.user)
+        .map((userId) => ({
+          userId,
+          payload: JSON.stringify({
+            title: "あなたが購読しているトピックに新しいレスがありました",
+            body: res.text,
+            data: {
+              url: `https://anontown.com/topics/${res.topic}/reses/${res.id}`,
+            },
+          }),
+        }))
     );
 
     return api;
