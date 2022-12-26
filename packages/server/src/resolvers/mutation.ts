@@ -188,6 +188,9 @@ export const mutation: G.MutationResolvers = {
     await context.ports.notificationQueue.enqueue(
       subscriptionUsers
         .filter((userId) => userId !== res.user)
+        .filter(
+          (userId) => O.isNone(res.reply) || userId !== res.reply.value.user
+        )
         .map((userId) => ({
           userId,
           payload: JSON.stringify({
