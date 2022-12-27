@@ -16,8 +16,7 @@ export class NotificationSenderImpl implements NotificationSender {
         userId,
         pushSubscription.endpoint
       );
-    }
-    if (result.statusCode !== 201) {
+    } else if (result.statusCode !== 201) {
       throw new Error(`[NotificationSenderImpl] ${String(result)}`);
     }
   }
