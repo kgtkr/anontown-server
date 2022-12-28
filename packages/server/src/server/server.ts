@@ -16,6 +16,10 @@ import {
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
+import { prisma } from "../prisma-client";
+import { faktoryClient } from "../faktoryClient";
+import { RedisClient } from "../db";
+import { logger } from "../logger";
 
 export async function serverRun() {
   const typeDefs = gql(
@@ -98,6 +102,19 @@ export async function serverRun() {
   await runWorker();
 
   router.get("/ping", (ctx, _next) => (ctx.body = "OK"));
+  router.get("/livez", (ctx, _next) => (ctx.body = "OK"));
+  router.get("/readyz", async (ctx, _next) => {
+    try {
+      await prisma.$queryRaw`SELECT 1;`;
+      await faktoryClient.info();
+      await RedisClient().ping();
+      ctx.body = "OK";
+    } catch (error) {
+      logger.error("readyz error", error);
+      ctx.status = 500;
+      ctx.body = "NG";
+    }
+  });
   server.applyMiddleware({ app, path: "/" });
   app.use(router.routes());
   app.use(router.allowedMethods());
