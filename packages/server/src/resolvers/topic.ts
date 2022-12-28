@@ -45,4 +45,13 @@ export const topicFork: G.TopicForkResolvers = {
     }
     return parent;
   },
+  subscribe: topic.subscribe,
+};
+
+export const topicOne: G.TopicOneResolvers = {
+  subscribe: topic.subscribe,
+};
+
+export const topicNormal: G.TopicNormalResolvers = {
+  subscribe: topic.subscribe,
 };

@@ -12,7 +12,7 @@ import {
 } from "./res";
 import { subscription } from "./subscription";
 import { token, tokenGeneral } from "./token";
-import { topic, topicFork, topicSearch } from "./topic";
+import { topic, topicFork, topicNormal, topicOne, topicSearch } from "./topic";
 import { DateTimeResolver } from "graphql-scalars";
 
 export const resolvers: G.Resolvers = {
@@ -32,4 +32,6 @@ export const resolvers: G.Resolvers = {
   Topic: topic,
   TopicSearch: topicSearch,
   TopicFork: topicFork,
+  TopicOne: topicOne,
+  TopicNormal: topicNormal,
 };
