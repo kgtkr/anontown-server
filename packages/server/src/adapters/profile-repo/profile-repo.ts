@@ -3,7 +3,7 @@ import { AtConflictError, AtNotFoundError } from "../../at-error";
 import { Profile } from "../../entities";
 import { IAuthContainer, IProfileRepo, ProfileRepoQuery } from "../../ports";
 import * as P from "@prisma/client";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 function toEntity(p: P.Profile): Profile {
   return new Profile(

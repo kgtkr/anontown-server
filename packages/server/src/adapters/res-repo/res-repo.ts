@@ -294,9 +294,7 @@ export class ResRepo implements IResRepo {
 
     if (!isNullish(query.topic)) {
       filter.push({
-        topicId: {
-          in: query.topic,
-        },
+        topicId: query.topic,
       });
     }
 

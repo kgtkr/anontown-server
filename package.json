@@ -2,15 +2,15 @@
   "name": "@anontown-backend/root",
   "private": true,
   "devDependencies": {
+    "@lerna-lite/cli": "^1.11.2",
+    "@lerna-lite/run": "^1.11.2",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
     "prettier": "^2.7.1",
-    "typescript": "^4.8.2",
-    "@lerna-lite/run": "^1.11.2",
-    "@lerna-lite/cli": "^1.11.2",
-    "eslint-plugin-import": "^2.26.0"
+    "typescript": "^4.8.2"
   },
   "scripts": {
     "lint": "eslint 'packages/*/src/**/*.{ts,tsx}'",

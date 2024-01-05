@@ -9,6 +9,8 @@ export async function $transactionAfterRollback(
 ): Promise<void> {
   try {
     await prisma.$transaction(async (prisma) => {
+      // TODO: テストのために外部キー制約を無視しているが、本来集約外では外部キー制約を消すべき
+      await prisma.$executeRaw`SET session_replication_role = 'replica';`;
       await callback(prisma);
       throw new RollbackError();
     });

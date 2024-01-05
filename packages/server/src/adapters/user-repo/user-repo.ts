@@ -2,7 +2,7 @@ import { AtConflictError, AtNotFoundError } from "../../at-error";
 import { ResWaitCountKey, User } from "../../entities";
 import { IUserRepo } from "../../ports";
 import * as P from "@prisma/client";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 function toEntity(u: P.User): User {
   return new User(
