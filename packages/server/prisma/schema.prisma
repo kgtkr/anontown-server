@@ -215,18 +215,6 @@ model HistoryTag {
   @@map("history_tags")
 }
 
-model Msg {
-  id         String   @id @db.VarChar(64)
-  receiverId String?  @map("receiver_id") @db.VarChar(64)
-  content    String   @db.Text
-  createdAt  DateTime @map("created_at") @db.Timestamptz(3)
-
-  // TODO: textのindex
-  @@index([receiverId])
-  @@index([createdAt])
-  @@map("msgs")
-}
-
 enum TopicType {
   NORMAL @map(name: "normal")
   ONE    @map(name: "one")

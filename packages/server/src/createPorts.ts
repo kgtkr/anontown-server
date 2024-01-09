@@ -9,8 +9,6 @@ import {
   HistoryLoader,
   HistoryRepo,
   Logger,
-  MsgLoader,
-  MsgRepo,
   ObjectIdGenerator,
   ProfileLoader,
   ProfileRepo,
@@ -48,7 +46,6 @@ export function createPorts(config: PortsConfig): Ports {
   const authContainer = new AuthContainer(config.token);
   const clientRepo = new ClientRepo(prisma);
   const historyRepo = new HistoryRepo(prisma);
-  const msgRepo = new MsgRepo(prisma);
   const profileRepo = new ProfileRepo(prisma);
   const resRepo = new ResRepo(prisma);
   const topicRepo = new TopicRepo(prisma);
@@ -56,7 +53,6 @@ export function createPorts(config: PortsConfig): Ports {
   const storageRepo = new StorageRepo(prisma);
   const clientLoader = new ClientLoader(clientRepo, authContainer);
   const historyLoader = new HistoryLoader(historyRepo);
-  const msgLoader = new MsgLoader(msgRepo, authContainer);
   const profileLoader = new ProfileLoader(profileRepo, authContainer);
   const resLoader = new ResLoader(resRepo, authContainer);
   const topicLoader = new TopicLoader(topicRepo);
@@ -77,7 +73,6 @@ export function createPorts(config: PortsConfig): Ports {
     objectIdGenerator: new ObjectIdGenerator(),
     clientRepo,
     historyRepo,
-    msgRepo,
     profileRepo,
     resRepo,
     tokenRepo,
@@ -86,7 +81,6 @@ export function createPorts(config: PortsConfig): Ports {
     storageRepo,
     clientLoader,
     historyLoader,
-    msgLoader,
     profileLoader,
     resLoader,
     topicLoader,
