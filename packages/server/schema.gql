@@ -371,6 +371,7 @@ input AuthUser {
 
 input StorageQuery {
   key: [String!]
+  keyPrefix: String
 }
 
 input TopicQuery {

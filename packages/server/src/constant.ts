@@ -43,9 +43,9 @@ export const Constant = {
   },
   storage: {
     key: {
-      regex: /^.{1,100}$/,
-      validate: validateData(null, 1, 100),
-      msg: "ストレージキーは1～100文字にして下さい",
+      regex: /^.{1,1024}$/,
+      validate: validateData(null, 1, 1024),
+      msg: "ストレージキーは1～1024文字にして下さい",
     },
     value: {
       regex: /^.{0,100000}$/,

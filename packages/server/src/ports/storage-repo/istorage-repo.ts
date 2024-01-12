@@ -3,10 +3,12 @@ import { Storage } from "../../entities";
 
 export type StorageRepoQuery = {
   key: string[] | null;
+  keyPrefix: string | null;
 };
 
 export const emptyStorageRepoQuery: StorageRepoQuery = {
   key: null,
+  keyPrefix: null,
 };
 
 export interface IStorageRepo {
