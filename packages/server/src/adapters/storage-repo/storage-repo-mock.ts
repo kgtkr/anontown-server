@@ -24,7 +24,8 @@ export class StorageRepoMock implements IStorageRepo {
       .filter((x) => isNullish(query.key) || query.key.includes(x.key))
       .filter(
         (x) => isNullish(query.keyPrefix) || x.key.startsWith(query.keyPrefix)
-      );
+      )
+      .sort((a, b) => (a.key < b.key ? -1 : 1));
 
     return storages.map((x) => toStorage(x));
   }

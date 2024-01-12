@@ -253,8 +253,8 @@ export function run(
         const storage1 = new Storage(some(client), user, "key1", "value1");
         const storage2 = new Storage(some(client), user, "key2", "value2");
         const storage3 = new Storage(some(client), user, "key3", "value3");
-        const storage4 = new Storage(some(client), user, "bar1", "value4");
-        const storage5 = new Storage(some(client), user, "bar2", "value5");
+        const storage4 = new Storage(some(client), user, "xyz1", "value4");
+        const storage5 = new Storage(some(client), user, "xyz2", "value5");
 
         await repo.save(storage1);
         await repo.save(storage2);
@@ -280,7 +280,7 @@ export function run(
         expect(
           await repo.find(authGeneral, {
             ...emptyStorageRepoQuery,
-            keyPrefix: "bar",
+            keyPrefix: "xyz",
           })
         ).toEqual([storage4, storage5]);
 

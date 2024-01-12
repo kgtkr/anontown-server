@@ -72,6 +72,9 @@ export class StorageRepo implements IStorageRepo {
       where: {
         AND: filter,
       },
+      orderBy: {
+        key: "asc",
+      },
     });
     return storages.map((x) => toEntity(x));
   }
