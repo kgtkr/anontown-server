@@ -383,6 +383,7 @@ input TopicQuery {
 }
 
 type Query {
+  query: Query!
   clients(query: ClientQuery!): [Client!]!
   histories(query: HistoryQuery!, limit: Int! = 100): [History!]!
   profiles(query: ProfileQuery!): [Profile!]!
