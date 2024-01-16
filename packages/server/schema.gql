@@ -443,6 +443,19 @@ type CreateClientResponseError {
 
 union CreateClientResponse = Client | CreateClientResponseError
 
+input SetStoragesInput {
+  storages: [StorageInput!]!
+}
+
+input StorageInput {
+  key: String!
+  value: String!
+}
+
+type SetStoragesPayload {
+  storages: [Storage!]!
+}
+
 type Mutation {
   createClient(name: String!, url: String!): Client!
   updateClient(id: ID!, name: String, url: String): Client!
@@ -458,7 +471,7 @@ type Mutation {
   ): ResNormal!
   voteRes(res: ID!, type: VoteType!): Res!
   delRes(res: ID!): ResDelete!
-  setStorage(key: String!, value: String!): Storage!
+  setStorages(input: SetStoragesInput!): SetStoragesPayload!
   delStorage(key: String!): Boolean
   delTokenClient(client: ID!): Boolean
   createTokenGeneral(client: ID!): CreateTokenGeneralResponse!

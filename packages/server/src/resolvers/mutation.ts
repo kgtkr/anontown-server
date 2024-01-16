@@ -3,6 +3,7 @@ import { fromNullable, some } from "fp-ts/lib/Option";
 import { AtNotFoundError } from "../at-error";
 import {
   Client,
+  IStorageAPI,
   Profile,
   ResNormal,
   Storage,
@@ -283,14 +284,21 @@ export const mutation: G.MutationResolvers = {
     }
     return api;
   },
-  setStorage: async (_obj, args, context, _info) => {
-    const storage = Storage.create(
-      context.ports.authContainer.getToken(),
-      args.key,
-      args.value
-    );
-    await context.ports.storageRepo.save(storage);
-    return storage.toAPI(context.ports.authContainer.getToken());
+  setStorages: async (_obj, args, context, _info) => {
+    // TODO: トランザクション
+    const results: IStorageAPI[] = [];
+    for (const storageInput of args.input.storages) {
+      const storage = Storage.create(
+        context.ports.authContainer.getToken(),
+        storageInput.key,
+        storageInput.value
+      );
+      await context.ports.storageRepo.save(storage);
+      results.push(storage.toAPI(context.ports.authContainer.getToken()));
+    }
+    return {
+      storages: results,
+    };
   },
   delStorage: async (_obj, args, context, _info) => {
     const storage = await context.ports.storageRepo.findOneKey(
