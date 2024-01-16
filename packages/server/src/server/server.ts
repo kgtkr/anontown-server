@@ -1,4 +1,3 @@
-import { ApolloServer, gql } from "apollo-server-koa";
 import cors from "@koa/cors";
 import Koa from "koa";
 import * as fs from "fs/promises";
@@ -9,28 +8,30 @@ import { resolvers as appResolvers } from "../resolvers";
 import { runWorker } from "../worker";
 import { AppContext, createContext } from "./context";
 import Router from "@koa/router";
-import {
-  ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageGraphQLPlayground,
-} from "apollo-server-core";
-import { makeExecutableSchema } from "@graphql-tools/schema";
+import { ApolloServer } from "@apollo/server";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { prisma } from "../prisma-client";
 import { faktoryClient } from "../faktoryClient";
 import { RedisClient } from "../db";
 import { logger } from "../logger";
+import { koaMiddleware } from "@as-integrations/koa";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import bodyParser from "koa-bodyparser";
 
 export async function serverRun() {
-  const typeDefs = gql(
-    await fs.readFile(require.resolve("../../schema.gql"), "utf8")
+  const typeDefs = await fs.readFile(
+    require.resolve("../../schema.gql"),
+    "utf8"
   );
 
   const app = new Koa();
   app.use(cors());
+  app.use(bodyParser());
 
   const router = new Router();
-  const httpServer = createServer();
+  const httpServer = createServer(app.callback());
   const schema = makeExecutableSchema({ typeDefs, resolvers: appResolvers });
   const wsServer = new WebSocketServer({
     server: httpServer,
@@ -50,16 +51,10 @@ export async function serverRun() {
 
   const server = new ApolloServer({
     schema,
-    context: (params): Promise<AppContext> => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      return createContext(params.ctx.request.headers);
-    },
     introspection: true,
-    debug: false,
-    formatError: (error) => {
-      console.log(error);
-      if (error.originalError instanceof AtError) {
-        const atError = error.originalError;
+    formatError: (_formattedError, error) => {
+      const atError = (error as any).originalError;
+      if (atError instanceof AtError) {
         return {
           message: atError.data.message,
           extensions: {
@@ -68,6 +63,7 @@ export async function serverRun() {
           },
         };
       } else {
+        // TODO: 表示してもいいエラーは返す
         return {
           message: "サーバー内部エラー",
         };
@@ -75,17 +71,6 @@ export async function serverRun() {
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
-      ApolloServerPluginLandingPageGraphQLPlayground({
-        tabs: [
-          {
-            endpoint: "/",
-            query: "",
-            headers: {
-              "X-Token": "",
-            },
-          },
-        ],
-      }),
       {
         async serverWillStart() {
           return {
@@ -115,11 +100,16 @@ export async function serverRun() {
       ctx.body = "NG";
     }
   });
-  server.applyMiddleware({ app, path: "/" });
   app.use(router.routes());
   app.use(router.allowedMethods());
-
-  httpServer.on("request", app.callback());
+  app.use(
+    koaMiddleware(server, {
+      context: (params): Promise<AppContext> => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        return createContext(params.ctx.request.headers);
+      },
+    })
+  );
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: Config.server.port }, resolve)
