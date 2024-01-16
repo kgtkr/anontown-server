@@ -12,6 +12,9 @@ function convertDateQuery(query: G.DateQuery | null): DateQuery | null {
 }
 
 export const query: G.QueryResolvers = {
+  query: async (_obj, _args, _context, _info) => {
+    return query;
+  },
   userID: async (_obj, args, context, _info) => {
     return await context.ports.userRepo.findID(args.sn);
   },
@@ -87,6 +90,7 @@ export const query: G.QueryResolvers = {
       context.ports.authContainer.getToken(),
       {
         key: args.query.key ?? null,
+        keyPrefix: args.query.keyPrefix ?? null,
       }
     );
     return storages.map((x) => x.toAPI(context.ports.authContainer.getToken()));

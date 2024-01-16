@@ -61,9 +61,19 @@ export class StorageRepo implements IStorageRepo {
         },
       });
     }
+    if (!isNullish(query.keyPrefix)) {
+      filter.push({
+        key: {
+          startsWith: query.keyPrefix,
+        },
+      });
+    }
     const storages = await this.prisma.storage.findMany({
       where: {
         AND: filter,
+      },
+      orderBy: {
+        key: "asc",
       },
     });
     return storages.map((x) => toEntity(x));

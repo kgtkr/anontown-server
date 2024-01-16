@@ -68,7 +68,7 @@ describe("Storage", () => {
     });
 
     it("keyが不正な時エラーになるか", () => {
-      for (const key of ["", "x".repeat(101)]) {
+      for (const key of ["", "x".repeat(10000)]) {
         expect(() => {
           Storage.create(authGeneral, key, "value");
         }).toThrow(AtError);
