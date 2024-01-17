@@ -18,29 +18,33 @@ export interface ITagsAPI {
 export type ITopicAPI = ITopicOneAPI | ITopicNormalAPI | ITopicForkAPI;
 export type ITopicSearchAPI = ITopicOneAPI | ITopicNormalAPI;
 
-export interface ITopicBaseAPI<T extends TopicType> {
-  readonly id: string;
-  readonly title: string;
-  readonly update: string;
-  readonly date: string;
-  readonly resCount: number;
-  readonly type: T;
-  readonly active: boolean;
+// --
+// typescript-resolver-files がinterfaceのextendsをサポートしていないので、classとして定義するがinterfaceとして使う
+export class ITopicBaseAPI<T extends TopicType> {
+  readonly id!: string;
+  readonly title!: string;
+  readonly update!: string;
+  readonly date!: string;
+  readonly resCount!: number;
+  readonly type!: T;
+  readonly active!: boolean;
 }
 
-export interface ITopicSearchBaseAPI<T extends TopicSearchType>
-  extends ITopicBaseAPI<T> {
-  readonly tags: Array<string>;
-  readonly text: string;
+export class ITopicSearchBaseAPI<
+  T extends TopicSearchType
+> extends ITopicBaseAPI<T> {
+  readonly tags!: Array<string>;
+  readonly text!: string;
 }
 
-export type ITopicNormalAPI = ITopicSearchBaseAPI<"normal">;
+export class ITopicNormalAPI extends ITopicSearchBaseAPI<"normal"> {}
 
-export type ITopicOneAPI = ITopicSearchBaseAPI<"one">;
+export class ITopicOneAPI extends ITopicSearchBaseAPI<"one"> {}
 
-export interface ITopicForkAPI extends ITopicBaseAPI<"fork"> {
-  readonly parentID: string;
+export class ITopicForkAPI extends ITopicBaseAPI<"fork"> {
+  readonly parentID!: string;
 }
+// --
 
 export type TopicSearchType = "one" | "normal";
 export type TopicType = TopicSearchType | "fork";

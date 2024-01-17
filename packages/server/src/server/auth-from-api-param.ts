@@ -4,7 +4,6 @@ import { ITokenRepo, IUserRepo } from "../ports";
 import { AtAuthError } from "../at-error";
 
 import { isNullish } from "@kgtkr/utils";
-import * as G from "../generated/graphql";
 
 export async function tokenHeaderToToken(
   tokenRepo: ITokenRepo,
@@ -18,7 +17,11 @@ export async function tokenHeaderToToken(
 
 export async function authUserRequestToUser(
   userRepo: IUserRepo,
-  apiParamUser: G.AuthUser
+  apiParamUser: {
+    id?: string | null;
+    pass: string;
+    sn?: string | null;
+  }
 ): Promise<IAuthUser> {
   let id;
   if (!isNullish(apiParamUser.id) && isNullish(apiParamUser.sn)) {

@@ -13,27 +13,30 @@ export interface ITokenReq {
   readonly active: boolean;
 }
 
-export interface ITokenReqAPI {
-  readonly token: string;
-  readonly key: string;
+export class ITokenReqAPI {
+  readonly token!: string;
+  readonly key!: string;
 }
 
 export type TokenType = "master" | "general";
 
 export type ITokenAPI = ITokenGeneralAPI | ITokenMasterAPI;
 
-export interface ITokenBaseAPI<T extends TokenType> {
-  readonly id: string;
-  readonly key: string;
-  readonly date: string;
-  readonly type: T;
+// --
+// typescript-resolver-files がinterfaceのextendsをサポートしていないので、classとして定義するがinterfaceとして使う
+export class ITokenBaseAPI<T extends TokenType> {
+  readonly id!: string;
+  readonly key!: string;
+  readonly date!: string;
+  readonly type!: T;
 }
 
-export type ITokenMasterAPI = ITokenBaseAPI<"master">;
+export class ITokenMasterAPI extends ITokenBaseAPI<"master"> {}
 
-export interface ITokenGeneralAPI extends ITokenBaseAPI<"general"> {
-  readonly clientID: string;
+export class ITokenGeneralAPI extends ITokenBaseAPI<"general"> {
+  readonly clientID!: string;
 }
+// --
 
 export type Token = TokenMaster | TokenGeneral;
 

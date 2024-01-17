@@ -1,0 +1,31 @@
+type Storage {
+  key: String!
+  value: String!
+}
+
+input StorageQuery {
+  key: [String!]
+  keyPrefix: String
+}
+
+extend type Query {
+  storages(query: StorageQuery!): [Storage!]!
+}
+
+input SetStoragesInput {
+  storages: [StorageInput!]!
+}
+
+input StorageInput {
+  key: String!
+  value: String!
+}
+
+type SetStoragesPayload {
+  storages: [Storage!]!
+}
+
+extend type Mutation {
+  setStorages(input: SetStoragesInput!): SetStoragesPayload!
+  delStorage(key: String!): Boolean
+}

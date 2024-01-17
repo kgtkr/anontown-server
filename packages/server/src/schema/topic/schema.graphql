@@ -1,0 +1,96 @@
+interface Topic {
+  id: ID!
+  title: String!
+  update: DateTime!
+  date: DateTime!
+  resCount: Int!
+  active: Boolean!
+  subscribe: Boolean
+}
+
+interface TopicSearch {
+  id: ID!
+  title: String!
+  update: DateTime!
+  date: DateTime!
+  resCount: Int!
+  active: Boolean!
+  subscribe: Boolean
+
+  tags: [String!]!
+  text: String!
+}
+
+type TopicNormal implements Topic & TopicSearch {
+  id: ID!
+  title: String!
+  update: DateTime!
+  date: DateTime!
+  resCount: Int!
+  active: Boolean!
+  subscribe: Boolean
+
+  tags: [String!]!
+  text: String!
+}
+
+type TopicOne implements Topic & TopicSearch {
+  id: ID!
+  title: String!
+  update: DateTime!
+  date: DateTime!
+  resCount: Int!
+  active: Boolean!
+  subscribe: Boolean
+
+  tags: [String!]!
+  text: String!
+}
+
+type TopicFork implements Topic {
+  id: ID!
+  title: String!
+  update: DateTime!
+  date: DateTime!
+  resCount: Int!
+  active: Boolean!
+  subscribe: Boolean
+
+  parent: TopicNormal!
+}
+
+type Tags {
+  name: String!
+  count: Int!
+}
+
+input TopicQuery {
+  id: [ID!]
+  title: String
+  tags: [String!]
+  activeOnly: Boolean
+  parent: ID
+}
+
+extend type Mutation {
+  createTopicNormal(
+    title: String!
+    tags: [String!]!
+    text: String!
+  ): TopicNormal!
+  createTopicOne(title: String!, tags: [String!]!, text: String!): TopicOne!
+  createTopicFork(title: String!, parent: ID!): TopicFork!
+  updateTopic(
+    id: ID!
+    title: String
+    tags: [String!]
+    text: String
+  ): TopicNormal!
+  subscribeTopic(topic: ID!): Boolean # void
+  unsubscribeTopic(topic: ID!): Boolean # void
+}
+
+extend type Query {
+  topics(query: TopicQuery!, skip: Int! = 0, limit: Int! = 100): [Topic!]!
+  topicTags(limit: Int! = 100): [Tags!]!
+}

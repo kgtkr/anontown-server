@@ -1,10 +1,11 @@
 import cors from "@koa/cors";
 import Koa from "koa";
-import * as fs from "fs/promises";
 import { createServer } from "http";
 import { AtError } from "../at-error";
 import { Config } from "../config";
-import { resolvers as appResolvers } from "../resolvers";
+import { resolvers } from "../schema/resolvers.generated";
+import { resolveTypes } from "../schema/resolveTypes";
+import { typeDefs } from "../schema/typeDefs.generated";
 import { runWorker } from "../worker";
 import { AppContext, createContext } from "./context";
 import Router from "@koa/router";
@@ -22,18 +23,16 @@ import bodyParser from "koa-bodyparser";
 import { GraphQLError } from "graphql";
 
 export async function serverRun() {
-  const typeDefs = await fs.readFile(
-    require.resolve("../../schema.gql"),
-    "utf8"
-  );
-
   const app = new Koa();
   app.use(cors());
   app.use(bodyParser());
 
   const router = new Router();
   const httpServer = createServer(app.callback());
-  const schema = makeExecutableSchema({ typeDefs, resolvers: appResolvers });
+  const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers: [resolvers, resolveTypes],
+  });
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: "/",

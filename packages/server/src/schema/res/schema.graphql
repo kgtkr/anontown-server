@@ -1,0 +1,212 @@
+# res vote flag
+enum VoteFlag {
+  # up voted
+  uv
+  # down voted
+  dv
+  # not voted
+  not
+}
+
+# res delete flag
+enum ResDeleteFlag {
+  # by user
+  self
+  # by manager
+  freeze
+}
+
+interface Res {
+  # res id
+  id: ID!
+  # posted topic
+  topic: Topic!
+  # post date
+  date: DateTime!
+  # yours
+  self: Boolean
+  # up vote count
+  uv: Int!
+  # down vote count
+  dv: Int!
+  # hash(user,topic,date)
+  hash: String!
+  # reply count
+  replyCount: Int!
+  # you vote flag
+  voteFlag: VoteFlag
+}
+
+# normal res
+type ResNormal implements Res {
+  # res id
+  id: ID!
+  # posted topic
+  topic: Topic!
+  # post date
+  date: DateTime!
+  # yours
+  self: Boolean
+  # up vote count
+  uv: Int!
+  # down vote count
+  dv: Int!
+  # hash(user,topic,date)
+  hash: String!
+  # reply count
+  replyCount: Int!
+  # you vote flag
+  voteFlag: VoteFlag
+
+  # res name
+  name: String
+  # res text
+  text: String!
+  # reply res
+  reply: Res
+  # res profile
+  profile: Profile
+  # is yours reply
+  isReply: Boolean
+}
+
+# post history notice res
+type ResHistory implements Res {
+  # res id
+  id: ID!
+  # post topic
+  topic: Topic!
+  # post date
+  date: DateTime!
+  # yours
+  self: Boolean
+  # up vote count
+  uv: Int!
+  # down vote count
+  dv: Int!
+  # hash(date,user,topic)
+  hash: String!
+  # was reply count
+  replyCount: Int!
+  # you vote flag
+  voteFlag: VoteFlag
+
+  # target history
+  history: History!
+}
+
+# first res in One/Fork Topic
+type ResTopic implements Res {
+  # res id
+  id: ID!
+  # post topic
+  topic: Topic!
+  # post date
+  date: DateTime!
+  # yours
+  self: Boolean
+  # up vote count
+  uv: Int!
+  # down vote count
+  dv: Int!
+  # hash(user,topic,date)
+  hash: String!
+  # reply count
+  replyCount: Int!
+  # you vote flag
+  voteFlag: VoteFlag
+}
+
+# new fork topic notice res
+type ResFork implements Res {
+  # res id
+  id: ID!
+  # post topic
+  topic: Topic!
+  # post date
+  date: DateTime!
+  # yours
+  self: Boolean
+  # up vote count
+  uv: Int!
+  # down vote count
+  dv: Int!
+  # hash(user,topic,date)
+  hash: String!
+  # reply count
+  replyCount: Int!
+  # you vote flag
+  voteFlag: VoteFlag
+
+  # target fork topic
+  fork: TopicFork!
+}
+# deteled res
+type ResDelete implements Res {
+  # res id
+  id: ID!
+  # post topic
+  topic: Topic!
+  # post date
+  date: DateTime!
+  # yours
+  self: Boolean
+  # up vote count
+  uv: Int!
+  # down vote count
+  dv: Int!
+  # hash(user,topic,date)
+  hash: String!
+  # reply count
+  replyCount: Int!
+  # you vote flag
+  voteFlag: VoteFlag
+
+  # delete flag
+  flag: ResDeleteFlag!
+}
+
+input ResQuery {
+  id: [ID!]
+  topic: ID
+  notice: Boolean
+  hash: String
+  reply: ID
+  profile: ID
+  self: Boolean
+  text: String
+  date: DateQuery
+}
+
+enum VoteType {
+  uv
+  dv
+  cv
+}
+
+
+extend type Query {
+  reses(query: ResQuery!, limit: Int! = 100): [Res!]!
+}
+
+extend type Mutation {
+  createRes(
+    topic: String!
+    name: String
+    text: String!
+    reply: String
+    profile: String
+    age: Boolean!
+  ): ResNormal!
+  voteRes(res: ID!, type: VoteType!): Res!
+  delRes(res: ID!): ResDelete!
+}
+
+type ResSubscript {
+  res: Res!
+  count: Int!
+}
+
+extend type Subscription {
+  resAdded(topic: ID!): ResSubscript!
+}

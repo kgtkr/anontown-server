@@ -1,0 +1,35 @@
+# client app
+type Client {
+  # client id
+  id: ID!
+  name: String!
+  # callback url
+  url: String!
+  # yours
+  self: Boolean
+  # create date
+  date: DateTime!
+  # update date
+  update: DateTime!
+}
+
+input ClientQuery {
+  id: [ID!]
+  self: Boolean
+}
+
+type CreateClientResponseError {
+  name: ValidateData!
+  url: Boolean!
+}
+
+union CreateClientResponse = Client | CreateClientResponseError
+
+extend type Mutation {
+  createClient(name: String!, url: String!): Client!
+  updateClient(id: ID!, name: String, url: String): Client!
+}
+
+extend type Query {
+  clients(query: ClientQuery!): [Client!]!
+}
