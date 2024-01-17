@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const createTokenGeneral: NonNullable<MutationResolvers['createTokenGeneral']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.createTokenGeneral resolver logic here */ };

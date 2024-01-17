@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const createProfile: NonNullable<MutationResolvers['createProfile']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.createProfile resolver logic here */ };

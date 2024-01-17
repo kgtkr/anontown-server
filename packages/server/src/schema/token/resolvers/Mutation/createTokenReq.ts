@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const createTokenReq: NonNullable<MutationResolvers['createTokenReq']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.createTokenReq resolver logic here */ };

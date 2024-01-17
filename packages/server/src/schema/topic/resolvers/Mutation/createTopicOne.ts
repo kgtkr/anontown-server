@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const createTopicOne: NonNullable<MutationResolvers['createTopicOne']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.createTopicOne resolver logic here */ };

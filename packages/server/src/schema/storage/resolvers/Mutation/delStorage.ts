@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const delStorage: NonNullable<MutationResolvers['delStorage']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.delStorage resolver logic here */ };

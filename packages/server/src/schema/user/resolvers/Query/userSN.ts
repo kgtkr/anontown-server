@@ -1,0 +1,2 @@
+import type   { QueryResolvers } from './../../../types.generated';
+        export const userSN: NonNullable<QueryResolvers['userSN']> = async (_parent, _arg, _ctx) => { /* Implement Query.userSN resolver logic here */ };

@@ -1,0 +1,2 @@
+import type   { QueryResolvers } from './../../../types.generated';
+        export const histories: NonNullable<QueryResolvers['histories']> = async (_parent, _arg, _ctx) => { /* Implement Query.histories resolver logic here */ };

@@ -1,0 +1,2 @@
+import type   { QueryResolvers } from './../../../types.generated';
+        export const storages: NonNullable<QueryResolvers['storages']> = async (_parent, _arg, _ctx) => { /* Implement Query.storages resolver logic here */ };

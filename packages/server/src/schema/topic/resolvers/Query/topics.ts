@@ -1,0 +1,2 @@
+import type   { QueryResolvers } from './../../../types.generated';
+        export const topics: NonNullable<QueryResolvers['topics']> = async (_parent, _arg, _ctx) => { /* Implement Query.topics resolver logic here */ };

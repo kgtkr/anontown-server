@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const delRes: NonNullable<MutationResolvers['delRes']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.delRes resolver logic here */ };
