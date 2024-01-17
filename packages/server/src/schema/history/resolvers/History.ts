@@ -8,5 +8,5 @@ export const History: HistoryResolvers = {
       throw new Error();
     }
     return topic;
-  },
+  }
 };

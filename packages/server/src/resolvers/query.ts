@@ -95,18 +95,6 @@ export const query: G.QueryResolvers = {
     );
     return storages.map((x) => x.toAPI(context.ports.authContainer.getToken()));
   },
-  token: async (_obj, _args, context, _info) => {
-    const token = await context.ports.tokenRepo.findOne(
-      context.ports.authContainer.getToken().id
-    );
-    return token.toAPI();
-  },
-  tokens: async (_obj, _args, context, _info: any) => {
-    const tokens = await context.ports.tokenRepo.findAll(
-      context.ports.authContainer.getTokenMaster()
-    );
-    return tokens.map((t) => t.toAPI());
-  },
   topics: async (_obj, args, context, _info) => {
     const topic = await context.ports.topicRepo.find(
       {

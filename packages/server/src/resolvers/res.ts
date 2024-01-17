@@ -8,23 +8,6 @@ const resBase: Pick<G.ResResolvers, "topic"> = {
   },
 };
 
-export const res: G.ResResolvers = {
-  __resolveType(obj) {
-    switch (obj.type) {
-      case "normal":
-        return "ResNormal";
-      case "history":
-        return "ResHistory";
-      case "topic":
-        return "ResTopic";
-      case "fork":
-        return "ResFork";
-      case "delete":
-        return "ResDelete";
-    }
-  },
-};
-
 export const resNormal: G.ResNormalResolvers = {
   ...resBase,
   reply: async (res, _args, context, _info) => {

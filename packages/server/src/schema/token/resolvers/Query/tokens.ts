@@ -1,2 +1,12 @@
-import type   { QueryResolvers } from './../../../types.generated';
-        export const tokens: NonNullable<QueryResolvers['tokens']> = async (_parent, _arg, _ctx) => { /* Implement Query.tokens resolver logic here */ };
+import type { QueryResolvers } from "./../../../types.generated";
+export const tokens: NonNullable<QueryResolvers['tokens']> = async (
+  _obj,
+  _args,
+  context,
+  _info
+) => {
+  const tokens = await context.ports.tokenRepo.findAll(
+    context.ports.authContainer.getTokenMaster()
+  );
+  return tokens.map((t) => t.toAPI());
+};

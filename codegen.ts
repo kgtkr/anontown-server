@@ -7,6 +7,8 @@ const config: CodegenConfig = {
     "src/schema": defineConfig({
       typesPluginsConfig: {
         contextType: "../server#AppContext",
+        optionalResolveType: false,
+        resolversNonOptionalTypename: false,
       },
     }),
   },
