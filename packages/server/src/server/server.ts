@@ -19,6 +19,7 @@ import { logger } from "../logger";
 import { koaMiddleware } from "@as-integrations/koa";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import bodyParser from "koa-bodyparser";
+import { GraphQLError } from "graphql";
 
 export async function serverRun() {
   const typeDefs = await fs.readFile(
@@ -52,18 +53,19 @@ export async function serverRun() {
   const server = new ApolloServer({
     schema,
     introspection: true,
-    formatError: (_formattedError, error) => {
-      const atError = (error as any).originalError;
-      if (atError instanceof AtError) {
+    formatError: (formattedError, error) => {
+      const originalError: unknown = (error as any).originalError;
+      if (originalError instanceof AtError) {
         return {
-          message: atError.data.message,
+          message: originalError.data.message,
           extensions: {
-            code: atError.data.code,
-            data: atError.data.data,
+            code: originalError.data.code,
+            data: originalError.data.data,
           },
         };
+      } else if (originalError instanceof GraphQLError) {
+        return formattedError;
       } else {
-        // TODO: 表示してもいいエラーは返す
         return {
           message: "サーバー内部エラー",
         };
