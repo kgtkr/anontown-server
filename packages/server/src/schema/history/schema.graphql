@@ -1,0 +1,29 @@
+# topic edit history
+type History {
+  # history id
+  id: ID!
+  # target topic
+  topic: TopicNormal!
+  # topic title
+  title: String!
+  # topic tags
+  tags: [String!]!
+  # topic text
+  text: String!
+  # history create date
+  date: DateTime!
+  # hash(user,date,topic)
+  hash: String!
+  # yours
+  self: Boolean
+}
+
+input HistoryQuery {
+  id: [ID!]
+  topic: [ID!]
+  date: DateQuery
+}
+
+extend type Query {
+  histories(query: HistoryQuery!, limit: Int! = 100): [History!]!
+}

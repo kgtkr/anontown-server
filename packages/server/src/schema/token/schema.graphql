@@ -1,0 +1,42 @@
+type TokenReq {
+  token: ID!
+  key: String!
+}
+
+interface Token {
+  id: ID!
+  key: String!
+  date: DateTime!
+}
+
+type TokenMaster implements Token {
+  id: ID!
+  key: String!
+  date: DateTime!
+}
+
+type TokenGeneral implements Token {
+  id: ID!
+  key: String!
+  date: DateTime!
+
+  client: Client!
+}
+
+extend type Query {
+  token: Token!
+  tokens: [Token!]!
+}
+
+type CreateTokenGeneralResponse {
+  token: TokenGeneral!
+  req: TokenReq!
+}
+
+extend type Mutation {
+  delTokenClient(client: ID!): Boolean
+  createTokenGeneral(client: ID!): CreateTokenGeneralResponse!
+  createTokenReq: TokenReq!
+  createTokenMaster(auth: AuthUser!): TokenMaster!
+  authTokenReq(id: ID!, key: String!): TokenGeneral!
+}

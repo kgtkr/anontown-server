@@ -1,0 +1,36 @@
+type User {
+  id: ID!
+  sn: String!
+}
+
+input AuthUser {
+  id: String
+  sn: String
+  pass: String!
+}
+
+extend type Query {
+  userID(sn: String!): ID!
+  userSN(id: ID!): String!
+  user: User!
+}
+
+
+type UpdateUserResponse {
+  user: User!
+  token: TokenMaster!
+}
+
+type CreateUserResponse {
+  user: User!
+  token: TokenMaster!
+}
+
+extend type Mutation {
+  createUser(
+    sn: String!
+    pass: String!
+    recaptcha: String!
+  ): CreateUserResponse!
+  updateUser(sn: String, pass: String, auth: AuthUser!): UpdateUserResponse!
+}

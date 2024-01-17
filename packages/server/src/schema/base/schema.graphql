@@ -1,0 +1,51 @@
+scalar DateTime
+
+input DateQuery {
+  date: DateTime!
+  type: DateType!
+}
+
+enum DateType {
+  gt
+  gte
+  lt
+  lte
+}
+
+enum CharType {
+  lc
+  uc
+  d
+  ub
+  hy
+  hira
+  kana
+  han
+}
+
+type ValidateData {
+  char: [CharType]
+  min: Int
+  max: Int
+}
+
+
+type Query {
+  query: Query!
+}
+
+type Mutation {
+  # TODO: 移動
+  resisterPushSubscription(
+    endpoint: String!
+    p256dh: String!
+    auth: String!
+  ): Boolean # void
+}
+type Subscription
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}

@@ -1,0 +1,31 @@
+# user profile
+type Profile {
+  # profile id
+  id: ID!
+  # yours
+  self: Boolean
+  # profile name
+  name: String!
+  # profile text
+  text: String!
+  # create date
+  date: DateTime!
+  # update
+  update: DateTime!
+  # screen name
+  sn: String!
+}
+
+input ProfileQuery {
+  id: [ID!]
+  self: Boolean
+}
+
+extend type Mutation {
+  createProfile(name: String!, text: String!, sn: String!): Profile!
+  updateProfile(id: ID!, name: String, text: String, sn: String): Profile!
+}
+
+extend type Query {
+  profiles(query: ProfileQuery!): [Profile!]!
+}
