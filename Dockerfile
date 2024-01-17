@@ -1,5 +1,6 @@
 FROM node:20.11.0-slim
 
+ENV NODE_ENV=production
 WORKDIR /home
 
 RUN apt update && \
