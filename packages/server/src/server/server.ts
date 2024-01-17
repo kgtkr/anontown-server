@@ -66,6 +66,7 @@ export async function serverRun() {
       } else if (originalError instanceof GraphQLError) {
         return formattedError;
       } else {
+        logger.error("server error", error);
         return {
           message: "サーバー内部エラー",
         };
