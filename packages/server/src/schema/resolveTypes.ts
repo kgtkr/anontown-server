@@ -27,4 +27,26 @@ export const resolveTypes: Resolvers = {
       }
     },
   },
+  Topic: {
+    __resolveType(obj) {
+      switch (obj.type) {
+        case "normal":
+          return "TopicNormal";
+        case "one":
+          return "TopicOne";
+        case "fork":
+          return "TopicFork";
+      }
+    },
+  },
+  TopicSearch: {
+    __resolveType(obj) {
+      switch (obj.type) {
+        case "normal":
+          return "TopicNormal";
+        case "one":
+          return "TopicOne";
+      }
+    },
+  },
 };
