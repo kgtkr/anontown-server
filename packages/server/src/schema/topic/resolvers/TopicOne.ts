@@ -1,6 +1,6 @@
 import type { TopicOneResolvers } from "./../../types.generated";
-import { TopicSearchBase } from "./TopicSearchBase";
+import { base_Topic } from "./base_Topic";
 
 export const TopicOne: TopicOneResolvers = {
-  ...TopicSearchBase,
+  subscribe: base_Topic.subscribe,
 };

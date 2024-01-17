@@ -1,6 +1,6 @@
 import type { ResDeleteResolvers } from "./../../types.generated";
-import { ResBase } from "./ResBase";
+import { base_Res } from "./base_Res";
 
 export const ResDelete: ResDeleteResolvers = {
-  ...ResBase,
+  topic: base_Res.topic,
 };

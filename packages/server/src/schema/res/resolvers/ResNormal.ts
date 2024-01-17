@@ -1,9 +1,9 @@
 import { getProfile, getRes } from "../../../usecases";
 import type { ResNormalResolvers } from "./../../types.generated";
-import { ResBase } from "./ResBase";
+import { base_Res } from "./base_Res";
 
 export const ResNormal: ResNormalResolvers = {
-  ...ResBase,
+  topic: base_Res.topic,
   reply: async (res, _args, context, _info) => {
     if (res.replyID !== null) {
       const reply = await getRes({ id: res.replyID }, context.ports);

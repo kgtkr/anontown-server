@@ -1,5 +1,5 @@
 import type { QueryResolvers } from "./../../../types.generated";
-export const token: NonNullable<QueryResolvers['token']> = async (
+export const token: NonNullable<QueryResolvers["token"]> = async (
   _obj,
   _args,
   context,
