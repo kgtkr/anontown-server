@@ -12,4 +12,5 @@ COPY package.json package-lock.json lerna.json tsconfig.base.json ./
 RUN npm ci
 RUN npx lerna run build
 
+ENV NODE_ENV=production
 CMD npx lerna run start --scope @anontown-backend/server --stream 
