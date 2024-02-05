@@ -6,7 +6,7 @@ import { Config } from "../config";
 import { resolvers } from "../schema/resolvers.generated";
 import { resolveTypes } from "../schema/resolveTypes";
 import { typeDefs } from "../schema/typeDefs.generated";
-import { runWorker } from "../worker";
+import { startWorker } from "../worker";
 import { AppContext, createContext } from "./context";
 import Router from "@koa/router";
 import { ApolloServer } from "@apollo/server";
@@ -21,6 +21,7 @@ import { koaMiddleware } from "@as-integrations/koa";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import bodyParser from "koa-bodyparser";
 import { GraphQLError } from "graphql";
+import { startCron } from "../cron";
 
 export async function serverRun() {
   const app = new Koa();
@@ -86,7 +87,8 @@ export async function serverRun() {
   });
   await server.start();
 
-  await runWorker();
+  startCron();
+  await startWorker();
 
   router.get("/ping", (ctx, _next) => (ctx.body = "OK"));
   router.get("/livez", (ctx, _next) => (ctx.body = "OK"));

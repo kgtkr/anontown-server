@@ -1,20 +1,19 @@
-import { CronJob } from "cron";
-import { Logger, TopicRepo, UserRepo } from "./adapters";
-import { ResWaitCountKey } from "./entities";
-import { prisma } from "./prisma-client";
 import faktory from "faktory-worker";
 import { Config } from "./config";
-import * as SendPushNotificationJob from "./jobs/SendPushNotification";
+import { SendPushNotificationJob } from "./jobs/SendPushNotificationJob";
+import { CheckDeadTopicJob } from "./jobs/CheckDeadTopicJob";
 import { createPorts, PortsConfig } from "./createPorts";
+import { registerWorker } from "./jobs/JobType";
+import { UserPointResetJob } from "./jobs/UserPointResetJob";
+import { UserCountResetJob } from "./jobs/UserCountResetJob";
 
-export async function runWorker(): Promise<void> {
+export async function startWorker(): Promise<void> {
   const worker = await faktory.work({
     url: Config.faktory.url,
   });
 
-  worker.register(SendPushNotificationJob.JobType, async (raw) => {
+  registerWorker(worker, SendPushNotificationJob, async (arg) => {
     const ports = createPorts(PortsConfig);
-    const arg = SendPushNotificationJob.Arg.parse(raw);
     await ports.notificationSender.sendNotification(
       arg.userId,
       arg.pushSubscription,
@@ -22,61 +21,18 @@ export async function runWorker(): Promise<void> {
     );
   });
 
-  runTopicWorker();
-  runUserWorker();
-}
+  registerWorker(worker, CheckDeadTopicJob, async (_arg) => {
+    const ports = createPorts(PortsConfig);
+    await ports.topicRepo.cronTopicCheck(ports.clock.now());
+  });
 
-function runTopicWorker() {
-  // 毎時間トピ落ちチェック
-  new CronJob({
-    cronTime: "00 00 * * * *",
-    onTick: () => {
-      void (async () => {
-        const logger = new Logger();
-        const topicRepo = new TopicRepo(prisma);
+  registerWorker(worker, UserPointResetJob, async (_arg) => {
+    const ports = createPorts(PortsConfig);
+    await ports.userRepo.cronPointReset();
+  });
 
-        logger.info("TopicCron");
-        await topicRepo.cronTopicCheck(new Date());
-      })();
-    },
-    start: false,
-    timeZone: "Asia/Tokyo",
-  }).start();
-}
-
-function runUserWorker() {
-  const start = (cronTime: string, key: ResWaitCountKey) => {
-    new CronJob({
-      cronTime,
-      onTick: () => {
-        void (async () => {
-          const logger = new Logger();
-          const userRepo = new UserRepo(prisma);
-
-          logger.info(`UserCron ${key}`);
-          await userRepo.cronCountReset(key);
-        })();
-      },
-      start: false,
-      timeZone: "Asia/Tokyo",
-    }).start();
-  };
-
-  start("00 00,10,20,30,40,50 * * * *", "m10");
-  start("00 00,30 * * * *", "m30");
-  start("00 00 * * * *", "h1");
-  start("00 00 00,06,12,18 * * *", "h6");
-  start("00 00 00,12 * * *", "h12");
-  start("00 00 00 * * *", "d1");
-  new CronJob({
-    cronTime: "00 00 00 * * *",
-    onTick: () => {
-      void (async () => {
-        const userRepo = new UserRepo(prisma);
-        await userRepo.cronPointReset();
-      })();
-    },
-    start: false,
-    timeZone: "Asia/Tokyo",
-  }).start();
+  registerWorker(worker, UserCountResetJob, async (arg) => {
+    const ports = createPorts(PortsConfig);
+    await ports.userRepo.cronCountReset(arg.key);
+  });
 }
