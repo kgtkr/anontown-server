@@ -22,9 +22,11 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import bodyParser from "koa-bodyparser";
 import { GraphQLError } from "graphql";
 import { startCron } from "../cron";
+import { none, some } from "fp-ts/lib/Option";
 
 export async function serverRun() {
   const app = new Koa();
+  app.proxy = true;
   app.use(cors());
   app.use(bodyParser());
 
@@ -43,7 +45,8 @@ export async function serverRun() {
       schema,
       context: ({ connectionParams }) => {
         return createContext({
-          "x-token": connectionParams?.["token"],
+          rawToken: connectionParams?.["token"],
+          ip: none,
         });
       },
     },
@@ -110,7 +113,10 @@ export async function serverRun() {
     koaMiddleware(server, {
       context: (params): Promise<AppContext> => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        return createContext(params.ctx.request.headers);
+        return createContext({
+          rawToken: params.ctx.request.headers["x-token"],
+          ip: some(params.ctx.ip),
+        });
       },
     })
   );

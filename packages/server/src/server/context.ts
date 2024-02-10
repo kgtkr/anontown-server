@@ -1,6 +1,6 @@
 import { prisma } from "../prisma-client";
 import { array, option } from "fp-ts";
-import { none, some } from "fp-ts/lib/Option";
+import { none, some, Option } from "fp-ts/lib/Option";
 import { TokenRepo } from "../adapters";
 import { AtAuthError } from "../at-error";
 import { ITokenRepo, Ports } from "../ports";
@@ -30,15 +30,14 @@ async function createToken(raw: unknown, tokenRepo: ITokenRepo) {
   );
 }
 
-export async function createContext(
-  headers: Record<string, unknown>
-): Promise<AppContext> {
-  const xRealIp = headers["x-real-ip"];
-  const ip = typeof xRealIp === "string" ? some(xRealIp) : none;
-  const token = await createToken(
-    headers["x-token"] || headers["X-Token"],
-    new TokenRepo(prisma)
-  );
+export async function createContext({
+  rawToken,
+  ip,
+}: {
+  rawToken: unknown;
+  ip: Option<string>;
+}): Promise<AppContext> {
+  const token = await createToken(rawToken, new TokenRepo(prisma));
 
   return {
     ports: createPorts({
