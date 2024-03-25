@@ -41,44 +41,40 @@ export type IResAPI =
   | IResForkAPI
   | IResDeleteAPI;
 
-// --
-// typescript-resolver-files がinterfaceのextendsをサポートしていないので、classとして定義するがinterfaceとして使う
-export class IResBaseAPI<T extends ResAPIType> {
-  readonly id!: string;
-  readonly topicID!: string;
-  readonly date!: Date;
-  readonly self!: boolean | null;
-  readonly uv!: number;
-  readonly dv!: number;
-  readonly hash!: string;
-  readonly replyCount!: number;
-  readonly voteFlag!: VoteFlag | null;
-  readonly type!: T;
+export interface IResBaseAPI<T extends ResAPIType> {
+  readonly id: string;
+  readonly topicID: string;
+  readonly date: Date;
+  readonly self: boolean | null;
+  readonly uv: number;
+  readonly dv: number;
+  readonly hash: string;
+  readonly replyCount: number;
+  readonly voteFlag: VoteFlag | null;
+  readonly type: T;
 }
 
-export class IResNormalAPI extends IResBaseAPI<"normal"> {
-  readonly name!: string | null;
-  readonly text!: string;
-  readonly replyID!: string | null;
-  readonly profileID!: string | null;
-  readonly isReply!: boolean | null;
+export interface IResNormalAPI extends IResBaseAPI<"normal"> {
+  readonly name: string | null;
+  readonly text: string;
+  readonly replyID: string | null;
+  readonly profileID: string | null;
+  readonly isReply: boolean | null;
 }
 
-export class IResHistoryAPI extends IResBaseAPI<"history"> {
-  readonly historyID!: string;
+export interface IResHistoryAPI extends IResBaseAPI<"history"> {
+  readonly historyID: string;
 }
 
-export class IResTopicAPI extends IResBaseAPI<"topic"> {}
+export type IResTopicAPI = IResBaseAPI<"topic">;
 
-export class IResForkAPI extends IResBaseAPI<"fork"> {
-  readonly forkID!: string;
+export interface IResForkAPI extends IResBaseAPI<"fork"> {
+  readonly forkID: string;
 }
 
-export class IResDeleteAPI extends IResBaseAPI<"delete"> {
-  readonly flag!: "self" | "freeze";
+export interface IResDeleteAPI extends IResBaseAPI<"delete"> {
+  readonly flag: "self" | "freeze";
 }
-
-// --
 
 export type VoteFlag = "uv" | "dv" | "not";
 export type ResDeleteFlag = "active" | "self" | "freeze";

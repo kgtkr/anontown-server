@@ -36,7 +36,7 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
-    "@eddeee888/gcg-typescript-resolver-files": "^0.7.2",
+    "@eddeee888/gcg-typescript-resolver-files": "pr242-run423-1",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/core": "^4.0.0",
     "@graphql-codegen/typescript": "^4.0.1",
