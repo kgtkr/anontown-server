@@ -2,7 +2,6 @@
   "name": "@anontown-backend/root",
   "private": true,
   "devDependencies": {
-    "@eddeee888/gcg-typescript-resolver-files": "^0.0.0-pr242-run423-1-20240323110222",
     "@lerna-lite/cli": "^1.11.2",
     "@lerna-lite/run": "^1.11.2",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
