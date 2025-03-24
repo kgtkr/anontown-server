@@ -22,21 +22,18 @@ export type TokenType = "master" | "general";
 
 export type ITokenAPI = ITokenGeneralAPI | ITokenMasterAPI;
 
-// --
-// typescript-resolver-files がinterfaceのextendsをサポートしていないので、classとして定義するがinterfaceとして使う
-export class ITokenBaseAPI<T extends TokenType> {
-  readonly id!: string;
-  readonly key!: string;
-  readonly date!: string;
-  readonly type!: T;
+export interface ITokenBaseAPI<T extends TokenType> {
+  readonly id: string;
+  readonly key: string;
+  readonly date: string;
+  readonly type: T;
 }
 
-export class ITokenMasterAPI extends ITokenBaseAPI<"master"> {}
+export type ITokenMasterAPI = ITokenBaseAPI<"master">;
 
-export class ITokenGeneralAPI extends ITokenBaseAPI<"general"> {
-  readonly clientID!: string;
+export interface ITokenGeneralAPI extends ITokenBaseAPI<"general"> {
+  readonly clientID: string;
 }
-// --
 
 export type Token = TokenMaster | TokenGeneral;
 
