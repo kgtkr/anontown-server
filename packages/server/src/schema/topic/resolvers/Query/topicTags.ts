@@ -9,4 +9,3 @@ export const topicTags: NonNullable<QueryResolvers["topicTags"]> = async (
 ) => {
   return await getTopicTags({ limit: args.limit }, context.ports);
 };
-

@@ -17,4 +17,3 @@ export const clients: NonNullable<QueryResolvers["clients"]> = async (
     context.ports
   );
 };
-

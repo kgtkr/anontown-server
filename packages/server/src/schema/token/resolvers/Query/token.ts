@@ -9,4 +9,3 @@ export const token: NonNullable<QueryResolvers["token"]> = async (
 ) => {
   return await getToken({}, context.ports);
 };
-

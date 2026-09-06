@@ -6,4 +6,3 @@ export const createTokenReq: NonNullable<
 > = async (_obj, _args, context, _info) => {
   return await createTokenReqUsecase({}, context.ports);
 };
-

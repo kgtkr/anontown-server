@@ -11,4 +11,3 @@ export const createTokenGeneral: NonNullable<
     context.ports
   );
 };
-

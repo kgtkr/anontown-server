@@ -14,4 +14,3 @@ export const updateProfile: NonNullable<
     context.ports
   );
 };
-

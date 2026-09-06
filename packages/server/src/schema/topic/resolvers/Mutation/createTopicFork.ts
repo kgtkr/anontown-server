@@ -12,4 +12,3 @@ export const createTopicFork: NonNullable<
     context.ports
   );
 };
-

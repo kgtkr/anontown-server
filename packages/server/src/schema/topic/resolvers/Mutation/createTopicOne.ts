@@ -13,4 +13,3 @@ export const createTopicOne: NonNullable<
     context.ports
   );
 };
-

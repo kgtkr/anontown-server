@@ -20,4 +20,3 @@ export const histories: NonNullable<QueryResolvers["histories"]> = async (
     context.ports
   );
 };
-

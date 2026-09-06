@@ -13,4 +13,3 @@ export const updateClient: NonNullable<
     context.ports
   );
 };
-

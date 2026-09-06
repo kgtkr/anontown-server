@@ -9,4 +9,3 @@ export const user: NonNullable<QueryResolvers["user"]> = async (
 ) => {
   return await getUser({}, context.ports);
 };
-

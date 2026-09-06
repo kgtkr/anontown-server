@@ -22,4 +22,3 @@ export const topics: NonNullable<QueryResolvers["topics"]> = async (
     context.ports
   );
 };
-

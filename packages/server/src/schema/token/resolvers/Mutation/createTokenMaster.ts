@@ -11,4 +11,3 @@ export const createTokenMaster: NonNullable<
     context.ports
   );
 };
-

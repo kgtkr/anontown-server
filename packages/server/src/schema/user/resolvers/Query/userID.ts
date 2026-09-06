@@ -9,4 +9,3 @@ export const userID: NonNullable<QueryResolvers["userID"]> = async (
 ) => {
   return await getUserID({ sn: args.sn }, context.ports);
 };
-

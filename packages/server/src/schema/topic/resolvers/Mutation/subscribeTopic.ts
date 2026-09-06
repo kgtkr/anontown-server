@@ -11,4 +11,3 @@ export const subscribeTopic: NonNullable<
     context.ports
   );
 };
-

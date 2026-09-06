@@ -12,4 +12,3 @@ export const authTokenReq: NonNullable<
     context.ports
   );
 };
-

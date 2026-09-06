@@ -16,4 +16,3 @@ export const createUser: NonNullable<MutationResolvers["createUser"]> = async (
     context.ports
   );
 };
-
