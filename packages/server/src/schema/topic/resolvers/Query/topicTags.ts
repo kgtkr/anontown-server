@@ -1,3 +1,4 @@
+import { getTopicTags } from "../../../../usecases";
 import type { QueryResolvers } from "./../../../types.generated";
 
 export const topicTags: NonNullable<QueryResolvers["topicTags"]> = async (
@@ -6,5 +7,6 @@ export const topicTags: NonNullable<QueryResolvers["topicTags"]> = async (
   context,
   _info
 ) => {
-  return await context.ports.topicRepo.findTags(args.limit);
+  return await getTopicTags({ limit: args.limit }, context.ports);
 };
+

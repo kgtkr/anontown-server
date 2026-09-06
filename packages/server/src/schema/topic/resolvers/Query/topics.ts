@@ -1,3 +1,4 @@
+import { getTopics } from "../../../../usecases";
 import type { QueryResolvers } from "./../../../types.generated";
 
 export const topics: NonNullable<QueryResolvers["topics"]> = async (
@@ -6,16 +7,19 @@ export const topics: NonNullable<QueryResolvers["topics"]> = async (
   context,
   _info
 ) => {
-  const topic = await context.ports.topicRepo.find(
+  return await getTopics(
     {
-      id: args.query.id ?? null,
-      title: args.query.title ?? null,
-      tags: args.query.tags ?? null,
-      activeOnly: args.query.activeOnly ?? null,
-      parent: args.query.parent ?? null,
+      query: {
+        id: args.query.id ?? null,
+        title: args.query.title ?? null,
+        tags: args.query.tags ?? null,
+        activeOnly: args.query.activeOnly ?? null,
+        parent: args.query.parent ?? null,
+      },
+      skip: args.skip,
+      limit: args.limit,
     },
-    args.skip,
-    args.limit
+    context.ports
   );
-  return topic.map((t) => t.toAPI());
 };
+

@@ -1,4 +1,13 @@
 export * from "./get-topic";
+export * from "./get-topics";
+export * from "./get-topic-tags";
+export * from "./create-topic-normal";
+export * from "./create-topic-one";
+export * from "./create-topic-fork";
+export * from "./update-topic";
+export * from "./subscribe-topic";
+export * from "./unsubscribe-topic";
+
 export * from "./get-res";
 export * from "./get-history";
 export * from "./get-histories";
