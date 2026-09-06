@@ -24,6 +24,8 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npx lerna run build
+      - name: Check generated files diff
+        run: git diff --exit-code
       - run: npm run format:check
       - run: npm run lint
       - run: |
