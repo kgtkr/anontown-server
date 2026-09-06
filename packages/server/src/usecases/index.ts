@@ -9,6 +9,10 @@ export * from "./subscribe-topic";
 export * from "./unsubscribe-topic";
 
 export * from "./get-res";
+export * from "./get-reses";
+export * from "./create-res";
+export * from "./del-res";
+export * from "./vote-res";
 export * from "./get-history";
 export * from "./get-histories";
 export * from "./get-profile";
