@@ -1,3 +1,4 @@
+import { getStorages } from "../../../../usecases";
 import type { QueryResolvers } from "./../../../types.generated";
 
 export const storages: NonNullable<QueryResolvers["storages"]> = async (
@@ -6,12 +7,13 @@ export const storages: NonNullable<QueryResolvers["storages"]> = async (
   context,
   _info
 ) => {
-  const storages = await context.ports.storageRepo.find(
-    context.ports.authContainer.getToken(),
+  return await getStorages(
     {
-      key: args.query.key ?? null,
-      keyPrefix: args.query.keyPrefix ?? null,
-    }
+      query: {
+        key: args.query.key ?? null,
+        keyPrefix: args.query.keyPrefix ?? null,
+      },
+    },
+    context.ports
   );
-  return storages.map((x) => x.toAPI(context.ports.authContainer.getToken()));
 };

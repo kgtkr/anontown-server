@@ -1,20 +1,13 @@
-import { IStorageAPI, Storage } from "../../../../entities";
+import { setStorages as setStoragesUsecase } from "../../../../usecases";
 import type { MutationResolvers } from "./../../../types.generated";
+
 export const setStorages: NonNullable<
   MutationResolvers["setStorages"]
 > = async (_obj, args, context, _info) => {
-  // TODO: トランザクション
-  const results: IStorageAPI[] = [];
-  for (const storageInput of args.input.storages) {
-    const storage = Storage.create(
-      context.ports.authContainer.getToken(),
-      storageInput.key,
-      storageInput.value
-    );
-    await context.ports.storageRepo.save(storage);
-    results.push(storage.toAPI(context.ports.authContainer.getToken()));
-  }
-  return {
-    storages: results,
-  };
+  return await setStoragesUsecase(
+    {
+      storages: args.input.storages,
+    },
+    context.ports
+  );
 };
