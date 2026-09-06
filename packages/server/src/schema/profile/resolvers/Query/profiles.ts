@@ -1,3 +1,4 @@
+import { getProfiles } from "../../../../usecases";
 import type { QueryResolvers } from "./../../../types.generated";
 
 export const profiles: NonNullable<QueryResolvers["profiles"]> = async (
@@ -6,14 +7,14 @@ export const profiles: NonNullable<QueryResolvers["profiles"]> = async (
   context,
   _info
 ) => {
-  const profiles = await context.ports.profileRepo.find(
-    context.ports.authContainer,
+  return await getProfiles(
     {
-      id: args.query.id ?? null,
-      self: args.query.self ?? null,
-    }
-  );
-  return profiles.map((p) =>
-    p.toAPI(context.ports.authContainer.getTokenOrNull())
+      query: {
+        id: args.query.id ?? null,
+        self: args.query.self ?? null,
+      },
+    },
+    context.ports
   );
 };
+
