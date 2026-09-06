@@ -1,3 +1,4 @@
+import { getHistories } from "../../../../usecases";
 import type { QueryResolvers } from "./../../../types.generated";
 import { convertDateQuery } from "../../../convertDateQuery";
 
@@ -7,15 +8,16 @@ export const histories: NonNullable<QueryResolvers["histories"]> = async (
   context,
   _info
 ) => {
-  const histories = await context.ports.historyRepo.find(
+  return await getHistories(
     {
-      id: args.query.id ?? null,
-      date: convertDateQuery(args.query.date ?? null),
-      topic: args.query.topic ?? null,
+      query: {
+        id: args.query.id ?? null,
+        date: convertDateQuery(args.query.date ?? null),
+        topic: args.query.topic ?? null,
+      },
+      limit: args.limit,
     },
-    args.limit
-  );
-  return histories.map((x) =>
-    x.toAPI(context.ports.authContainer.getTokenOrNull())
+    context.ports
   );
 };
+
