@@ -12,5 +12,9 @@ export * from "./update-client";
 export * from "./get-storages";
 export * from "./set-storages";
 export * from "./del-storage";
-
+export * from "./get-user";
+export * from "./get-user-id";
+export * from "./get-user-sn";
+export * from "./create-user";
+export * from "./update-user";
 

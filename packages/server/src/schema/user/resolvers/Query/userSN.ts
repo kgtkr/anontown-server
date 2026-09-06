@@ -1,3 +1,4 @@
+import { getUserSN } from "../../../../usecases";
 import type { QueryResolvers } from "./../../../types.generated";
 
 export const userSN: NonNullable<QueryResolvers["userSN"]> = async (
@@ -6,5 +7,6 @@ export const userSN: NonNullable<QueryResolvers["userSN"]> = async (
   context,
   _info
 ) => {
-  return (await context.ports.userRepo.findOne(args.id)).sn;
+  return await getUserSN({ id: args.id }, context.ports);
 };
+
