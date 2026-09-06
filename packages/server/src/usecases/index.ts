@@ -38,3 +38,5 @@ export * from "./create-token-master";
 export * from "./create-token-req";
 export * from "./auth-token-req";
 export * from "./del-token-client";
+export * from "./resister-push-subscription";
+
