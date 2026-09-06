@@ -3,6 +3,10 @@ export * from "./get-res";
 export * from "./get-history";
 export * from "./get-profile";
 export * from "./get-client";
+export * from "./get-clients";
+export * from "./create-client";
+export * from "./update-client";
 export * from "./get-storages";
 export * from "./set-storages";
 export * from "./del-storage";
+
