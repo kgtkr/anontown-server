@@ -25,8 +25,11 @@ src/
 1. **Entities (`src/entities/`)**:
    - ドメインのコアロジックをカプセル化。
    - `Immutable.js`（`Record`, `List` 等）やイミュータブルな設計（`Copyable` パターン）を採用。
-   - GraphQL/API レスポンス表現への変換は各エンティティの `toAPI()` メソッドが担う。
    - `fp-ts` の `Option`（`Option<T>`）を内部状態のオプショナル値に活用。
+   - **`I*API` (API表現型 / DTO)**:
+     - 各エンティティに対応する外部公開用のプレーンなインターフェース（例: `IUserAPI`, `ITopicAPI`, `IResAPI`, `ITokenGeneralAPI` 等）を `src/entities/` 配下で定義する。
+     - エンティティから `I*API` への変換は各エンティティの `toAPI(authToken?: Option<IAuthToken>)` メソッドが担う。
+     - 認証状態に応じた値（`self: boolean` や投票状態など）の解決も `toAPI` 内で行う。
 
 2. **Ports (`src/ports/`)**:
    - リポジトリや外部サービスのインターフェースを定義。
@@ -35,6 +38,7 @@ src/
 
 3. **Usecases (`src/usecases/`)**:
    - アプリケーションのビジネスフローを実装。
+   - **戻り値型**: ドメインエンティティそのものではなく、`I*API`（またはプリミティブ/null）を返す。
    - **シグネチャの統一**:
      ```typescript
      export async function doSomething(
@@ -50,10 +54,29 @@ src/
 4. **Schema & Resolvers (`src/schema/`)**:
    - GraphQL のリゾルバは**ビジネスロジックを持たず、薄いアダプターとして実装**する。
    - 引数のバリデーションやフォーマット変換（`convertDateQuery` 等）を行い、対応する Usecase を呼び出して結果を返す。
+   - **`schema.mappers.ts`**:
+     - GraphQL Code Generator (`@eddeee888/gcg-typescript-resolver-files`) のマッパーとして `I*API` を割り当てる：
+       ```typescript
+       export { IUserAPI as UserMapper } from "../../entities";
+       ```
+     - これにより GraphQL スキーマ型と `I*API` が型安全にバインドされる。
 
 ---
 
-## 2. コーディング規約
+## 2. `I*API` (API表現型) パターン
+
+- **定義場所**: 各ドメインエンティティのファイル内（`src/entities/**`）。
+- **用途**:
+  - エンティティの内部状態（Immutable.js、ハッシュ値、パスワード等の機密情報）を秘匿し、外部公開用DTOとして安全なプレーンオブジェクトを表現する。
+  - Usecase の戻り値型として使用され、GraphQL リゾルバや将来の gRPC/REST エンドポイントへ渡される。
+- **変換**:
+  - `entity.toAPI(authContainer.getTokenOrNull())` または `entity.toAPI(some(token))` を経由して取得する。
+- **GraphQL Mapper へのマッピング**:
+  - 各スキーマディレクトリの `schema.mappers.ts` で `export { IFooAPI as FooMapper } from "../../entities";` のように対応付ける。
+
+---
+
+## 3. コーディング規約
 
 ### Null / Undefined の扱い
 - ドメイン層、Ports層（特にリポジトリのクエリ型 `*RepoQuery` など）、DBとの境界では **`null` を `undefined` より優先**して使用する。
@@ -69,7 +92,7 @@ src/
 
 ---
 
-## 3. コード生成 (GraphQL Code Generator)
+## 4. コード生成 (GraphQL Code Generator)
 
 - スキーマ定義（`src/schema/**/schema.graphql`）を変更した場合は、必ずコード生成を実行する：
   ```bash
@@ -80,7 +103,7 @@ src/
 
 ---
 
-## 4. テストと型チェック
+## 5. テストと型チェック
 
 - **型チェック**:
   ```bash
@@ -91,5 +114,3 @@ src/
   npm --prefix packages/server test
   ```
   - テストではトランザクションロールバック（`$transactionAfterRollback`）を利用してDBの整合性を維持している。
-
----
